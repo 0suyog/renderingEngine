@@ -1,0 +1,49 @@
+project "Core"
+kind "StaticLib"
+language "C++"
+cppdialect "C++20"
+targetdir "Binaries/%{cfg.buildcfg}"
+staticruntime "off"
+
+
+group "deps"
+include "./Vendors/glfw/Build.premake.lua"
+group ""
+
+files { "Source/**.h", "Source/**.cpp", "Vendors/glad/src/glad.c" }
+
+includedirs
+{
+  "Source",
+  "./Vendors/glfw/include",
+  "./Vendors/glad/include",
+}
+
+
+links{
+  "GLFW",
+}
+
+targetdir (RootDir.."/Binaries/" .. OutputDir .. "/%{prj.name}")
+objdir (RootDir.."/Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
+
+filter "system:windows"
+systemversion "latest"
+defines { }
+
+filter "configurations:Debug"
+defines { "DEBUG" }
+runtime "Debug"
+symbols "On"
+
+filter "configurations:Release"
+defines { "RELEASE" }
+runtime "Release"
+optimize "On"
+symbols "On"
+
+filter "configurations:Dist"
+defines { "DIST" }
+runtime "Release"
+optimize "On"
+symbols "Off"

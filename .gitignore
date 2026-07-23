@@ -1,0 +1,16 @@
+# Directories
+.vs/
+Binaries/
+.cache/
+
+# Files
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.sln
+*.log
+Makefile
+theplan.py
+
+# Exclude
+!Vendor/Binaries
