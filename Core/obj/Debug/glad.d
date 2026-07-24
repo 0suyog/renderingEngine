@@ -37,7 +37,8 @@ obj/Debug/glad.o: Vendors/glad/src/glad.c /usr/include/stdio.h \
   /usr/include/alloca.h /usr/include/bits/stdlib-float.h \
   /usr/include/string.h /usr/include/bits/types/locale_t.h \
   /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
-  /usr/include/glad/glad.h /usr/include/KHR/khrplatform.h \
+  Vendors/glad/include/glad/glad.h \
+  Vendors/glad/include/KHR/khrplatform.h \
   /usr/lib/clang/22/include/stdint.h /usr/include/stdint.h \
   /usr/include/bits/wchar.h /usr/include/bits/stdint-uintn.h \
   /usr/include/bits/stdint-least.h /usr/include/dlfcn.h \
@@ -104,8 +105,8 @@ obj/Debug/glad.o: Vendors/glad/src/glad.c /usr/include/stdio.h \
 /usr/include/bits/types/locale_t.h:
 /usr/include/bits/types/__locale_t.h:
 /usr/include/strings.h:
-/usr/include/glad/glad.h:
-/usr/include/KHR/khrplatform.h:
+Vendors/glad/include/glad/glad.h:
+Vendors/glad/include/KHR/khrplatform.h:
 /usr/lib/clang/22/include/stdint.h:
 /usr/include/stdint.h:
 /usr/include/bits/wchar.h:

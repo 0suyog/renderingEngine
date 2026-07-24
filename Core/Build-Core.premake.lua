@@ -6,19 +6,21 @@ targetdir "Binaries/%{cfg.buildcfg}"
 staticruntime "off"
 
 
-group "deps"
-include "./Vendors/glfw/Build.premake.lua"
-group ""
-
-files { "Source/**.h", "Source/**.cpp", "Vendors/glad/src/glad.c" }
 
 includedirs
 {
   "Source",
   "./Vendors/glfw/include",
   "./Vendors/glad/include",
+  "./Vendors/glm/"
 }
 
+files { "./Source/**.h", "./Source/**.cpp", "./Vendors/glad/src/glad.c" }
+
+
+group "deps"
+include "./Vendors/glfw/Build.premake.lua"
+group ""
 
 links{
   "GLFW",
