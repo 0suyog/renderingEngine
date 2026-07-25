@@ -6,27 +6,29 @@
 namespace Core {
 class KeyEvent : public Event {
 public:
-  inline int GetKeyCode() const { return m_ScanCode; }
+  inline int GetKeyCode() const { return m_KeyCode; }
+  inline int GetScanCode() const { return m_ScanCode; }
   inline const char *GetPrintableChar() const {
-    return glfwGetKeyName(GLFW_KEY_UNKNOWN, m_ScanCode);
+    const char *c = glfwGetKeyName(m_KeyCode, m_ScanCode);
+    return c ? c : "<nonprintable>";
   }
 
 protected:
-  KeyEvent(int keycode) : m_ScanCode(keycode) {}
-  int m_ScanCode;
+  KeyEvent(int scancode, int keycode)
+      : m_ScanCode(scancode), m_KeyCode(keycode) {}
+  int m_ScanCode, m_KeyCode;
 };
 
 class KeyPressedEvent : public KeyEvent {
 public:
-  KeyPressedEvent(int keycode, bool isRepeat)
-      : KeyEvent(keycode), m_IsRepeat(isRepeat) {}
+  KeyPressedEvent(int scancode, int keycode, bool isRepeat)
+      : KeyEvent(scancode, keycode), m_IsRepeat(isRepeat) {}
   inline bool IsRepeat() const { return m_IsRepeat; }
 
   std::string ToString() const override {
     const char *printableChar = GetPrintableChar();
     return std::format("KeyPressedEvent: {}, (repeat={}), char: {}", m_ScanCode,
-                       m_IsRepeat,
-                       printableChar ? printableChar : "<nonprintable>");
+                       m_IsRepeat, printableChar);
   }
   EVENT_CLASS_TYPE(KeyPressed)
 private:
@@ -35,7 +37,7 @@ private:
 
 class KeyReleasedEvent : public KeyEvent {
 public:
-  KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
+  KeyReleasedEvent(int scancode, int keycode) : KeyEvent(scancode, keycode) {}
 
   std::string ToString() const override {
     return std::format("KeyReleasedEvent: {}", m_ScanCode);

@@ -1,5 +1,5 @@
 #include "application.h"
-#include "RedLayer.h"
+#include "AppLayer.h"
 int main() {
   auto appSpec = Core::ApplicationSpecification();
   appSpec.Name = "Test Application";

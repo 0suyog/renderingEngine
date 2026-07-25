@@ -61,12 +61,12 @@ void Window::Create() {
     switch (action) {
     case GLFW_PRESS:
     case GLFW_REPEAT: {
-      KeyPressedEvent e(scanCode, action == GLFW_REPEAT);
+      KeyPressedEvent e(scanCode, key, action == GLFW_REPEAT);
       window.RaiseEvent(e);
       break;
     }
     case GLFW_RELEASE: {
-      KeyReleasedEvent e(scanCode);
+      KeyReleasedEvent e(scanCode, key);
       window.RaiseEvent(e);
       break;
     }

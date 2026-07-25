@@ -1,6 +1,8 @@
+#include "application.h"
 #include "event.h"
 #include "layer.h"
 #include "inputevents.h"
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
 class RedLayer : public Core::Layer {
@@ -12,15 +14,22 @@ class RedLayer : public Core::Layer {
 
   bool handleKeyPress(Core::KeyPressedEvent &e) {
     std::cerr << "char: " << e.GetPrintableChar() << '\n';
+    if (e.GetKeyCode() == GLFW_KEY_ESCAPE ||
+        e.GetKeyCode() == GLFW_KEY_CAPS_LOCK) {
+      auto &app = Core::Application::Get();
+      app.Stop();
+    }
     return true;
   }
 
   void OnEvent(Core::Event &e) override {
-    // std::cerr << "[Event Occured]: " << e.ToString() << std::endl;
+    std::cerr << "[Event Occured]: " << e.ToString() << std::endl;
     Core::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Core::MouseButtonPressedEvent>(
         [this](Core::MouseButtonPressedEvent &e) {
           return handleMousePress(e);
         });
+    dispatcher.Dispatch<Core::KeyPressedEvent>(
+        [this](Core::KeyPressedEvent &e) { return handleKeyPress(e); });
   }
 };

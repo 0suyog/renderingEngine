@@ -4,6 +4,7 @@
 #include <utility>
 #include "event.h"
 namespace Core {
+
 class Layer {
 public:
   virtual ~Layer() = default;
