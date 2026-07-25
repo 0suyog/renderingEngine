@@ -1,3 +1,4 @@
+#pragma once
 #include <functional>
 #include <string>
 #include <type_traits>
@@ -39,7 +40,7 @@ public:
   // requires(std::is_base_of_v<Event, T>)
   bool Dispatch(EventFn<T> func) {
     if (m_Event.GetEventType() == T::GetStaticType() && !m_Event.Handled) {
-      m_Event.Handled == func(*(T *)&m_Event);
+      m_Event.Handled = func(*(T *)&m_Event);
       return true;
     }
     return false;

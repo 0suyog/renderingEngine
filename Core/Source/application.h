@@ -18,6 +18,8 @@ public:
   void Run();
   void Stop();
 
+  void RaiseEvent(Event &event);
+
   template <typename TLayer>
     requires(std::is_base_of_v<Layer, TLayer>)
   void PushLayer() {

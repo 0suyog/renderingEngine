@@ -1,7 +1,6 @@
 #pragma once
-
-#include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "event.h"
 #include <string>
 #include "glm/vec2.hpp"
 
@@ -12,6 +11,8 @@ struct WindowSpecification {
   uint32_t Height = 720;
   bool IsResizeable = true;
   bool VSync = true;
+  using EventCallbackFn = std::function<void(Event &)>;
+  EventCallbackFn EventCallback;
 };
 
 class Window {
@@ -23,6 +24,8 @@ public:
   void Destroy();
 
   void Update();
+
+  void RaiseEvent(Event &event);
 
   glm::vec2 GetFrameBufferSize() const;
   glm::vec2 GetMousePosition() const;

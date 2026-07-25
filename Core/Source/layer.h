@@ -2,6 +2,7 @@
 #include <concepts>
 #include <memory>
 #include <utility>
+#include "event.h"
 namespace Core {
 class Layer {
 public:
@@ -10,6 +11,7 @@ public:
   virtual void OnUpdate(float ts) {}
 
   virtual void OnRender() {}
+  virtual void OnEvent(Core::Event &e) {}
   template <std::derived_from<Layer> T, typename... Args>
   void TransitionTo(Args &&...args) {
     QueueTransition(

@@ -1,3 +1,7 @@
+#include "glad/glad.h"
+#include "event.h"
+#include "windowevents.h"
+#include "inputevents.h"
 #include "window.h"
 #include <GLFW/glfw3.h>
 #include <cstddef>
@@ -35,6 +39,38 @@ void Window::Create() {
 
   glfwSetWindowCloseCallback(m_Handle, [](GLFWwindow *handle) {
     Window &window = *((Window *)glfwGetWindowUserPointer(handle));
+    WindowClosedEvent event;
+    window.RaiseEvent(event);
+  });
+
+  glfwSetMouseButtonCallback(
+      m_Handle, [](GLFWwindow *handle, int key, int action, int modifiers) {
+        Window &window = *((Window *)glfwGetWindowUserPointer(handle));
+        if (action == GLFW_PRESS) {
+          MouseButtonPressedEvent e(key);
+          window.RaiseEvent(e);
+          return;
+        }
+        MouseButtonReleasedEvent e(key);
+        window.RaiseEvent(e);
+      });
+
+  glfwSetKeyCallback(m_Handle, [](GLFWwindow *handle, int key, int scanCode,
+                                  int action, int mods) {
+    Window &window = *((Window *)glfwGetWindowUserPointer(handle));
+    switch (action) {
+    case GLFW_PRESS:
+    case GLFW_REPEAT: {
+      KeyPressedEvent e(scanCode, action == GLFW_REPEAT);
+      window.RaiseEvent(e);
+      break;
+    }
+    case GLFW_RELEASE: {
+      KeyReleasedEvent e(scanCode);
+      window.RaiseEvent(e);
+      break;
+    }
+    }
   });
 }
 
@@ -48,6 +84,12 @@ void Window::Destroy() {
 void Window::Update() { glfwSwapBuffers(m_Handle); }
 
 bool Window::ShouldClose() const { return glfwWindowShouldClose(m_Handle); }
+
+void Window::RaiseEvent(Event &event) {
+  if (m_Specification.EventCallback) {
+    m_Specification.EventCallback(event);
+  }
+}
 
 glm::vec2 Window::GetFrameBufferSize() const {
   int width, height;

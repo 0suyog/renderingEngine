@@ -1,15 +1,19 @@
 #pragma once
 #include "event.h"
+#include <GLFW/glfw3.h>
 #include <format>
 
 namespace Core {
 class KeyEvent : public Event {
 public:
-  inline int GetKeyCode() const { return m_KeyCode; }
+  inline int GetKeyCode() const { return m_ScanCode; }
+  inline const char *GetPrintableChar() const {
+    return glfwGetKeyName(GLFW_KEY_UNKNOWN, m_ScanCode);
+  }
 
 protected:
-  KeyEvent(int keycode) : m_KeyCode(keycode) {}
-  int m_KeyCode;
+  KeyEvent(int keycode) : m_ScanCode(keycode) {}
+  int m_ScanCode;
 };
 
 class KeyPressedEvent : public KeyEvent {
@@ -19,8 +23,10 @@ public:
   inline bool IsRepeat() const { return m_IsRepeat; }
 
   std::string ToString() const override {
-    return std::format("KeyPressedEvent: {} (repeat={})", m_KeyCode,
-                       m_IsRepeat);
+    const char *printableChar = GetPrintableChar();
+    return std::format("KeyPressedEvent: {}, (repeat={}), char: {}", m_ScanCode,
+                       m_IsRepeat,
+                       printableChar ? printableChar : "<nonprintable>");
   }
   EVENT_CLASS_TYPE(KeyPressed)
 private:
@@ -32,7 +38,7 @@ public:
   KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
 
   std::string ToString() const override {
-    return std::format("KeyReleasedEvent: {}", m_KeyCode);
+    return std::format("KeyReleasedEvent: {}", m_ScanCode);
   }
   EVENT_CLASS_TYPE(KeyReleased)
 };

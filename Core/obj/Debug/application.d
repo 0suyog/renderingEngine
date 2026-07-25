@@ -206,11 +206,26 @@ obj/Debug/application.o: Source/application.cpp Source/application.h \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/utility \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_relops.h \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/intcmp.h \
-  Source/window.h Vendors/glad/include/glad/glad.h \
-  Vendors/glad/include/KHR/khrplatform.h \
+  Source/event.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/functional \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/std_function.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/unordered_map \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/unordered_map.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable_policy.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/enable_special_members.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/node_handle.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/vector \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_vector.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_bvector.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/vector.tcc \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/array \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/binders.h \
+  Source/window.h Vendors/glfw/include/GLFW/glfw3.h \
   /usr/lib/clang/22/include/stdint.h /usr/include/stdint.h \
   /usr/include/bits/stdint-uintn.h /usr/include/bits/stdint-least.h \
-  Vendors/glfw/include/GLFW/glfw3.h /usr/include/glm/vec2.hpp \
+  /usr/include/GL/gl.h /usr/include/GL/glext.h \
+  Vendors/glad/include/KHR/khrplatform.h /usr/include/glm/vec2.hpp \
   /usr/include/glm/./ext/vector_bool2.hpp \
   /usr/include/glm/./ext/../detail/type_vec2.hpp \
   /usr/include/glm/./ext/../detail/qualifier.hpp \
@@ -236,10 +251,6 @@ obj/Debug/application.o: Source/application.cpp Source/application.h \
   /usr/include/glm/./ext/vector_uint2_sized.hpp \
   /usr/include/glm/./ext/../ext/vector_uint2.hpp \
   /usr/include/glm/./ext/../ext/scalar_uint_sized.hpp \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/vector \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_vector.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_bvector.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/vector.tcc \
   /usr/include/glm/common.hpp /usr/include/glm/detail/qualifier.hpp \
   /usr/include/glm/detail/_fixes.hpp \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/cmath \
@@ -278,16 +289,6 @@ obj/Debug/application.o: Source/application.cpp Source/application.h \
   /usr/include/glm/detail/type_vec3.inl \
   /usr/include/glm/detail/compute_vector_relational.hpp \
   /usr/include/glm/detail/compute_vector_decl.hpp \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/functional \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/std_function.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/unordered_map \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/unordered_map.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable_policy.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/enable_special_members.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/node_handle.h \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/array \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/binders.h \
   /usr/include/glm/detail/_vectorize.hpp \
   /usr/include/glm/detail/type_vec4.hpp \
   /usr/include/glm/detail/type_vec4.inl \
@@ -296,7 +297,12 @@ obj/Debug/application.o: Source/application.cpp Source/application.h \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/ostream_print.h \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/ostream.tcc \
   /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/istream \
-  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/istream.tcc
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/istream.tcc \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/ranges \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/iterator \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stream_iterator.h \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/optional \
+  /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/span
 Source/application.h:
 Source/layer.h:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/concepts:
@@ -542,14 +548,30 @@ Source/layer.h:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/utility:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_relops.h:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/intcmp.h:
+Source/event.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/functional:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/std_function.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/unordered_map:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/unordered_map.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable_policy.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/enable_special_members.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/node_handle.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/vector:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_vector.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_bvector.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/vector.tcc:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/array:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/binders.h:
 Source/window.h:
-Vendors/glad/include/glad/glad.h:
-Vendors/glad/include/KHR/khrplatform.h:
+Vendors/glfw/include/GLFW/glfw3.h:
 /usr/lib/clang/22/include/stdint.h:
 /usr/include/stdint.h:
 /usr/include/bits/stdint-uintn.h:
 /usr/include/bits/stdint-least.h:
-Vendors/glfw/include/GLFW/glfw3.h:
+/usr/include/GL/gl.h:
+/usr/include/GL/glext.h:
+Vendors/glad/include/KHR/khrplatform.h:
 /usr/include/glm/vec2.hpp:
 /usr/include/glm/./ext/vector_bool2.hpp:
 /usr/include/glm/./ext/../detail/type_vec2.hpp:
@@ -576,10 +598,6 @@ Vendors/glfw/include/GLFW/glfw3.h:
 /usr/include/glm/./ext/vector_uint2_sized.hpp:
 /usr/include/glm/./ext/../ext/vector_uint2.hpp:
 /usr/include/glm/./ext/../ext/scalar_uint_sized.hpp:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/vector:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_vector.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stl_bvector.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/vector.tcc:
 /usr/include/glm/common.hpp:
 /usr/include/glm/detail/qualifier.hpp:
 /usr/include/glm/detail/_fixes.hpp:
@@ -623,16 +641,6 @@ Vendors/glfw/include/GLFW/glfw3.h:
 /usr/include/glm/detail/type_vec3.inl:
 /usr/include/glm/detail/compute_vector_relational.hpp:
 /usr/include/glm/detail/compute_vector_decl.hpp:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/functional:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/std_function.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/unordered_map:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/unordered_map.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/hashtable_policy.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/enable_special_members.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/node_handle.h:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/array:
-/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/binders.h:
 /usr/include/glm/detail/_vectorize.hpp:
 /usr/include/glm/detail/type_vec4.hpp:
 /usr/include/glm/detail/type_vec4.inl:
@@ -642,3 +650,8 @@ Vendors/glfw/include/GLFW/glfw3.h:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/ostream.tcc:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/istream:
 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/istream.tcc:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/ranges:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/iterator:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/bits/stream_iterator.h:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/optional:
+/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/16/../../../../include/c++/16/span:
