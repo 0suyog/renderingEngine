@@ -12,7 +12,8 @@ includedirs
   "Source",
   "./Vendors/glfw/include",
   "./Vendors/glad/include",
-  "./Vendors/glm/"
+  "./Vendors/glm/",
+  "./Vendors/stb/"
 }
 
 files { "./Source/**.h", "./Source/**.cpp", "./Vendors/glad/src/glad.c" }
