@@ -11,13 +11,12 @@ includedirs
 {
   "Source",
   "./Vendors/glfw/include",
-  "./Vendors/glad/include",
+  "./Vendors/glad/include/",
   "./Vendors/glm/",
   "./Vendors/stb/"
 }
 
-files { "./Source/**.h", "./Source/**.cpp", "./Vendors/glad/src/glad.c" }
-
+files { "./Source/**.h", "./Source/**.cpp", "./Vendors/glad/src/glad.c", "./Vendors/stb/stb_image.cpp" }
 
 group "deps"
 include "./Vendors/glfw/Build.premake.lua"

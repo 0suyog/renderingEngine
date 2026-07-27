@@ -1,4 +1,4 @@
-#include "glad/glad.h"
+#include <glad/glad.h>
 #include "event.h"
 #include "windowevents.h"
 #include "inputevents.h"

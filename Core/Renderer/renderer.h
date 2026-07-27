@@ -1,5 +1,5 @@
 #pragma once
-#include "glad/glad.h"
+#include <glad/glad.h>
 #include <filesystem>
 
 namespace Renderer {
@@ -17,7 +17,8 @@ struct Framebuffer {
 Texture CreateTexture(int width, int height);
 Texture LoadTexture(const std::filesystem::path &path);
 Framebuffer CreateFramebufferWithTexture(const Texture texture);
-bool AttachTextureToFrambuffer(Framebuffer &framebuffer, const Texture texture);
+bool AttachTextureToFramebuffer(Framebuffer &framebuffer,
+                                const Texture texture);
 void BlitFramebufferToSwapchain(const Framebuffer framebuffer);
 
 } // namespace Renderer
