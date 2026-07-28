@@ -1,22 +1,19 @@
 #include "file.h"
-#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <string>
 namespace Core {
-const char *ReadTextFile(const std::string &path) {
+bool ReadTextFile(const std::string &path, std::string &data) {
   std::ifstream f(path.c_str());
   if (!f.is_open()) {
-    return nullptr;
+    return 0;
   }
-  auto start = f.tellg();
-  f.seekg(EOF);
-  int size = f.tellg() - start;
-  f.seekg(start);
-
-  char *result;
-  f.read(result, size);
+  f.seekg(0, std::ios::end);
+  int size = f.tellg();
+  f.seekg(0);
+  data.resize(size);
+  f.read(data.data(), size);
   f.close();
-  return result;
+  return 1;
 }
 }; // namespace Core

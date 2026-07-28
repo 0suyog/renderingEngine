@@ -1,10 +1,10 @@
-#include "application.h"
 #include "AppLayer.h"
+#include "application.h"
 int main() {
   auto appSpec = Core::ApplicationSpecification();
   appSpec.Name = "Test Application";
 
   auto app = Core::Application(appSpec);
-  app.PushLayer<RedLayer>();
+  app.PushLayer<AppLayer>();
   app.Run();
 }

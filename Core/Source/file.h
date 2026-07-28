@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
+#include <memory>
 #include <string>
 namespace Core {
-const char *ReadTextFile(std::string path);
+bool ReadTextFile(const std::string &path, std::string &data);
 } // namespace Core

@@ -11,6 +11,7 @@ includedirs
   "Source",
 
   -- Include Core
+  "../Core/Renderer/",
   "../Core/Source",
   "../Core/Vendors/glad/include"
 }

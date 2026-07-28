@@ -1,11 +1,12 @@
 [
   {
-    "file": "Source/application.cpp",
+    "file": "Source/file.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-MD",
       "-MP",
       "-ISource",
+      "-ISource/Renderer",
       "-IVendors/glfw/include",
       "-IVendors/glad/include",
       "-IVendors/glm",
@@ -13,14 +14,14 @@
       "-m64",
       "-std=c++20",
       "-o",
-      "obj/Debug/application.o",
+      "obj/Debug/file.o",
       "-MF",
-      "obj/Debug/application.d",
+      "obj/Debug/file.d",
       "-c",
-      "Source/application.cpp"
+      "Source/file.cpp"
     ],
     "directory": "/hardDrive/renderingEngine/Core",
-    "output": "obj/Debug/application.o"
+    "output": "obj/Debug/file.o"
   },
   {
     "file": "Vendors/glad/src/glad.c",
@@ -29,6 +30,7 @@
       "-MD",
       "-MP",
       "-ISource",
+      "-ISource/Renderer",
       "-IVendors/glfw/include",
       "-IVendors/glad/include",
       "-IVendors/glm",
@@ -51,6 +53,7 @@
       "-MD",
       "-MP",
       "-ISource",
+      "-ISource/Renderer",
       "-IVendors/glfw/include",
       "-IVendors/glad/include",
       "-IVendors/glm",
@@ -68,12 +71,85 @@
     "output": "obj/Debug/layer.o"
   },
   {
+    "file": "Renderer/renderer.cpp",
+    "arguments": [
+      "/usr/bin/clang++",
+      "-MD",
+      "-MP",
+      "-ISource",
+      "-ISource/Renderer",
+      "-IVendors/glfw/include",
+      "-IVendors/glad/include",
+      "-IVendors/glm",
+      "-IVendors/stb",
+      "-m64",
+      "-std=c++20",
+      "-o",
+      "obj/Debug/renderer.o",
+      "-MF",
+      "obj/Debug/renderer.d",
+      "-c",
+      "Renderer/renderer.cpp"
+    ],
+    "directory": "/hardDrive/renderingEngine/Core",
+    "output": "obj/Debug/renderer.o"
+  },
+  {
+    "file": "Renderer/shader.cpp",
+    "arguments": [
+      "/usr/bin/clang++",
+      "-MD",
+      "-MP",
+      "-ISource",
+      "-ISource/Renderer",
+      "-IVendors/glfw/include",
+      "-IVendors/glad/include",
+      "-IVendors/glm",
+      "-IVendors/stb",
+      "-m64",
+      "-std=c++20",
+      "-o",
+      "obj/Debug/shader.o",
+      "-MF",
+      "obj/Debug/shader.d",
+      "-c",
+      "Renderer/shader.cpp"
+    ],
+    "directory": "/hardDrive/renderingEngine/Core",
+    "output": "obj/Debug/shader.o"
+  },
+  {
+    "file": "Vendors/stb/stb_image.cpp",
+    "arguments": [
+      "/usr/bin/clang++",
+      "-MD",
+      "-MP",
+      "-ISource",
+      "-ISource/Renderer",
+      "-IVendors/glfw/include",
+      "-IVendors/glad/include",
+      "-IVendors/glm",
+      "-IVendors/stb",
+      "-m64",
+      "-std=c++20",
+      "-o",
+      "obj/Debug/stb_image.o",
+      "-MF",
+      "obj/Debug/stb_image.d",
+      "-c",
+      "Vendors/stb/stb_image.cpp"
+    ],
+    "directory": "/hardDrive/renderingEngine/Core",
+    "output": "obj/Debug/stb_image.o"
+  },
+  {
     "file": "Source/window.cpp",
     "arguments": [
       "/usr/bin/clang++",
       "-MD",
       "-MP",
       "-ISource",
+      "-ISource/Renderer",
       "-IVendors/glfw/include",
       "-IVendors/glad/include",
       "-IVendors/glm",
@@ -581,6 +657,7 @@
       "-MP",
       "-DDEBUG",
       "-ISource",
+      "-I../Core/Renderer",
       "-I../Core/Source",
       "-I../Core/Vendors/glad/include",
       "-m64",
@@ -604,6 +681,7 @@
       "-MP",
       "-DDEBUG",
       "-ISource",
+      "-I../Core/Renderer",
       "-I../Core/Source",
       "-I../Core/Vendors/glad/include",
       "-m64",

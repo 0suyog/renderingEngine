@@ -1,19 +1,18 @@
 #pragma once
 #include "glad/glad.h"
-#include <cstdio>
 #include <filesystem>
-#include <fstream>
 namespace Renderer {
 class ShaderProgram {
 
 public:
-  ShaderProgram(const std::string &vertexPath, const std::string &fragmentPath);
+  ShaderProgram(const std::filesystem::path &vertexPath,
+                const std::filesystem::path &fragmentPath);
   void reload();
 
 private:
   GLuint m_Handle;
-  std::string m_vertexPath;
-  std::string m_fragmentPath;
+  std::filesystem::path m_vertexPath;
+  std::filesystem::path m_fragmentPath;
 
   GLuint init();
 };

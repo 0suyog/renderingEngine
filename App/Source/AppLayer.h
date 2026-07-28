@@ -1,11 +1,11 @@
+#pragma once
+#include "shader.h"
 #include "application.h"
 #include "event.h"
 #include "layer.h"
 #include "inputevents.h"
-#include <GLFW/glfw3.h>
 #include <iostream>
-#include <string>
-class RedLayer : public Core::Layer {
+class AppLayer : public Core::Layer {
 
   bool handleMousePress(Core::MouseButtonPressedEvent &e) {
     std::cerr << "button: " << e.GetMouseButton() << "\n";
@@ -32,4 +32,8 @@ class RedLayer : public Core::Layer {
     dispatcher.Dispatch<Core::KeyPressedEvent>(
         [this](Core::KeyPressedEvent &e) { return handleKeyPress(e); });
   }
+
+private:
+  Renderer::ShaderProgram basicshader = {"./shaders/basicshader.vert",
+                                         "./shaders/basicshader.frag"};
 };

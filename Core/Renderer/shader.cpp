@@ -1,15 +1,15 @@
-#include "shader.h"
 #include "file.h"
+#include "shader.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
-#include <algorithm>
+#include <filesystem>
 #include <iostream>
 #include <linux/input.h>
 #include <vector>
 namespace Renderer {
 
-ShaderProgram::ShaderProgram(const std::string &vertexPath,
-                             const std::string &fragmentPath)
+ShaderProgram::ShaderProgram(const std::filesystem::path &vertexPath,
+                             const std::filesystem::path &fragmentPath)
     : m_vertexPath(vertexPath), m_fragmentPath(fragmentPath) {
   auto programId = init();
   if (programId != 0) {
@@ -18,44 +18,52 @@ ShaderProgram::ShaderProgram(const std::string &vertexPath,
 }
 
 GLuint ShaderProgram::init() {
-  const char *vertexSource = Core::ReadTextFile(m_vertexPath);
-  if (vertexSource == nullptr) {
+  int status = 0;
+  std::string fileData;
+  const char *shaderSource;
+  status = Core::ReadTextFile(m_vertexPath, fileData);
+  if (status == 0) {
     std::cerr << "[SHADER] cannot open vertex shader file";
+    std::cerr << "Failed to open '" << m_vertexPath << '\n';
     return -1;
   }
-
+  shaderSource = fileData.c_str();
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexSource, 0);
+  glShaderSource(vertexShader, 1, &shaderSource, 0);
 
-  GLint status = 0;
+  glCompileShader(vertexShader);
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
 
+  char infologtemp[512];
   if (status == GL_FALSE) {
-    GLint maxLength = 0;
+    int infoLogLen;
+    glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infoLogLen);
     std::cerr << "[SHADER] Vertex shader compilation failed" << "\n";
-    std::vector<GLchar> infoLog(maxLength);
-    std::cerr << infoLog.data() << "\n";
+    std::string infoLog(infoLogLen, '\0');
+    glGetShaderInfoLog(vertexShader, 512, NULL, infologtemp);
+    std::cerr << infologtemp << "\n";
     glDeleteShader(vertexShader);
     return -1;
   }
 
-  const char *fragmentSource = Core::ReadTextFile(m_fragmentPath);
-
-  if (fragmentSource == nullptr) {
+  status = Core::ReadTextFile(m_fragmentPath, fileData);
+  if (status == 0) {
     std::cerr << "[SHADER] cannot open fragment shader file";
+    std::cerr << "Failed to open '" << m_fragmentPath << '\n';
     return -1;
   }
+  shaderSource = fileData.c_str();
 
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentSource, 0);
+  glShaderSource(fragmentShader, 1, &shaderSource, 0);
+  glCompileShader(fragmentShader);
 
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
   if (status == GL_FALSE) {
-    GLint maxLength = 0;
     std::cerr << "[SHADER] Fragment shader compilation failed" << "\n";
-    std::vector<GLchar> infoLog(maxLength);
-    glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
-    std::cerr << infoLog.data() << "\n";
+    std::string infoLog;
+    glGetShaderInfoLog(fragmentShader, 0, 0, &infoLog[0]);
+    std::cerr << infoLog << "\n";
     glDeleteShader(fragmentShader);
     return -1;
   }

@@ -12,6 +12,7 @@ buildoptions({ "/EHsc", "/Zc:preprocessor", "/Zc:__cplusplus" })
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 RootDir = os.getcwd()
 
+
 group("Core")
 include("Core/Build-Core.premake.lua")
 group("")
