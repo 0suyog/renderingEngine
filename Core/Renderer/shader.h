@@ -9,6 +9,10 @@ public:
                 const std::filesystem::path &fragmentPath);
   void reload();
 
+  void use() const;
+
+  const GLuint getId() const;
+
 private:
   GLuint m_Handle;
   std::filesystem::path m_vertexPath;

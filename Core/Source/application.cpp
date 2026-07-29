@@ -49,6 +49,11 @@ void Application::Run() {
     float timestep = glm::clamp(currentTime - lastTime, 0.001f, 0.1f);
     lastTime = currentTime;
 
+    for (auto &layer : m_LayerStack) {
+      layer->OnUpdate(timestep);
+      layer->OnRender();
+    }
+
     m_Window->Update();
   }
 }

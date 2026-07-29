@@ -98,4 +98,9 @@ void ShaderProgram::reload() {
   glDeleteProgram(m_Handle);
   m_Handle = programId;
 }
+
+void ShaderProgram::use() const { glUseProgram(m_Handle); }
+
+const GLuint ShaderProgram::getId() const { return m_Handle; }
+
 } // namespace Renderer
