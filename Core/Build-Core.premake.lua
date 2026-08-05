@@ -5,15 +5,13 @@ cppdialect "C++20"
 targetdir "Binaries/%{cfg.buildcfg}"
 staticruntime "off"
 
-
-
 includedirs
 {
   "Source",
   "Source/Renderer",
   "./Vendors/glfw/include",
   "./Vendors/glad/include/",
-  "./Vendors/glm/",
+  "./Vendors/",
   "./Vendors/stb/"
 }
 

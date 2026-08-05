@@ -1,3 +1,4 @@
+#pragma once
 #include "event.h"
 #include <cstdint>
 #include <format>

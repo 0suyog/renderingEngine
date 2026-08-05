@@ -12,8 +12,9 @@ includedirs
 
   -- Include Core
   "../Core/Renderer/",
-  "../Core/Source",
-  "../Core/Vendors/glad/include"
+  "../Core/Source/",
+  "../Core/Vendors/glad/include/",
+  "../Core/Vendors"
 }
 
 files { "Source/**.h", "Source/**.cpp", "../Core/Vendors/glad/src/glad.c"}

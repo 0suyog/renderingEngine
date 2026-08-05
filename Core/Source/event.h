@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
 #include <string>
-#include <type_traits>
 namespace Core {
 enum class EventType {
   None = 0,

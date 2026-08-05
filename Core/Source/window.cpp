@@ -43,6 +43,13 @@ void Window::Create() {
     window.RaiseEvent(event);
   });
 
+  glfwSetWindowSizeCallback(
+      m_Handle, [](GLFWwindow *handle, int width, int height) {
+        Window &window = *((Window *)glfwGetWindowUserPointer(handle));
+        WindowResizeEvent event(width, height);
+        window.RaiseEvent(event);
+      });
+
   glfwSetMouseButtonCallback(
       m_Handle, [](GLFWwindow *handle, int key, int action, int modifiers) {
         Window &window = *((Window *)glfwGetWindowUserPointer(handle));

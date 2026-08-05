@@ -1,4 +1,5 @@
 #pragma once
+#include "application.h"
 #include "event.h"
 #include <GLFW/glfw3.h>
 #include <format>
@@ -11,6 +12,10 @@ public:
   inline const char *GetPrintableChar() const {
     const char *c = glfwGetKeyName(m_KeyCode, m_ScanCode);
     return c ? c : "<nonprintable>";
+  }
+
+  static int GetKey(int key) {
+    return glfwGetKey((Application::Get().GetWindow())->GetHandle(), key);
   }
 
 protected:
