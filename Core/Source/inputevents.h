@@ -54,10 +54,13 @@ public:
 
 class MouseMovedEvent : public Event {
 public:
-  MouseMovedEvent(double x, double y) : m_MouseX(x), m_MouseY() {}
+  MouseMovedEvent(double x, double y, double dx, double dy)
+      : m_MouseX(x), m_MouseY(y), m_dX(dx), m_dY(dy) {}
 
   inline double GetX() const { return m_MouseX; }
   inline double GetY() const { return m_MouseY; }
+  inline double GetdX() const { return m_dX; }
+  inline double GetdY() const { return m_dY; }
 
   std::string ToString() const override {
     return std::format("MousemovedEvent: {},{}", m_MouseX, m_MouseY);
@@ -66,7 +69,7 @@ public:
   EVENT_CLASS_TYPE(MouseMoved)
 
 private:
-  double m_MouseX, m_MouseY;
+  double m_MouseX, m_MouseY, m_dX, m_dY;
 };
 
 class MouseScrolledEvent : public Event {

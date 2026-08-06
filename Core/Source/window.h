@@ -37,6 +37,8 @@ public:
 private:
   WindowSpecification m_Specification;
   GLFWwindow *m_Handle = nullptr;
+  double mouseX, mouseY;
+  bool firstMove = true;
 };
 
 } // namespace Core

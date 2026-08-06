@@ -39,7 +39,7 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path,
                             : i->channels == 3 ? GL_RGB8
                             : i->channels == 4 ? GL_RGBA8
                                                : GL_R8;
-
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTextureStorage2D(result->handle, 1, internalFormat, i->width, i->height);
     glTextureSubImage2D(result->handle, 0, 0, 0, i->width, i->height, format,
                         GL_UNSIGNED_BYTE, i->data);

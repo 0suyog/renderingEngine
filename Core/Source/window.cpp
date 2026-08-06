@@ -79,6 +79,20 @@ void Window::Create() {
     }
     }
   });
+
+  glfwSetCursorPosCallback(
+      m_Handle, [](GLFWwindow *handle, double x, double y) {
+        Window &window = *((Window *)glfwGetWindowUserPointer(handle));
+        auto dx = x - window.mouseX, dy = y - window.mouseY;
+        if (window.firstMove) {
+          dx = 0, dy = 0;
+          window.firstMove = false;
+        }
+        MouseMovedEvent e(x, y, dx, dy);
+        window.mouseX = x;
+        window.mouseY = y;
+        window.RaiseEvent(e);
+      });
 }
 
 void Window::Destroy() {
