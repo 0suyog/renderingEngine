@@ -1,6 +1,9 @@
 @echo off
 
-pushd ..
-Vendor\Binaries\Premake\Windows\premake5.exe --file=Build.lua vs2022
+if not exist "..\build" mkdir "..\build"
+
+pushd "..\build"
+cmake ..
+cmake --build .
 popd
 pause

@@ -64,7 +64,7 @@ target_include_directories(engine.core
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/include
 )
-
 add_subdirectory(Vendors/glfw)
+add_subdirectory(Vendors/assimp)
 
-target_link_libraries(engine.core PUBLIC glfw)
+target_link_libraries(engine.core PUBLIC glfw assimp)

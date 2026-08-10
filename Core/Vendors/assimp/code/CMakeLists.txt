@@ -1179,6 +1179,7 @@ ELSE()
     ../contrib/unzip/unzip.c
     ../contrib/unzip/unzip.h
   )
+  INCLUDE_DIRECTORIES("../contrib/unzip/")
   SOURCE_GROUP(Contrib\\unzip FILES ${unzip_SRCS})
 ENDIF()
 
@@ -1353,7 +1354,7 @@ SET( assimp_src
   ${ASSIMP_EXPORTER_SRCS}
 
   ${FBX_COMMON_SRCS}
-  
+
   # Third-party libraries
   ${unzip_compile_SRCS}
   ${Poly2Tri_SRCS}
