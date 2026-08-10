@@ -1,5 +1,5 @@
 //========================================================================
-// GLFW 3.5 Wayland - www.glfw.org
+// GLFW 3.6 Wayland - www.glfw.org
 //------------------------------------------------------------------------
 // Copyright (c) 2014 Jonas Ådahl <jadahl@gmail.com>
 //
@@ -478,8 +478,9 @@ static void resizeFramebuffer(_GLFWwindow* window)
 {
     if (window->wl.fractionalScale)
     {
-        window->wl.fbWidth = (window->wl.width * window->wl.scalingNumerator) / 120;
-        window->wl.fbHeight = (window->wl.height * window->wl.scalingNumerator) / 120;
+        // Round halfway away from zero per fractional-scale-v1 protocol spec
+        window->wl.fbWidth = (window->wl.width * window->wl.scalingNumerator + 60) / 120;
+        window->wl.fbHeight = (window->wl.height * window->wl.scalingNumerator + 60) / 120;
     }
     else
     {

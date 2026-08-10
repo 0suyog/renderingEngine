@@ -3,6 +3,7 @@
 Binaries/
 .cache/
 obj/
+build/
 
 # Files
 *.vcxproj

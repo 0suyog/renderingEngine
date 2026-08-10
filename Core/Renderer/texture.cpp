@@ -14,8 +14,6 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path,
   auto key = std::filesystem::absolute(path).generic_string() + type;
   if (textures[key] == nullptr) {
 
-    std::cerr << "New texture created of key " << key << "\n";
-
     std::shared_ptr<Texture> result = std::make_shared<Texture>();
     std::optional<Core::Image> i = Core::ReadImage(path);
 
@@ -23,6 +21,9 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path,
       std::cerr << "[TEXTURE] Failed opening image: " << path << "\n";
       return nullptr;
     }
+
+    std::cerr << "New texture created of key " << key << "\n";
+
     glCreateTextures(GL_TEXTURE_2D, 1, &(result->handle));
 
     glTextureParameteri(result->handle, GL_TEXTURE_WRAP_S, GL_REPEAT);
