@@ -1,4 +1,5 @@
 #include "texture.h"
+#include "embededimages.h"
 #include "file.h"
 #include <cstdlib>
 #include <filesystem>
@@ -8,9 +9,14 @@
 #include <unordered_map>
 namespace Renderer {
 
+static std::unordered_map<BuiltInTexture, std::shared_ptr<Texture>>
+    builtintextures;
+
 static std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 // TODO: unlikely but key could match existing one
 static std::string defaultTextureKey = "defaultTextureKey";
+static std::string errorTextureKey = "errorTextureKey";
+static std::string blackTextureKey = "blackTextureKey";
 
 std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
 
@@ -48,8 +54,7 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
 
     if (!i) {
       std::cerr << "[TEXTURE] Failed opening image: " << path << "\n";
-      exit(-1);
-      // TODO: use error texture instead
+      return GetBuiltInTexture(BuiltInTexture::ERROR);
     }
 
     std::cerr << "New texture created of key " << key << "\n";
@@ -67,7 +72,27 @@ std::shared_ptr<Texture> TextureFromMemory(unsigned char *data, int length) {
     std::cerr << "[TEXTURE] Reading from memory but data doesnt exist";
     exit(-1);
   }
-  TextureFromImage(image.value());
+  return TextureFromImage(image.value());
+}
+
+std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
+
+  if (builtintextures.find(tex) == builtintextures.end()) {
+    EmbeddedImage e;
+    switch (tex) {
+    case BuiltInTexture::DEFAULT:
+      e = embeddedImagesMap[EmbeddedImages::DEFAULT];
+      break;
+    case BuiltInTexture::BLACK:
+      e = embeddedImagesMap[EmbeddedImages::BLACK];
+      break;
+    case BuiltInTexture::ERROR:
+      e = embeddedImagesMap[EmbeddedImages::ERROR];
+      break;
+    }
+    builtintextures[tex] = TextureFromMemory(e.data, e.length);
+  }
+  return builtintextures[tex];
 }
 
 } // namespace Renderer

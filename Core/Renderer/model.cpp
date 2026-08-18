@@ -23,7 +23,6 @@ void Model::render(const ShaderProgram &s) const {
 }
 
 void Model::loadModel(std::filesystem::path path) {
-  std::cerr << "inside load model" << "\n";
   Assimp::Importer importer;
   const aiScene *scene =
       importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -34,14 +33,12 @@ void Model::loadModel(std::filesystem::path path) {
     exit(-1);
   }
   m_directory = path.parent_path();
-  std::cerr << "process node now" << "\n";
   processNode(scene->mRootNode, scene);
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene) {
   static int counter = 1;
   counter++;
-  std::cerr << "ran process node " << counter << "times\n";
   for (int i = 0; i < node->mNumMeshes; i++) {
     aiMesh *assimpMesh = scene->mMeshes[node->mMeshes[i]];
     m_meshes.push_back(processMesh(assimpMesh, scene));
@@ -54,7 +51,6 @@ void Model::processNode(aiNode *node, const aiScene *scene) {
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
   static int counter = 1;
   counter++;
-  std::cerr << "ran process mesh " << counter << "times\n";
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
   std::unordered_map<TextureType, std::vector<std::shared_ptr<Texture>>>
@@ -110,7 +106,6 @@ Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type) {
 
   static int counter = 1;
   counter++;
-  std::cerr << "ran  loadmaterialtextures " << counter << "times\n";
   std::vector<std::shared_ptr<Texture>> returnValue;
   for (int i = 0; i < mat->GetTextureCount(type); i++) {
     aiString str;

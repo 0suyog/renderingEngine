@@ -39,9 +39,8 @@ std::optional<Image> ReadImage(const std::filesystem::path &path) {
 std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length) {
   stbi_set_flip_vertically_on_load(true);
   Image result;
-  result.data = stbi_load_from_memory(
-      embedded_default_texture, embedded_default_texture_len, &result.width,
-      &result.height, &result.channels, 0);
+  result.data = stbi_load_from_memory(buffer, length, &result.width,
+                                      &result.height, &result.channels, 0);
   if (!result.data) {
     return std::nullopt;
   }

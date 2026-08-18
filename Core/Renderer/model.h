@@ -4,16 +4,12 @@
 #include "shader.h"
 #include "mesh.h"
 #include <filesystem>
-#include <iostream>
 #include <memory>
 
 namespace Renderer {
 class Model : public Renderable {
 public:
-  Model(const std::string &path) {
-    std::cerr << "model constructor" << "\n";
-    loadModel(path);
-  }
+  Model(const std::string &path) { loadModel(path); }
   void render(const ShaderProgram &s) const override;
 
 private:

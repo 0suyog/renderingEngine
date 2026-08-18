@@ -34,137 +34,35 @@ public:
 
     float vertices[] = {
         // Front (+Z)
-        -5.0f,
-        -5.0f,
-        5.0f,
-        0.0f,
-        0.0f,
-        5.0f,
-        -5.0f,
-        5.0f,
-        1.0f,
-        0.0f,
-        5.0f,
-        5.0f,
-        5.0f,
-        1.0f,
-        1.0f,
-        -5.0f,
-        5.0f,
-        5.0f,
-        0.0f,
-        1.0f,
+        // position             // normal       // uv
+        -5.0f, -5.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 5.0f, -5.0f, 5.0f,
+        0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 5.0f, 5.0f, 5.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, -5.0f, 5.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 
         // Back (-Z)
-        5.0f,
-        -5.0f,
-        -5.0f,
-        0.0f,
-        0.0f,
-        -5.0f,
-        -5.0f,
-        -5.0f,
-        1.0f,
-        0.0f,
-        -5.0f,
-        5.0f,
-        -5.0f,
-        1.0f,
-        1.0f,
-        5.0f,
-        5.0f,
-        -5.0f,
-        0.0f,
-        1.0f,
+        5.0f, -5.0f, -5.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -5.0f, -5.0f, -5.0f,
+        0.0f, 0.0f, -1.0f, 1.0f, 0.0f, -5.0f, 5.0f, -5.0f, 0.0f, 0.0f, -1.0f,
+        1.0f, 1.0f, 5.0f, 5.0f, -5.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
 
         // Left (-X)
-        -5.0f,
-        -5.0f,
-        -5.0f,
-        0.0f,
-        0.0f,
-        -5.0f,
-        -5.0f,
-        5.0f,
-        1.0f,
-        0.0f,
-        -5.0f,
-        5.0f,
-        5.0f,
-        1.0f,
-        1.0f,
-        -5.0f,
-        5.0f,
-        -5.0f,
-        0.0f,
-        1.0f,
+        -5.0f, -5.0f, -5.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -5.0f, -5.0f, 5.0f,
+        -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, -5.0f, 5.0f, 5.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, -5.0f, 5.0f, -5.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 
         // Right (+X)
-        5.0f,
-        -5.0f,
-        5.0f,
-        0.0f,
-        0.0f,
-        5.0f,
-        -5.0f,
-        -5.0f,
-        1.0f,
-        0.0f,
-        5.0f,
-        5.0f,
-        -5.0f,
-        1.0f,
-        1.0f,
-        5.0f,
-        5.0f,
-        5.0f,
-        0.0f,
-        1.0f,
+        5.0f, -5.0f, 5.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, -5.0f, -5.0f,
+        1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f, -5.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 5.0f, 5.0f, 5.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
 
         // Top (+Y)
-        -5.0f,
-        5.0f,
-        5.0f,
-        0.0f,
-        0.0f,
-        5.0f,
-        5.0f,
-        5.0f,
-        1.0f,
-        0.0f,
-        5.0f,
-        5.0f,
-        -5.0f,
-        1.0f,
-        1.0f,
-        -5.0f,
-        5.0f,
-        -5.0f,
-        0.0f,
-        1.0f,
+        -5.0f, 5.0f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 5.0f, 5.0f, 5.0f, 0.0f,
+        1.0f, 0.0f, 1.0f, 0.0f, 5.0f, 5.0f, -5.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        -5.0f, 5.0f, -5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 
         // Bottom (-Y)
-        -5.0f,
-        -5.0f,
-        -5.0f,
-        0.0f,
-        0.0f,
-        5.0f,
-        -5.0f,
-        -5.0f,
-        1.0f,
-        0.0f,
-        5.0f,
-        -5.0f,
-        5.0f,
-        1.0f,
-        1.0f,
-        -5.0f,
-        -5.0f,
-        5.0f,
-        0.0f,
-        1.0f,
-    };
+        -5.0f, -5.0f, -5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 5.0f, -5.0f, -5.0f,
+        0.0f, -1.0f, 0.0f, 1.0f, 0.0f, 5.0f, -5.0f, 5.0f, 0.0f, -1.0f, 0.0f,
+        1.0f, 1.0f, -5.0f, -5.0f, 5.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f};
 
     uint32_t indices[] = {
         0,  1,  2,  0,  2,  3,  // Front
@@ -175,14 +73,12 @@ public:
         20, 21, 22, 20, 22, 23  // Bottom
     };
     //
-    // float vertices[] = {
-    //     // position            // uv
-    //     -5.0f, -5.0f, -10.0f, 0.0, 0.0, // A
-    //     5.0f,  -5.0f, -10.0f, 1.0, 0.0, // B
-    //     5.0f,  5.0f,  -10.0f, 1.0, 1.0, // C
-    //     -5.0f, 5.0f,  -10.0f, 0.0, 1.0  // D
-    // };
-    //
+    // float vertices[] = {// position             // normal       // uv
+    //                     -5.0f, -5.0f, -10.0f, 0, 0, 1, 0, 0,
+    //                     5.0f,  -5.0f, -10.0f, 0, 0, 1, 1, 0,
+    //                     5.0f,  5.0f,  -10.0f, 0, 0, 1, 1, 1,
+    //                     -5.0f, 5.0f,  -10.0f, 0, 0, 1, 0, 1};
+    // //
     // uint indices[] = {0, 1, 2, 0, 2, 3};
     // Not using DSA
     // glGenBuffers(1, &vbo);
@@ -216,7 +112,7 @@ public:
                               0, // binding index
                               vbo,
                               0,                // offset
-                              5 * sizeof(float) // stride
+                              8 * sizeof(float) // stride
     );
 
     // Position: attribute 0
@@ -233,19 +129,33 @@ public:
                                0, // attribute index
                                0  // binding index
     );
-
-    // UV: attribute 1
+    // normal
     glEnableVertexArrayAttrib(vao, 1);
 
     glVertexArrayAttribFormat(vao,
                               1, // attribute index
-                              2, // 2 floats
+                              3, // 3 floats
                               GL_FLOAT, GL_FALSE,
                               3 * sizeof(float) // offset
     );
 
     glVertexArrayAttribBinding(vao,
                                1, // attribute index
+                               0  // binding index
+    );
+
+    // UV: attribute 1
+    glEnableVertexArrayAttrib(vao, 2);
+
+    glVertexArrayAttribFormat(vao,
+                              2, // attribute index
+                              2, // 2 floats
+                              GL_FLOAT, GL_FALSE,
+                              6 * sizeof(float) // offset
+    );
+
+    glVertexArrayAttribBinding(vao,
+                               2, // attribute index
                                0  // binding index
     );
 
@@ -283,7 +193,7 @@ public:
 
   void OnRender() override {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 0.0f, 0.0f, 0.001f);
+    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, cam.getWidth(), cam.getHeight());
     basicshader.use();
@@ -302,9 +212,9 @@ public:
     basicshader.SetMat4("model", modelTransform.getTransformationMatrix());
     basicshader.SetMat4("view", view);
     basicshader.SetMat4("projection", perspective);
-    bag.render(basicshader);
-    // glBindVertexArray(vao);
-    // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    // bag.render(basicshader);
+    glBindVertexArray(vao);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
   }
 
   void OnEvent(Core::Event &e) override {
@@ -339,8 +249,6 @@ private:
     return true;
   }
 
-  // bool handleWindowClose(Core::WindowClosedEvent &e) { return false; }
-
   bool handleWindowResize(Core::WindowResizeEvent &e) {
     cam.setWidth(e.GetWidth());
     cam.setHeight(e.GetHeight());
@@ -355,7 +263,7 @@ private:
 
   Renderer::ShaderProgram basicshader = {"./shaders/basicshader.vert",
                                          "shaders/basicshader.frag"};
-  Renderer::Model bag = Renderer::Model("./models/backpack/backpack.obj");
+  // Renderer::Model bag = Renderer::Model("./models/backpack/backpack.obj");
   GLuint vbo, ebo, vao;
   Core::Camera cam;
   std::shared_ptr<Renderer::Texture> tex;

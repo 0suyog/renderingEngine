@@ -11,16 +11,12 @@ struct Texture {
   std::string path;
 };
 
-static std::shared_ptr<Texture> default_texture;
-static std::shared_ptr<Texture> black_texture;
-static std::shared_ptr<Texture> error_texture;
-
 enum class BuiltInTexture { DEFAULT = 1, BLACK, ERROR };
 enum class TextureType { DIFFUSE = 1, SPECULAR };
 
 std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path);
 std::shared_ptr<Texture> TextureFromMemory(unsigned char *data, int length);
 std::shared_ptr<Texture> TextureFromImage(const Core::Image &i);
-std::shared_ptr<Texture> GetBuiltInTexture();
+std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex);
 
 } // namespace Renderer

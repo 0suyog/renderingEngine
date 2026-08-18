@@ -1,5 +1,6 @@
 #include "shader.h"
 #include "texture.h"
+#include <iostream>
 #include <memory>
 #include <mesh.h>
 #include <string>
@@ -11,6 +12,7 @@ Mesh::Mesh(
     const std::unordered_map<TextureType, std::vector<std::shared_ptr<Texture>>>
         &textures_map)
     : vertices(vertices), indices(indices), textures_map(textures_map) {
+  auto t = textures_map.at(TextureType::DIFFUSE);
   setupMesh();
 }
 
@@ -39,7 +41,6 @@ void Mesh::setupMesh() {
 }
 
 void Mesh::render(const ShaderProgram &s) const {
-  // std::cerr << "meow";
   s.use();
   unsigned int diffuseNr = 1, specularNr = 1;
   for (auto &[type, textures] : textures_map) {
@@ -54,13 +55,8 @@ void Mesh::render(const ShaderProgram &s) const {
     }
     for (int i = 0; i < textures.size(); i++) {
       glActiveTexture(GL_TEXTURE0 + i);
-      std::string number;
-      if (name == "diffuse") {
-        number = std::to_string(diffuseNr++);
-      } else if (name == "specular") {
-        number = std::to_string(specularNr++);
-      }
-      s.SetInt(("material" + name + number).c_str(), i);
+      // std::string number;
+      s.SetInt(("material" + name + std::to_string(i)).c_str(), i);
       glBindTexture(GL_TEXTURE_2D, textures[i]->handle);
     }
   }
