@@ -9,6 +9,7 @@ struct Image {
   int width = 0, height = 0;
   int channels = 1;
   unsigned char *data = nullptr;
+  std::filesystem::path imagePath;
 
   ~Image() noexcept {
     if (data)
@@ -38,6 +39,7 @@ struct Image {
       height = other.height;
       channels = other.channels;
       data = other.data;
+      imagePath = other.imagePath;
       other.data = nullptr;
     }
     return *this;
@@ -46,4 +48,5 @@ struct Image {
 
 std::optional<std::string> ReadTextFile(const std::filesystem::path &path);
 std::optional<Image> ReadImage(const std::filesystem::path &path);
+std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length);
 } // namespace Core

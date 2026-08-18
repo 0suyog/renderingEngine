@@ -3,6 +3,10 @@ project (Core)
 add_library(engine.core)
 add_library(engine::core ALIAS engine.core)
 
+SET(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_EXTENSIONS OFF)
+
 target_sources(
   engine.core
 	 PRIVATE
@@ -19,9 +23,10 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/renderer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/shader.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/texture.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/model.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/mesh.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/src/glad.c
 )
 
@@ -48,9 +53,11 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/renderables.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/shader.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/mesh.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/model.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/renderer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/2dprimitives.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/texture.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/embededimages.h
 )
 
 set_target_properties(engine.core 

@@ -39,7 +39,7 @@ public:
     glEnableVertexAttribArray(0);
   }
 
-  void render(const ShaderProgram &s) override {}
+  void render(const ShaderProgram &s) const override {}
 
 private:
   GLuint VAO, VBO, EBO;

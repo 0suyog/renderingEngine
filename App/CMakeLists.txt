@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
 project (App)
-
+SET(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+SET(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(App)
 
@@ -37,6 +39,7 @@ App
 add_custom_command(TARGET App POST_BUILD 
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/shaders  ${CMAKE_CURRENT_BINARY_DIR}/shaders
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/images  ${CMAKE_CURRENT_BINARY_DIR}/images
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/models  ${CMAKE_CURRENT_BINARY_DIR}/models
 )
 
 target_link_libraries(App engine.core)
