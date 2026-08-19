@@ -94,9 +94,13 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         loadMaterialTextures(material, aiTextureType_DIFFUSE);
     std::vector<std::shared_ptr<Texture>> specularTextures =
         loadMaterialTextures(material, aiTextureType_SPECULAR);
+    if (diffuseTextures.size() > 0) {
 
-    textures[TextureType::DIFFUSE] = diffuseTextures;
-    textures[TextureType::SPECULAR] = specularTextures;
+      textures[TextureType::DIFFUSE] = diffuseTextures;
+    }
+    if (specularTextures.size() > 0) {
+      textures[TextureType::SPECULAR] = specularTextures;
+    }
   }
   return Mesh(vertices, indices, textures);
 };

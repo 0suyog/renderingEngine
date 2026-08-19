@@ -25,12 +25,12 @@ public:
     Renderer::Triangle(glm::vec3(0, 1, 2), glm::vec3(3, 4, 5),
                        glm::vec3(6, 7, 8));
 
-    tex = Renderer::TextureFromFile("./images/barrel.jpg");
-
-    if (tex == nullptr) {
-      std::cerr << "Failed creating Texture" << "\n";
-      exit(-1);
-    }
+    // tex = Renderer::TextureFromFile("./images/barrel.jpg");
+    //
+    // if (tex == nullptr) {
+    //   std::cerr << "Failed creating Texture" << "\n";
+    //   exit(-1);
+    // }
 
     float vertices[] = {
         // Front (+Z)
@@ -207,12 +207,12 @@ public:
     auto perspective = cam.prespectiveMat();
     auto view = cam.lookAt();
 
-    glBindTextureUnit(0, tex->handle);
+    // glBindTextureUnit(0, tex->handle);
 
     basicshader.SetMat4("model", modelTransform.getTransformationMatrix());
     basicshader.SetMat4("view", view);
     basicshader.SetMat4("projection", perspective);
-    // bag.render(basicshader);
+    bag.render(basicshader);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
   }
@@ -263,7 +263,7 @@ private:
 
   Renderer::ShaderProgram basicshader = {"./shaders/basicshader.vert",
                                          "shaders/basicshader.frag"};
-  // Renderer::Model bag = Renderer::Model("./models/backpack/backpack.obj");
+  Renderer::Model bag = Renderer::Model("./models/chessKing/chessKing.obj");
   GLuint vbo, ebo, vao;
   Core::Camera cam;
   std::shared_ptr<Renderer::Texture> tex;

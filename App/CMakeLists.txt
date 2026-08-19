@@ -36,7 +36,7 @@ App
 )
 
 
-add_custom_command(TARGET App POST_BUILD 
+add_custom_target(copy_assets ALL 
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/shaders  ${CMAKE_CURRENT_BINARY_DIR}/shaders
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/images  ${CMAKE_CURRENT_BINARY_DIR}/images
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/models  ${CMAKE_CURRENT_BINARY_DIR}/models

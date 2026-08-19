@@ -12,7 +12,6 @@ Mesh::Mesh(
     const std::unordered_map<TextureType, std::vector<std::shared_ptr<Texture>>>
         &textures_map)
     : vertices(vertices), indices(indices), textures_map(textures_map) {
-  auto t = textures_map.at(TextureType::DIFFUSE);
   setupMesh();
 }
 
@@ -42,23 +41,42 @@ void Mesh::setupMesh() {
 
 void Mesh::render(const ShaderProgram &s) const {
   s.use();
-  unsigned int diffuseNr = 1, specularNr = 1;
+  GLint activeTexture = 0;
+  bool hasDiffuse = false;
+  bool hasSpecular = false;
+  std::string diffuseName = "diffuse", specularName = "specular";
   for (auto &[type, textures] : textures_map) {
     std::string name;
     switch (type) {
     case TextureType::DIFFUSE:
-      name = "diffuse";
+      std::cerr << textures.size();
+      name = diffuseName;
+      hasDiffuse = true;
       break;
     case TextureType::SPECULAR:
-      name = "specular";
+      name = specularName;
+      hasSpecular = true;
       break;
     }
     for (int i = 0; i < textures.size(); i++) {
-      glActiveTexture(GL_TEXTURE0 + i);
-      // std::string number;
-      s.SetInt(("material" + name + std::to_string(i)).c_str(), i);
+      glActiveTexture(GL_TEXTURE0 + activeTexture++);
+      s.SetInt(("material." + name + std::to_string(i)).c_str(), activeTexture);
       glBindTexture(GL_TEXTURE_2D, textures[i]->handle);
     }
+  }
+  if (!hasDiffuse) {
+    glActiveTexture(GL_TEXTURE0 + activeTexture++);
+    s.SetInt(("material." + diffuseName + std::to_string(0)).c_str(),
+             activeTexture);
+    glBindTexture(GL_TEXTURE_2D,
+                  GetBuiltInTexture(BuiltInTexture::DEFAULT)->handle);
+  }
+  if (!hasSpecular) {
+    glActiveTexture(GL_TEXTURE0 + activeTexture++);
+    s.SetInt(("material." + specularName + std::to_string(0)).c_str(),
+             activeTexture);
+    glBindTexture(GL_TEXTURE_2D,
+                  GetBuiltInTexture(BuiltInTexture::BLACK)->handle);
   }
   glActiveTexture(GL_TEXTURE0);
   glBindVertexArray(m_VAO);

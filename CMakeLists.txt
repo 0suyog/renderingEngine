@@ -10,6 +10,6 @@ add_subdirectory(App)
 
 add_custom_target(run
   COMMAND $<TARGET_FILE:App>
-  DEPENDS App
+  DEPENDS App copy_assets
   WORKING_DIRECTORY $<TARGET_FILE_DIR:App>
 )
