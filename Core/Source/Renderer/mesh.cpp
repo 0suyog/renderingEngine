@@ -2,7 +2,7 @@
 #include "texture.h"
 #include <iostream>
 #include <memory>
-#include <mesh.h>
+#include "mesh.h"
 #include <string>
 #include <sys/types.h>
 namespace Renderer {

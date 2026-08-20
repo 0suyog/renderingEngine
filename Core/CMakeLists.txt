@@ -13,20 +13,19 @@ target_sources(
 	 FILE_SET SOURCES
 		BASE_DIRS
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors
 		FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/transform.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/window.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/application.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Source/camera.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/shader.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/texture.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/model.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Renderer/mesh.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shader.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/model.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/mesh.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/src/glad.c
 )
 
@@ -36,7 +35,6 @@ target_sources(
 		FILE_SET HEADERS
 		BASE_DIRS
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors
 		FILES
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.h
@@ -45,19 +43,19 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/window.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/application.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/transform.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/camera.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/event.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/renderables.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/shader.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/mesh.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/model.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/renderer.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/2dprimitives.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/texture.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Renderer/embededimages.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/renderables.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shader.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/mesh.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/model.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/renderer.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/2dprimitives.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/embededimages.h
 )
 
 set_target_properties(engine.core 

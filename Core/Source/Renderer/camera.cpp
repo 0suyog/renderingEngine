@@ -3,11 +3,9 @@
 #include "glm/geometric.hpp"
 #include "glm/trigonometric.hpp"
 #include "movement.h"
-#include "transform.h"
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
-#include <iostream>
-namespace Core {
+namespace Renderer {
 glm::mat4 Camera::prespectiveMat() const {
   // TODO: make this by myself without relying on glm
   return glm::perspective(glm::radians(fov), v_Width / v_Height, near, far);
@@ -34,25 +32,25 @@ void Camera::move(Core::Movement movement, float timeStep) {
   // std::cerr << "movement: " << movementVector.x << " " << movementVector.y
   //           << " " << movementVector.z << "\n";
   float speed = walkSpeed;
-  if (movement & LEFT) {
+  if (movement & Core::LEFT) {
     movementVector -= right;
   }
-  if (movement & RIGHT) {
+  if (movement & Core::RIGHT) {
     movementVector += right;
   }
-  if (movement & UP) {
+  if (movement & Core::UP) {
     movementVector += up;
   }
-  if (movement & DOWN) {
+  if (movement & Core::DOWN) {
     movementVector -= up;
   }
-  if (movement & FORWARD) {
+  if (movement & Core::FORWARD) {
     movementVector += forward;
   }
-  if (movement & BACKWARD) {
+  if (movement & Core::BACKWARD) {
     movementVector -= forward;
   }
-  if (movement & FAST) {
+  if (movement & Core::FAST) {
     speed = sprintSpeed;
   }
 
@@ -68,4 +66,4 @@ void Camera::move(Core::Movement movement, float timeStep) {
   position += speed * movementVector * timeStep;
 }
 
-} // namespace Core
+} // namespace Renderer

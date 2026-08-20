@@ -4,7 +4,6 @@
 #include <iostream>
 #include <optional>
 #include <string>
-#include "embededimages.h"
 #include "stb_image.h"
 namespace Core {
 std::optional<std::string> ReadTextFile(const std::filesystem::path &path) {

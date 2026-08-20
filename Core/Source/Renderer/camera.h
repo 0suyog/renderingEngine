@@ -1,7 +1,7 @@
 #pragma once
 #include "movement.h"
 #include <glm/ext/matrix_float4x4.hpp>
-namespace Core {
+namespace Renderer {
 class Camera {
 public:
   Camera() { rotate(0, 0); }
@@ -39,4 +39,4 @@ private:
             position = {0, 0, 0};
   float sensitivity = 0.05;
 };
-} // namespace Core
+} // namespace Renderer

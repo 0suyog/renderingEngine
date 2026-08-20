@@ -1,22 +1,18 @@
 #pragma once
-#include "2dprimitives.h"
-#include "camera.h"
-#include "glm/ext/vector_float3.hpp"
-#include "glm/fwd.hpp"
-#include "model.h"
-#include "texture.h"
+#include "Renderer/2dprimitives.h"
+#include "Renderer/camera.h"
+#include "Renderer/model.h"
+#include "Renderer/texture.h"
 #include "transform.h"
 #include "windowevents.h"
 #include "movement.h"
-#include "shader.h"
+#include "Renderer/shader.h"
 #include "application.h"
 #include "event.h"
 #include "layer.h"
 #include "inputevents.h"
 #include <GLFW/glfw3.h>
-#include <cstdlib>
 #include <iostream>
-#include <memory>
 class AppLayer : public Core::Layer {
 public:
   AppLayer() {
@@ -265,6 +261,6 @@ private:
                                          "shaders/basicshader.frag"};
   Renderer::Model bag = Renderer::Model("./models/chessKing/chessKing.obj");
   GLuint vbo, ebo, vao;
-  Core::Camera cam;
+  Renderer::Camera cam;
   std::shared_ptr<Renderer::Texture> tex;
 };
