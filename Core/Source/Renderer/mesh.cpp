@@ -15,6 +15,12 @@ Mesh::Mesh(
   setupMesh();
 }
 
+Mesh::Mesh(const std::vector<Vertex> &vertices,
+           const std::vector<unsigned int> &indices)
+    : vertices(vertices), indices(indices) {
+  setupMesh();
+}
+
 void Mesh::setupMesh() {
   glCreateBuffers(1, &m_VBO);
   glNamedBufferData(m_VBO, vertices.size() * sizeof(Vertex), &vertices[0],

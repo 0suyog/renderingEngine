@@ -16,7 +16,6 @@ class Mesh : public Renderable {
 public:
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
-  // std::vector<std::shared_ptr<Texture>> textures;
   std::unordered_map<TextureType, std::vector<std::shared_ptr<Texture>>>
       textures_map;
 
@@ -24,6 +23,9 @@ public:
        const std::vector<unsigned int> &indices,
        const std::unordered_map<
            TextureType, std::vector<std::shared_ptr<Texture>>> &textures_map);
+
+  Mesh(const std::vector<Vertex> &vertices,
+       const std::vector<unsigned int> &indices);
 
   void setupMesh();
 

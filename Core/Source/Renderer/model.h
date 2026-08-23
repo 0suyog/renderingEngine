@@ -10,7 +10,13 @@ namespace Renderer {
 class Model : public Renderable {
 public:
   Model(const std::string &path) { loadModel(path); }
+  Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {}
   void render(const ShaderProgram &s) const override;
+
+  static Model Cube();
+  static Model Triangle();
+  static Model Quad();
+  static Model Pyramid(float s = 0.5f, float h = 1.0f);
 
 private:
   // model data
