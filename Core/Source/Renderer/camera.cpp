@@ -79,7 +79,7 @@ void Camera::move(Core::Movement movement, float timeStep) {
   // std::cerr << "movement: " << movementVector.x << " " << movementVector.y
   //           << " " << movementVector.z << "\n";
 
-  position += speed * movementVector * timeStep;
+  transform.moveto(speed * movementVector * timeStep);
 }
 
 } // namespace Renderer
