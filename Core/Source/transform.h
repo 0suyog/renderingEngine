@@ -10,7 +10,7 @@ public:
   void rotate(float angle_in_deg, const glm::vec3 &axis);
   void revolve(const glm::vec3 &around, float radius, float angleInDeg,
                const glm::vec3 &axis, const glm::vec3 &zerodegDir);
-  void moveto(glm::vec3 pos);
+  void moveto(const glm::vec3 &pos);
   void scale(const glm::vec3 &scale);
 
 private:

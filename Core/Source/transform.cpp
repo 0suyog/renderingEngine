@@ -27,4 +27,8 @@ void Transform::scale(const glm::vec3 &scale) {
   m_transformationMatrix = glm::scale(m_transformationMatrix, scale);
 }
 
+void Transform::moveto(const glm::vec3 &pos) {
+  m_transformationMatrix = glm::translate(m_transformationMatrix, pos);
+}
+
 } // namespace Core
