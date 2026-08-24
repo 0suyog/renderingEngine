@@ -5,7 +5,7 @@
 namespace Renderer {
 class Camera {
 public:
-  Camera() { rotate(0, 0); }
+  Camera() { rotateByMouse(0, 0); }
   glm::mat4 lookAt() const;
   glm::mat4 prespectiveMat() const;
   glm::mat4 orthographicMat() const;
@@ -27,7 +27,7 @@ public:
   float getWidth() const { return v_Width; }
   float getHeight() const { return v_Height; }
 
-  void rotate(float dx, float dy);
+  void rotateByMouse(float dx, float dy);
 
 private:
   Core::Transform transform;
