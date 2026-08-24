@@ -28,16 +28,16 @@ public:
   float getHeight() const { return v_Height; }
 
   void rotateByMouse(float dx, float dy);
+  float fov = 45.0f;
+  float sensitivity = 0.05;
+  float walkSpeed = 5.0f;
+  float sprintSpeed = 9.0f;
 
 private:
   Core::Transform transform;
-  float fov = 45.0f;
   float near = 0.01, far = 1000.0f;
   float v_Width = 800, v_Height = 600;
   float aspectRatio = v_Width / v_Height;
-  float walkSpeed = 5.0f;
-  float sprintSpeed = 9.0f;
   glm::vec3 up = {0, 1, 0}, forward = {0, 0, -1}, right = {1, 0, 0};
-  float sensitivity = 0.05;
 };
 } // namespace Renderer
