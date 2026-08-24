@@ -27,13 +27,13 @@ public:
     basicShader.use();
     auto modelTransform = Core::Transform();
 
-    // modelTransform.scale(glm::vec3(0.5, 0.5, 0.5));
+    modelTransform.scale(glm::vec3(5, 5, 0.5));
     // modelTransform.rotate(glfwGetTime(), glm::vec3(0, 0, -1));
     // modelTransform.revolve(glm::vec3(0), 20.0, 63 * glfwGetTime(),
     //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
     //                        0.0));
-    //
-    modelTransform.moveto({0, 0, 0});
+
+    modelTransform.moveto({0, 0, 100});
     auto perspective = cam.prespectiveMat();
     auto view = cam.lookAt();
 
@@ -65,7 +65,6 @@ private:
   }
 
   bool handleKeyPress(Core::KeyPressedEvent &e) {
-    // std::cerr << "char: " << e.GetPrintableChar() << '\n';
     if (e.GetKeyCode() == GLFW_KEY_ESCAPE ||
         e.GetKeyCode() == GLFW_KEY_CAPS_LOCK) {
       auto &app = Core::Application::Get();
@@ -75,9 +74,17 @@ private:
     return true;
   }
 
-  bool handleWindowResize(Core::WindowResizeEvent &e) { return false; }
+  bool handleWindowResize(Core::WindowResizeEvent &e) {
+    cam.setWidth(e.GetWidth());
+    cam.setHeight(e.GetHeight());
+    return false;
+    return false;
+  }
 
-  bool handleMouseMove(Core::MouseMovedEvent &e) { return false; }
+  bool handleMouseMove(Core::MouseMovedEvent &e) {
+    cam.rotate(e.GetdX(), e.GetdY());
+    return false;
+  }
 
   Renderer::Model leftPaddle = Renderer::Model::Quad();
   Renderer::ShaderProgram basicShader = Renderer::ShaderProgram(
