@@ -27,17 +27,17 @@ public:
     basicShader.use();
     auto modelTransform = Core::Transform();
 
-    modelTransform.scale(glm::vec3(5, 5, 0.5));
+    // modelTransform.scale(glm::vec3(5, 5, 0.5));
     // modelTransform.rotate(glfwGetTime(), glm::vec3(0, 0, -1));
     // modelTransform.revolve(glm::vec3(0), 20.0, 63 * glfwGetTime(),
     //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
     //                        0.0));
 
-    modelTransform.moveto({0, 0, 100});
+    // modelTransform.moveto({100, 0, 100});
     auto perspective = cam.prespectiveMat();
     auto view = cam.lookAt();
 
-    basicShader.SetMat4("model", modelTransform.getTransformationMatrix());
+    basicShader.SetMat4("model", modelTransform.matrix());
     basicShader.SetMat4("view", view);
     basicShader.SetMat4("projection", perspective);
     leftPaddle.render(basicShader);
@@ -86,7 +86,7 @@ private:
     return false;
   }
 
-  Renderer::Model leftPaddle = Renderer::Model::Quad();
+  Renderer::Model leftPaddle = Renderer::Model::Cube();
   Renderer::ShaderProgram basicShader = Renderer::ShaderProgram(
       "./shaders/basicshader.vert", "./shaders/basicshader.frag");
   Renderer::Camera cam;
