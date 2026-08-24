@@ -31,7 +31,7 @@ glm::mat4 Camera::lookAt() const {
                      up);
 }
 
-void Camera::rotate(float dx, float dy) {
+void Camera::rotateByMouse(float dx, float dy) {
   transform.rotate(transform.getPitch() + dy * sensitivity,
                    transform.getYaw() + dx * sensitivity, 0);
   forward =

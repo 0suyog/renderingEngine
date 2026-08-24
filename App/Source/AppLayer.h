@@ -112,7 +112,7 @@ private:
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    cam.rotate(e.GetdX(), e.GetdY());
+    cam.rotateByMouse(e.GetdX(), e.GetdY());
     // std::cerr << "dx: " << e.GetdX() << "dy: " << e.GetdY() << "\n";
     return false;
   }
