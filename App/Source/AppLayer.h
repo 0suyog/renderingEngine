@@ -66,7 +66,7 @@ public:
 
     // glBindTextureUnit(0, tex->handle);
 
-    basicshader.SetMat4("model", modelTransform.getTransformationMatrix());
+    basicshader.SetMat4("model", modelTransform.matrix());
     basicshader.SetMat4("view", view);
     basicshader.SetMat4("projection", perspective);
     // bag.render(basicshader);

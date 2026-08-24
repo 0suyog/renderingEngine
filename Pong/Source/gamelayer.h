@@ -15,6 +15,8 @@ public:
   GameLayer() {
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    cam.fov = 90.0f;
+    cam.position({0, 0, -40});
   }
 
   void OnUpdate(float ts) override {}
@@ -33,8 +35,8 @@ public:
     //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
     //                        0.0));
 
-    // modelTransform.moveto({100, 0, 100});
-    auto perspective = cam.prespectiveMat();
+    modelTransform.moveto({10, 0, 10});
+    auto perspective = cam.orthographicMat();
     auto view = cam.lookAt();
 
     basicShader.SetMat4("model", modelTransform.matrix());
@@ -86,7 +88,7 @@ private:
     return false;
   }
 
-  Renderer::Model leftPaddle = Renderer::Model::Cube();
+  Renderer::Model leftPaddle = Renderer::Model::Quad();
   Renderer::ShaderProgram basicShader = Renderer::ShaderProgram(
       "./shaders/basicshader.vert", "./shaders/basicshader.frag");
   Renderer::Camera cam;

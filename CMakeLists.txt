@@ -7,16 +7,16 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(Core)
 add_subdirectory(Pong)
-# add_subdirectory(App)
+add_subdirectory(App)
 
-# add_custom_target(run
-#   COMMAND $<TARGET_FILE:App>
-#   DEPENDS App copy_assets
-#   WORKING_DIRECTORY $<TARGET_FILE_DIR:App>
-# )
+add_custom_target(run
+  COMMAND $<TARGET_FILE:App>
+  DEPENDS App copy_assets
+  WORKING_DIRECTORY $<TARGET_FILE_DIR:App>
+)
 
 add_custom_target(pong
   COMMAND $<TARGET_FILE:Pong>
-  DEPENDS Pong copy_assets
+  DEPENDS Pong copy_assets_pong
   WORKING_DIRECTORY $<TARGET_FILE_DIR:Pong>
 )
