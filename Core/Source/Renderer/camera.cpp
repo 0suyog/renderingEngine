@@ -15,18 +15,30 @@ glm::mat4 Camera::orthographicMat() const {
   return glm::ortho(0.0f, v_Width, 0.0f, v_Height, near, far);
 }
 
+Camera &Camera::rotation(float pitch, float yaw, float roll) {
+  transform.rotate(pitch, yaw, roll);
+  return *this;
+}
+
+Camera &Camera::position(const glm::vec3 &pos) {
+  transform.moveto(pos);
+  return *this;
+}
+
 glm::mat4 Camera::lookAt() const {
   // TODO: make this by myself without relying on glm
-  return glm::lookAt(position, position + forward, up);
+  return glm::lookAt(transform.getPosition(), transform.getPosition() + forward,
+                     up);
 }
 
 void Camera::rotate(float dx, float dy) {
-  pitch += dy * sensitivity;
-  yaw += dx * sensitivity;
-  forward = -glm::normalize(
-      glm::vec3(cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-                sin(glm::radians(pitch)),
-                sin(glm::radians(yaw)) * cos(glm::radians(pitch))));
+  transform.rotate(dy * sensitivity, dx * sensitivity, 0);
+  forward =
+      -glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
+                                    cos(glm::radians(transform.getPitch())),
+                                sin(glm::radians(transform.getPitch())),
+                                sin(glm::radians(transform.getYaw())) *
+                                    cos(glm::radians(transform.getPitch()))));
   right = glm::normalize(glm::cross(forward, {0, 1, 0}));
   up = glm ::cross(right, forward);
 }

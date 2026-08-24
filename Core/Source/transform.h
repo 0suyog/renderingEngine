@@ -3,8 +3,15 @@
 namespace Core {
 class Transform {
 public:
+  float getPitch() const;
+  float getYaw() const;
+  float getRoll() const;
+
+  const glm::vec3 &getPosition() const;
+  const glm::vec3 &getScale() const;
+
   glm::mat4 matrix() const;
-  Transform &rotate(float yaw, float pitch, float roll);
+  Transform &rotate(float pitch, float yaw, float roll);
   Transform &rotate(float allAxisAngle);
   // void revolve(const glm::vec3 &around, float radius, float angleInDeg,
   //              const glm::vec3 &axis, const glm::vec3 &zerodegDir);
@@ -12,9 +19,9 @@ public:
   Transform &scale(const glm::vec3 &scale);
 
 private:
-  glm::vec3 m_rotation = {0, 0, 0};
-  glm::vec3 m_position;
-  glm::vec3 m_scale;
-  glm::mat4 m_transformationMatrix = glm::mat4(1.0f);
+  // pitch, yaw, roll
+  glm::vec3 m_rotation = {0.0f, 0.0f, 0.0f};
+  glm::vec3 m_position = {0.0f, 0.0f, 0.0f};
+  glm::vec3 m_scale = {1.0f, 1.0f, 1.0f};
 };
 } // namespace Core

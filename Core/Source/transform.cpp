@@ -3,7 +3,17 @@
 #include "glm/ext/matrix_transform.hpp"
 namespace Core {
 
-Transform &Transform::rotate(float yaw, float pitch, float roll) {
+float Transform::getPitch() const { return m_rotation.x; }
+
+float Transform::getYaw() const { return m_rotation.y; }
+
+float Transform::getRoll() const { return m_rotation.z; }
+
+const glm::vec3 &Transform::getPosition() const { return m_position; }
+
+const glm::vec3 &Transform::getScale() const { return m_scale; }
+
+Transform &Transform::rotate(float pitch, float yaw, float roll) {
   m_rotation.x = pitch;
   m_rotation.y = yaw;
   m_rotation.z = roll;
