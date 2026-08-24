@@ -32,7 +32,8 @@ glm::mat4 Camera::lookAt() const {
 }
 
 void Camera::rotate(float dx, float dy) {
-  transform.rotate(dy * sensitivity, dx * sensitivity, 0);
+  transform.rotate(transform.getPitch() + dy * sensitivity,
+                   transform.getYaw() + dx * sensitivity, 0);
   forward =
       -glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
                                     cos(glm::radians(transform.getPitch())),
