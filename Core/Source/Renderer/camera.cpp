@@ -11,6 +11,10 @@ glm::mat4 Camera::prespectiveMat() const {
   return glm::perspective(glm::radians(fov), v_Width / v_Height, near, far);
 }
 
+glm::mat4 Camera::orthographicMat() const {
+  return glm::ortho(0.0f, v_Width, 0.0f, v_Height, near, far);
+}
+
 glm::mat4 Camera::lookAt() const {
   // TODO: make this by myself without relying on glm
   return glm::lookAt(position, position + forward, up);
