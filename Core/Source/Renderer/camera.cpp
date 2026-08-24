@@ -5,6 +5,7 @@
 #include "movement.h"
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
+#include <iostream>
 namespace Renderer {
 glm::mat4 Camera::prespectiveMat() const {
   // TODO: make this by myself without relying on glm
@@ -12,11 +13,23 @@ glm::mat4 Camera::prespectiveMat() const {
 }
 
 glm::mat4 Camera::orthographicMat() const {
-  return glm::ortho(0.0f, v_Width, 0.0f, v_Height, near, far);
+  return glm::ortho(-v_Width / 2.0f, v_Width / 2.0f, -v_Height / 2.0f,
+                    v_Height / 2.0f, near, far);
 }
 
 Camera &Camera::rotation(float pitch, float yaw, float roll) {
   transform.rotate(pitch, yaw, roll);
+  forward =
+      glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
+                                   cos(glm::radians(transform.getPitch())),
+                               sin(glm::radians(transform.getPitch())),
+                               sin(glm::radians(transform.getYaw())) *
+                                   cos(glm::radians(transform.getPitch()))));
+  right = glm::normalize(glm::cross(forward, {0, 1, 0}));
+  up = glm ::cross(right, forward);
+  std::cerr << "pitch: " << transform.getPitch()
+            << "yaw: " << transform.getYaw() << "roll: " << transform.getRoll()
+            << "\n";
   return *this;
 }
 
@@ -34,12 +47,15 @@ glm::mat4 Camera::lookAt() const {
 void Camera::rotateByMouse(float dx, float dy) {
   transform.rotate(transform.getPitch() + dy * sensitivity,
                    transform.getYaw() + dx * sensitivity, 0);
+  std::cerr << "pitch: " << transform.getPitch()
+            << "yaw: " << transform.getYaw() << "roll: " << transform.getRoll()
+            << "\n";
   forward =
-      -glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
-                                    cos(glm::radians(transform.getPitch())),
-                                sin(glm::radians(transform.getPitch())),
-                                sin(glm::radians(transform.getYaw())) *
-                                    cos(glm::radians(transform.getPitch()))));
+      glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
+                                   cos(glm::radians(transform.getPitch())),
+                               sin(glm::radians(transform.getPitch())),
+                               sin(glm::radians(transform.getYaw())) *
+                                   cos(glm::radians(transform.getPitch()))));
   right = glm::normalize(glm::cross(forward, {0, 1, 0}));
   up = glm ::cross(right, forward);
 }
@@ -80,7 +96,7 @@ void Camera::move(Core::Movement movement, float timeStep) {
   // std::cerr << "movement: " << movementVector.x << " " << movementVector.y
   //           << " " << movementVector.z << "\n";
 
-  transform.moveto(speed * movementVector * timeStep);
+  transform.moveto(transform.getPosition() + speed * movementVector * timeStep);
 }
 
 } // namespace Renderer

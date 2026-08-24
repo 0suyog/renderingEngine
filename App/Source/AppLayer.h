@@ -120,7 +120,7 @@ private:
   Renderer::ShaderProgram basicshader = {"./shaders/basicshader.vert",
                                          "shaders/basicshader.frag"};
   Renderer::Model bag = Renderer::Model("./models/chessKing/chessKing.obj");
-  Renderer::Model cube = Renderer::Model::Pyramid();
+  Renderer::Model cube = Renderer::Model::Cube();
   GLuint vbo, ebo, vao;
   Renderer::Camera cam;
   std::shared_ptr<Renderer::Texture> tex;

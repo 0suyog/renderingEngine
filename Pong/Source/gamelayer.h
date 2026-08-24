@@ -15,8 +15,9 @@ public:
   GameLayer() {
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    cam.fov = 90.0f;
-    cam.position({0, 0, -40});
+    cam.fov = 30.0f;
+    cam.position({0, 0, -10});
+    cam.rotation(0, 90, 0);
   }
 
   void OnUpdate(float ts) override {}
@@ -35,8 +36,8 @@ public:
     //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
     //                        0.0));
 
-    modelTransform.moveto({10, 0, 10});
-    auto perspective = cam.orthographicMat();
+    modelTransform.moveto({0, 0, 0});
+    auto perspective = cam.prespectiveMat();
     auto view = cam.lookAt();
 
     basicShader.SetMat4("model", modelTransform.matrix());
@@ -84,7 +85,9 @@ private:
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    cam.rotateByMouse(e.GetdX(), e.GetdY());
+    // if (e.GetdX() != 0 || e.GetdY() != 0) {
+    //   cam.rotateByMouse(e.GetdX(), e.GetdY());
+    // }
     return false;
   }
 
