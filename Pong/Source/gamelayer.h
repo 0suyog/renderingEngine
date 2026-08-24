@@ -82,7 +82,7 @@ private:
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    cam.rotate(e.GetdX(), e.GetdY());
+    cam.rotateByMouse(e.GetdX(), e.GetdY());
     return false;
   }
 
