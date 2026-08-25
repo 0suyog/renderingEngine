@@ -16,7 +16,7 @@ public:
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     cam.fov = 30.0f;
-    cam.position({0, 0, -10});
+    cam.position({0, 0, 10});
     cam.rotation(0, 0, 0);
   }
 
@@ -63,9 +63,13 @@ public:
 
 private:
   bool handleMousePress(Core::MouseButtonPressedEvent &e) {
+    auto pos = leftPaddle.transform.matrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1);
+    std::cerr << "paddle position normally\n";
     std::cerr << leftPaddle.transform.getPosition().x << " "
               << leftPaddle.transform.getPosition().y << " "
               << leftPaddle.transform.getPosition().z << "\n";
+    std::cerr << "paddle position after multiplying\n";
+    std::cerr << pos.x << " " << pos.y << " " << pos.z << "\n";
     return true;
   }
 
@@ -101,9 +105,9 @@ private:
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    if (e.GetdX() != 0 || e.GetdY() != 0) {
-      cam.rotateByMouse(e.GetdX(), e.GetdY());
-    }
+    // if (e.GetdX() != 0 || e.GetdY() != 0) {
+    //   cam.rotateByMouse(e.GetdX(), e.GetdY());
+    // }
     return false;
   }
 

@@ -35,9 +35,10 @@ public:
 
 private:
   Core::Transform transform;
+  void updateVectors();
   float near = 0.01, far = 1000.0f;
   float v_Width = 800, v_Height = 600;
   float aspectRatio = v_Width / v_Height;
-  glm::vec3 up = {0, 1, 0}, forward = {0, 0, 1}, right = {1, 0, 0};
+  glm::vec3 up = {0, 1, 0}, forward = {0, 0, -1}, right = {1, 0, 0};
 };
 } // namespace Renderer
