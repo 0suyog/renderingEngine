@@ -26,7 +26,8 @@ target_sources(
 		BASE_DIRS
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source
 		FILES
-		  # ${CMAKE_CURRENT_SOURCE_DIR}/Source/AppLayer.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/gameLayer.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/paddle.h
 )
 
 target_include_directories(

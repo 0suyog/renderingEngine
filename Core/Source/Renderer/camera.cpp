@@ -13,6 +13,7 @@ glm::mat4 Camera::prespectiveMat() const {
 }
 
 glm::mat4 Camera::orthographicMat() const {
+  // TODO: make this by myself without relying on glm
   return glm::ortho(-v_Width / 2.0f, v_Width / 2.0f, -v_Height / 2.0f,
                     v_Height / 2.0f, near, far);
 }
@@ -20,13 +21,14 @@ glm::mat4 Camera::orthographicMat() const {
 Camera &Camera::rotation(float pitch, float yaw, float roll) {
   transform.rotate(pitch, yaw, roll);
   forward =
-      glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
+      glm::normalize(glm::vec3(sin(glm::radians(transform.getYaw())) *
                                    cos(glm::radians(transform.getPitch())),
                                sin(glm::radians(transform.getPitch())),
-                               sin(glm::radians(transform.getYaw())) *
+                               cos(glm::radians(transform.getYaw())) *
                                    cos(glm::radians(transform.getPitch()))));
-  right = glm::normalize(glm::cross(forward, {0, 1, 0}));
-  up = glm ::cross(right, forward);
+
+  right = glm::normalize(glm::cross({0, 1, 0}, forward));
+  up = glm::normalize(glm::cross(forward, right));
   std::cerr << "pitch: " << transform.getPitch()
             << "yaw: " << transform.getYaw() << "roll: " << transform.getRoll()
             << "\n";
@@ -45,19 +47,17 @@ glm::mat4 Camera::lookAt() const {
 }
 
 void Camera::rotateByMouse(float dx, float dy) {
-  transform.rotate(transform.getPitch() + dy * sensitivity,
-                   transform.getYaw() + dx * sensitivity, 0);
-  std::cerr << "pitch: " << transform.getPitch()
-            << "yaw: " << transform.getYaw() << "roll: " << transform.getRoll()
-            << "\n";
+  transform.rotate(transform.getPitch() - dy * sensitivity,
+                   transform.getYaw() - dx * sensitivity, 0);
   forward =
-      glm::normalize(glm::vec3(cos(glm::radians(transform.getYaw())) *
+      glm::normalize(glm::vec3(sin(glm::radians(transform.getYaw())) *
                                    cos(glm::radians(transform.getPitch())),
                                sin(glm::radians(transform.getPitch())),
-                               sin(glm::radians(transform.getYaw())) *
+                               cos(glm::radians(transform.getYaw())) *
                                    cos(glm::radians(transform.getPitch()))));
-  right = glm::normalize(glm::cross(forward, {0, 1, 0}));
-  up = glm ::cross(right, forward);
+
+  right = glm::normalize(glm::cross({0, 1, 0}, forward));
+  up = glm::normalize(glm::cross(forward, right));
 }
 
 void Camera::move(Core::Movement movement, float timeStep) {

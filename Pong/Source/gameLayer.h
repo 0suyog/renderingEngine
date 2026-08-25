@@ -1,7 +1,7 @@
 #pragma once
 #include "Renderer/camera.h"
-#include "Renderer/model.h"
 #include "Renderer/shader.h"
+#include "paddle.h"
 #include "transform.h"
 #include "windowevents.h"
 #include "application.h"
@@ -17,7 +17,7 @@ public:
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     cam.fov = 30.0f;
     cam.position({0, 0, -10});
-    cam.rotation(0, 90, 0);
+    cam.rotation(0, 0, 0);
   }
 
   void OnUpdate(float ts) override {}
@@ -63,7 +63,9 @@ public:
 
 private:
   bool handleMousePress(Core::MouseButtonPressedEvent &e) {
-    std::cerr << "button: " << e.GetMouseButton() << "\n";
+    std::cerr << leftPaddle.transform.getPosition().x << " "
+              << leftPaddle.transform.getPosition().y << " "
+              << leftPaddle.transform.getPosition().z << "\n";
     return true;
   }
 
@@ -72,6 +74,20 @@ private:
         e.GetKeyCode() == GLFW_KEY_CAPS_LOCK) {
       auto &app = Core::Application::Get();
       app.Stop();
+    }
+
+    if (e.GetKeyCode() == GLFW_KEY_UP) {
+      leftPaddle.moveUp();
+    }
+    if (e.GetKeyCode() == GLFW_KEY_DOWN) {
+      leftPaddle.moveDown();
+    }
+
+    if (e.GetKeyCode() == GLFW_KEY_LEFT) {
+      leftPaddle.moveLeft();
+    }
+    if (e.GetKeyCode() == GLFW_KEY_RIGHT) {
+      leftPaddle.moveRight();
     }
 
     return true;
@@ -85,13 +101,14 @@ private:
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    // if (e.GetdX() != 0 || e.GetdY() != 0) {
-    //   cam.rotateByMouse(e.GetdX(), e.GetdY());
-    // }
+    if (e.GetdX() != 0 || e.GetdY() != 0) {
+      cam.rotateByMouse(e.GetdX(), e.GetdY());
+    }
     return false;
   }
 
-  Renderer::Model leftPaddle = Renderer::Model::Quad();
+  Paddle leftPaddle = Paddle({0, 0, 0});
+
   Renderer::ShaderProgram basicShader = Renderer::ShaderProgram(
       "./shaders/basicshader.vert", "./shaders/basicshader.frag");
   Renderer::Camera cam;
