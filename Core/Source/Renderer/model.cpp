@@ -170,19 +170,31 @@ Model Model::Cube() {
   return Model(std::vector<Mesh>{std::move(mesh)});
 };
 
-Model Model::Quad() {
+Model Model::Quad(float width, float height) {
+  auto halfWidth = width / 2.0;
+  auto halfHeight = height / 2.0;
+  std::cerr << halfWidth << " " << halfHeight << "\n";
   std::vector<Vertex> vertices = {
-      {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0, 0}},
-      {{0.5f, -0.5f, 0.0f}, {0, 0, 1}, {1, 0}},
-      {{0.5f, 0.5f, 0.0f}, {0, 0, 1}, {1, 1}},
-      {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0, 1}},
+      {{-halfWidth, -halfHeight, 0.0f}, {0, 0, 1}, {0, 0}},
+      {{halfWidth, -halfHeight, 0.0f}, {0, 0, 1}, {1, 0}},
+      {{halfWidth, halfHeight, 0.0f}, {0, 0, 1}, {1, 1}},
+      {{-halfWidth, halfHeight, 0.0f}, {0, 0, 1}, {0, 1}},
   };
+
+  // std::vector<Vertex> vertices = {
+  //     {{-0.5f, -0.5f, 0.0f}, {0, 0, 1}, {0, 0}},
+  //     {{0.5f, -0.5f, 0.0f}, {0, 0, 1}, {1, 0}},
+  //     {{0.5f, 0.5f, 0.0f}, {0, 0, 1}, {1, 1}},
+  //     {{-0.5f, 0.5f, 0.0f}, {0, 0, 1}, {0, 1}},
+  // };
 
   std::vector<unsigned int> indices = {0, 1, 2, 0, 2, 3};
 
   Mesh mesh(vertices, indices);
   return Model(std::vector<Mesh>{std::move(mesh)});
 }
+
+Model Model::Quad() { return Quad(1.0, 1.0); }
 
 Model Model::Triangle() {
   std::vector<Vertex> vertices = {

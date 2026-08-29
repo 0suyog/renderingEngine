@@ -1,6 +1,8 @@
 #pragma once
 #include "Renderer/camera.h"
+#include "Renderer/model.h"
 #include "Renderer/shader.h"
+#include "ball.h"
 #include "paddle.h"
 #include "transform.h"
 #include "windowevents.h"
@@ -12,25 +14,31 @@
 #include <iostream>
 class GameLayer : public Core::Layer {
 public:
+  int viewportWidth = 960;
+  int viewportHeight = 540;
   GameLayer() {
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
-                     GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                     GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    cam.setWidth(viewportWidth);
+    cam.setHeight(viewportHeight);
     cam.fov = 30.0f;
-    cam.position({0, 0, 10});
+    cam.position({0, 0, 100});
     cam.rotation(0, 0, 0);
+    // leftPaddle.transform.scale(glm::vec3(5, 5, 0));
   }
 
-  void OnUpdate(float ts) override {}
+  void OnUpdate(float ts) override { ball.update(ts); }
 
   void OnRender() override {
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, cam.getWidth(), cam.getHeight());
+    // glViewport(0, 0, viewportWidth, viewportHeight);
+    // glViewport(0, 0, cam.getWidth(), cam.getHeight());
     basicShader.use();
     auto modelTransform = Core::Transform();
 
-    // modelTransform.scale(glm::vec3(5, 5, 0.5));
+    modelTransform.scale(glm::vec3(50, 50, 0.5));
     // modelTransform.rotate(glfwGetTime(), glm::vec3(0, 0, -1));
     // modelTransform.revolve(glm::vec3(0), 20.0, 63 * glfwGetTime(),
     //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
@@ -39,15 +47,15 @@ public:
     modelTransform.moveto({0, 0, 0});
     auto perspective = cam.prespectiveMat();
     auto view = cam.lookAt();
-
     basicShader.SetMat4("model", modelTransform.matrix());
     basicShader.SetMat4("view", view);
     basicShader.SetMat4("projection", perspective);
     leftPaddle.render(basicShader);
+    rightPaddle.render(basicShader);
+    ball.render(basicShader);
   }
 
   void OnEvent(Core::Event &e) override {
-    // std::cerr << "[Event Occured]: " << e.ToString() << std::endl;
     Core::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Core::MouseButtonPressedEvent>(
         [this](Core::MouseButtonPressedEvent &e) {
@@ -81,26 +89,29 @@ private:
     }
 
     if (e.GetKeyCode() == GLFW_KEY_UP) {
-      leftPaddle.moveUp();
+      rightPaddle.moveUp();
     }
     if (e.GetKeyCode() == GLFW_KEY_DOWN) {
-      leftPaddle.moveDown();
+      rightPaddle.moveDown();
     }
 
-    if (e.GetKeyCode() == GLFW_KEY_LEFT) {
-      leftPaddle.moveLeft();
-    }
-    if (e.GetKeyCode() == GLFW_KEY_RIGHT) {
-      leftPaddle.moveRight();
-    }
+    // if (e.GetKeyCode() == GLFW_KEY_LEFT) {
+    //   leftPaddle.moveLeft();
+    // }
+    // if (e.GetKeyCode() == GLFW_KEY_RIGHT) {
+    //   leftPaddle.moveRight();
+    // }
 
     return true;
   }
 
   bool handleWindowResize(Core::WindowResizeEvent &e) {
-    cam.setWidth(e.GetWidth());
-    cam.setHeight(e.GetHeight());
-    return false;
+    glViewport(e.GetWidth() / 2 - (viewportWidth / 2),
+               e.GetHeight() / 2 - (viewportHeight / 2), viewportWidth,
+               viewportHeight);
+    // glViewport(0, -500, viewportWidth, viewportHeight);
+    // cam.setWidth(e.GetWidth());
+    // cam.setHeight(e.GetHeight());
     return false;
   }
 
@@ -111,7 +122,9 @@ private:
     return false;
   }
 
-  Paddle leftPaddle = Paddle({0, 0, 0});
+  Paddle leftPaddle = Paddle({-46, 0, 0});
+  Paddle rightPaddle = Paddle({46, 0, 0});
+  Ball ball = Ball({0, 0, 0});
 
   Renderer::ShaderProgram basicShader = Renderer::ShaderProgram(
       "./shaders/basicshader.vert", "./shaders/basicshader.frag");

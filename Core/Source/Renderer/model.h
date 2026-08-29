@@ -16,6 +16,7 @@ public:
   static Model Cube();
   static Model Triangle();
   static Model Quad();
+  static Model Quad(float width, float height);
   static Model Pyramid(float s = 0.5f, float h = 1.0f);
 
 private:

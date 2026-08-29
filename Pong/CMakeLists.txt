@@ -28,6 +28,7 @@ target_sources(
 		FILES
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/gameLayer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/paddle.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/ball.h
 )
 
 target_include_directories(

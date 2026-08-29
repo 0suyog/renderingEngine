@@ -19,6 +19,7 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/window.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/application.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/shapes.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.cpp
@@ -47,6 +48,7 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/shapes.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/renderables.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shader.h

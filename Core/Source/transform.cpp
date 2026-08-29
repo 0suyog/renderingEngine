@@ -1,6 +1,9 @@
 #include "transform.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include <iostream>
 namespace Core {
 
 float Transform::getPitch() const { return m_rotation.x; }
