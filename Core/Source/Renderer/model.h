@@ -4,13 +4,24 @@
 #include "shader.h"
 #include "mesh.h"
 #include <filesystem>
+#include <iostream>
 #include <memory>
 
 namespace Renderer {
 class Model : public Renderable {
 public:
   Model(const std::string &path) { loadModel(path); }
-  Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {}
+  Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {
+    // for (const auto &m : m_meshes) {
+    //   const auto &v = m.vertices;
+    //   for (const auto &vertex : v) {
+    //     std::cerr << "position x: " << vertex.position.x
+    //               << " y: " << vertex.position.y << " z:" <<
+    //               vertex.position.z
+    //               << "\n";
+    //   }
+    // }
+  }
   void render(const ShaderProgram &s) const override;
 
   static Model Cube();

@@ -55,7 +55,6 @@ void Mesh::render(const ShaderProgram &s) const {
     std::string name;
     switch (type) {
     case TextureType::DIFFUSE:
-      std::cerr << textures.size();
       name = diffuseName;
       hasDiffuse = true;
       break;

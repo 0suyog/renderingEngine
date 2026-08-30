@@ -1,6 +1,5 @@
 #pragma once
 #include "Renderer/camera.h"
-#include "Renderer/model.h"
 #include "Renderer/shader.h"
 #include "ball.h"
 #include "paddle.h"
@@ -24,10 +23,13 @@ public:
     cam.fov = 30.0f;
     cam.position({0, 0, 100});
     cam.rotation(0, 0, 0);
-    // leftPaddle.transform.scale(glm::vec3(5, 5, 0));
   }
 
-  void OnUpdate(float ts) override { ball.update(ts); }
+  void OnUpdate(float ts) override {
+    ball.update(ts);
+    ball.collided(leftPaddle);
+    ball.collided(rightPaddle);
+  }
 
   void OnRender() override {
     glEnable(GL_DEPTH_TEST);
@@ -50,8 +52,8 @@ public:
     basicShader.SetMat4("model", modelTransform.matrix());
     basicShader.SetMat4("view", view);
     basicShader.SetMat4("projection", perspective);
-    leftPaddle.render(basicShader);
-    rightPaddle.render(basicShader);
+    // leftPaddle.render(basicShader);
+    // rightPaddle.render(basicShader);
     ball.render(basicShader);
   }
 
