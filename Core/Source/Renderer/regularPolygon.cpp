@@ -1,19 +1,16 @@
-#include "shapes.h"
+#include "regularPolygon.h"
 #include "Renderer/mesh.h"
-#include "Renderer/model.h"
 #include "glm/trigonometric.hpp"
+#include <iostream>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
-#include <iostream>
-#include <vector>
-namespace Shape {
-Polygon::Polygon(const glm::vec3 &center, float radius, unsigned int sides,
-                 const glm::vec3 &color = {0.38f, 0.6f, 0.89f})
-    : Renderer::Model(generateMesh(radius, sides < 3 ? 3 : sides)),
-      sides(sides < 3 ? 3 : sides), radius(radius), center(center) {}
+namespace Renderer {
+RegularPolygon::RegularPolygon(float radius, unsigned int sides,
+                               const glm::vec4 &color)
+    : sides(sides < 3 ? 3 : sides), radius(radius),
+      mat(Material{.fillColor = color}), meshes(generateMesh()) {}
 
-std::vector<Renderer::Mesh> Polygon::generateMesh(float radius,
-                                                  unsigned int sides) {
+std::vector<Renderer::Mesh> RegularPolygon::generateMesh() {
   float angle = 360.0f / sides;
   float offset = 90 / 2.0;
   if (sides % 2 == 0) {
@@ -27,16 +24,13 @@ std::vector<Renderer::Mesh> Polygon::generateMesh(float radius,
   for (int i = 0; i < sides; i++) {
     Renderer::Vertex v;
     float vertexAngle = glm::radians(offset + angle * i);
-    v.position.z = 0;
+    v.position.z = 1.0;
     v.texCoord = {glm::cos(vertexAngle), glm::sin(vertexAngle)};
-    std::cerr << vertexAngle << "\n";
-    std::cerr << "texCoord: " << glm::to_string(v.texCoord) << "\n";
-    std::cerr << "cos angle: " << glm::cos(vertexAngle)
-              << "sin angle: " << glm::sin(vertexAngle) << "\n";
-
     v.position.x = radius * v.texCoord.x;
     v.position.y = radius * v.texCoord.y;
     v.normal = {0, 0, 1};
+    v.texCoord = (v.texCoord + glm::vec2(1, 1)) * glm::vec2(1 / 2.0);
+
     vertices.push_back(v);
   }
   // number of triangles required for a polygon is sides - 2
@@ -45,10 +39,10 @@ std::vector<Renderer::Mesh> Polygon::generateMesh(float radius,
     indices.push_back(i + 1);
     indices.push_back(i + 2);
   }
-
-  meshes.push_back(Renderer::Mesh(vertices, indices));
+  std::cerr << mat.fillColor->x << " " << mat.fillColor->y << " "
+            << mat.fillColor->z << "\n";
+  meshes.push_back(Renderer::Mesh(vertices, indices, mat));
 
   return meshes;
 }
-
-} // namespace Shape
+} // namespace Renderer

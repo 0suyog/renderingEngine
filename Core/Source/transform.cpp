@@ -41,11 +41,11 @@ Transform &Transform::rotate(float allAxisAngle) {
 
 glm::mat4 Transform::matrix() const {
   glm::mat4 mat = glm::mat4(1.0);
-  mat = glm::scale(mat, m_scale);
+  mat = glm::translate(mat, m_position);
   mat = glm::rotate(mat, m_rotation.x, {1, 0, 0});
   mat = glm::rotate(mat, m_rotation.y, {0, 1, 0});
   mat = glm::rotate(mat, m_rotation.z, {0, 0, 1});
-  mat = glm::translate(mat, m_position);
+  mat = glm::scale(mat, m_scale);
 
   return mat;
 }
@@ -53,6 +53,10 @@ glm::mat4 Transform::matrix() const {
 Transform &Transform::scale(const glm::vec3 &scale) {
   m_scale = scale;
   return *this;
+}
+
+Transform &Transform::scale(float scale) {
+  return this->scale(glm::vec3(scale));
 }
 
 Transform &Transform::moveto(const glm::vec3 &pos) {

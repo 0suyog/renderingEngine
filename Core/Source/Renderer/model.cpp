@@ -6,23 +6,43 @@
 #include "assimp/scene.h"
 #include "assimp/types.h"
 #include "mesh.h"
-#include "shader.h"
 #include "texture.h"
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <memory>
-#include <string>
 #include <unordered_map>
 #include <vector>
 namespace Renderer {
-void Model::render(const ShaderProgram &s) const {
-  for (const auto &mesh : m_meshes) {
-    mesh.render(s);
+
+void PrintBounds(const aiScene *scene) {
+  glm::vec3 min{std::numeric_limits<float>::max()};
+  glm::vec3 max{std::numeric_limits<float>::lowest()};
+
+  for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
+    const aiMesh *mesh = scene->mMeshes[i];
+
+    for (unsigned int j = 0; j < mesh->mNumVertices; ++j) {
+      const aiVector3D &v = mesh->mVertices[j];
+
+      min.x = std::min(min.x, v.x);
+      min.y = std::min(min.y, v.y);
+      min.z = std::min(min.z, v.z);
+
+      max.x = std::max(max.x, v.x);
+      max.y = std::max(max.y, v.y);
+      max.z = std::max(max.z, v.z);
+    }
   }
+
+  std::cout << "Min: " << min.x * 90 << ", " << min.y * 90 << ", " << min.z * 90
+            << '\n';
+
+  std::cout << "Max: " << max.x * 90 << ", " << max.y * 90 << ", " << max.z * 90
+            << '\n';
 }
 
-void Model::loadModel(std::filesystem::path path) {
+void Model::loadModel(const std::filesystem::path &path) {
   Assimp::Importer importer;
   const aiScene *scene =
       importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -33,6 +53,7 @@ void Model::loadModel(std::filesystem::path path) {
     exit(-1);
   }
   m_directory = path.parent_path();
+  PrintBounds(scene);
   processNode(scene->mRootNode, scene);
 }
 
@@ -94,15 +115,25 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
         loadMaterialTextures(material, aiTextureType_DIFFUSE);
     std::vector<std::shared_ptr<Texture>> specularTextures =
         loadMaterialTextures(material, aiTextureType_SPECULAR);
+    Material meshMaterial;
     if (diffuseTextures.size() > 0) {
-
-      textures[TextureType::DIFFUSE] = diffuseTextures;
+      meshMaterial.diffuseTexture = diffuseTextures[0];
     }
     if (specularTextures.size() > 0) {
-      textures[TextureType::SPECULAR] = specularTextures;
+      meshMaterial.specularTexture = specularTextures[0];
     }
+    return Mesh(vertices, indices, meshMaterial);
+    // TODO: For now  I am going to use only one Diffuse and Specular Texture
+    // will deal with array later
+
+    // if (diffuseTextures.size() > 0) {
+    //   textures[TextureType::DIFFUSE] = diffuseTextures;
+    // }
+    // if (specularTextures.size() > 0) {
+    //   textures[TextureType::SPECULAR] = specularTextures;
+    // }
   }
-  return Mesh(vertices, indices, textures);
+  return Mesh(vertices, indices);
 };
 
 std::vector<std::shared_ptr<Texture>>

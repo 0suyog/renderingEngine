@@ -11,7 +11,7 @@ struct Texture {
   std::string path;
 };
 
-enum class BuiltInTexture { DEFAULT = 1, BLACK, ERROR };
+enum class BuiltInTexture { DEFAULT = 1, BLACK, ERROR, WHITE };
 enum class TextureType { DIFFUSE = 1, SPECULAR };
 
 std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path);

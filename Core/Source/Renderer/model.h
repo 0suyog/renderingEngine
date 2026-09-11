@@ -8,9 +8,9 @@
 #include <memory>
 
 namespace Renderer {
-class Model : public Renderable {
+class Model {
 public:
-  Model(const std::string &path) { loadModel(path); }
+  Model(const std::filesystem::path &path) { loadModel(path); }
   Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {
     // for (const auto &m : m_meshes) {
     //   const auto &v = m.vertices;
@@ -22,19 +22,20 @@ public:
     //   }
     // }
   }
-  void render(const ShaderProgram &s) const override;
 
   static Model Cube();
   static Model Triangle();
   static Model Quad();
   static Model Quad(float width, float height);
   static Model Pyramid(float s = 0.5f, float h = 1.0f);
+  friend void render(const RenderContext &renderCtx, const Model &model,
+                     const glm::mat4 &modelMatrix);
 
 private:
   // model data
   std::vector<Mesh> m_meshes;
   std::filesystem::path m_directory;
-  void loadModel(std::filesystem::path path);
+  void loadModel(const std::filesystem::path &path);
   void processNode(aiNode *node, const aiScene *scene);
   Mesh processMesh(aiMesh *mesh, const aiScene *scene);
   std::vector<std::shared_ptr<Texture>>

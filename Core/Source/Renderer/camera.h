@@ -5,7 +5,6 @@
 namespace Renderer {
 class Camera {
 public:
-  // Camera() { rotateByMouse(0, 0); }
   glm::mat4 lookAt() const;
   glm::mat4 prespectiveMat() const;
   glm::mat4 orthographicMat() const;

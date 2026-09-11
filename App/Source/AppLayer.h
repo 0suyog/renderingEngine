@@ -1,8 +1,9 @@
 #pragma once
-#include "Renderer/2dprimitives.h"
 #include "Renderer/camera.h"
+#include "Renderer/renderer.h"
 #include "Renderer/model.h"
-#include "Renderer/texture.h"
+#include "Renderer/renderContext.h"
+#include "Renderer/regularPolygon.h"
 #include "transform.h"
 #include "windowevents.h"
 #include "movement.h"
@@ -13,11 +14,13 @@
 #include "inputevents.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <memory>
 class AppLayer : public Core::Layer {
 public:
   AppLayer() {
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    cam->position({0, 0, 0});
   }
 
   void OnUpdate(float ts) override {
@@ -45,32 +48,19 @@ public:
       camMovement = static_cast<Core::Movement>(camMovement | Core::FAST);
     }
 
-    cam.move(camMovement, ts);
+    cam->move(camMovement, ts);
   }
 
   void OnRender() override {
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, cam.getWidth(), cam.getHeight());
-    basicshader.use();
+    glViewport(0, 0, cam->getWidth(), cam->getHeight());
     auto modelTransform = Core::Transform();
-    // modelTransform.scale(glm::vec3(0.5, 0.5, 0.5));
-    // modelTransform.rotate(glfwGetTime(), glm::vec3(0, 0, -1));
-    // modelTransform.revolve(glm::vec3(0), 20.0, 63 * glfwGetTime(),
-    //                        glm::vec3(0.0, 0.0, 1.0), glm::vec3(1.0, 0.0,
-    //                        0.0));
-    //
-    auto perspective = cam.prespectiveMat();
-    auto view = cam.lookAt();
-
-    // glBindTextureUnit(0, tex->handle);
-
-    basicshader.SetMat4("model", modelTransform.matrix());
-    basicshader.SetMat4("view", view);
-    basicshader.SetMat4("projection", perspective);
-    // bag.render(basicshader);
-    cube.render(basicshader);
+    modelTransform.moveto({0, 0, -500});
+    modelTransform.scale({90, 90, 90});
+    Renderer::render(renderContext, bag, modelTransform.matrix());
   }
 
   void OnEvent(Core::Event &e) override {
@@ -106,22 +96,21 @@ private:
   }
 
   bool handleWindowResize(Core::WindowResizeEvent &e) {
-    cam.setWidth(e.GetWidth());
-    cam.setHeight(e.GetHeight());
+    cam->setWidth(e.GetWidth());
+    cam->setHeight(e.GetHeight());
     return false;
   }
 
   bool handleMouseMove(Core::MouseMovedEvent &e) {
-    cam.rotateByMouse(e.GetdX(), e.GetdY());
+    cam->rotateByMouse(e.GetdX(), e.GetdY());
     // std::cerr << "dx: " << e.GetdX() << "dy: " << e.GetdY() << "\n";
     return false;
   }
 
-  Renderer::ShaderProgram basicshader = {"./shaders/basicshader.vert",
-                                         "shaders/basicshader.frag"};
-  Renderer::Model bag = Renderer::Model("./models/chessKing/chessKing.obj");
-  Renderer::Model cube = Renderer::Model::Cube();
-  GLuint vbo, ebo, vao;
-  Renderer::Camera cam;
-  std::shared_ptr<Renderer::Texture> tex;
+private:
+  Renderer::Model bag =
+      Renderer::Model("../assets/models/backpack/backpack.obj");
+  Renderer::RegularPolygon cube = Renderer::RegularPolygon(50, 8);
+  std::shared_ptr<Renderer::Camera> cam = std::make_shared<Renderer::Camera>();
+  Renderer::RenderContext renderContext = {this->cam};
 };

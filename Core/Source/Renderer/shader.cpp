@@ -3,9 +3,31 @@
 #include "shader.h"
 #include <filesystem>
 #include <iostream>
+#include <memory>
 #include <vector>
 #include "glm/ext.hpp"
+#include "glm/ext/vector_float4.hpp"
+#include "glm/gtc/type_ptr.hpp"
 namespace Renderer {
+
+std::shared_ptr<ShaderProgram> basicShader;
+
+std::shared_ptr<ShaderProgram> getShader(EShaders es) {
+  switch (es) {
+  case EShaders::BasicShader:
+    if (!basicShader) {
+      basicShader =
+          std::make_shared<ShaderProgram>("../assets/shaders/basicShader.vert",
+                                          "../assets/shaders/basicShader.frag");
+    }
+    return basicShader;
+    break;
+  default:
+    std::cerr << "[getShader] No Shader of that type";
+    return nullptr;
+    break;
+  }
+}
 
 ShaderProgram::ShaderProgram(const std::filesystem::path &vertexPath,
                              const std::filesystem::path &fragmentPath)
@@ -26,7 +48,8 @@ GLuint ShaderProgram::init() {
     return -1;
   }
   shaderSource = fileData->c_str();
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  std::cerr << (void *)glCreateShader << "\n";
+  auto vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &shaderSource, 0);
 
   glCompileShader(vertexShader);
@@ -111,6 +134,20 @@ void ShaderProgram::SetMat4(const std::string &name,
 
 void ShaderProgram::SetInt(const std::string &name, GLint val) const {
   glUniform1i(glGetUniformLocation(m_Handle, name.c_str()), val);
+}
+void ShaderProgram::SetFloat(const std::string &name, GLfloat val) const {
+  glUniform1f(glGetUniformLocation(m_Handle, name.c_str()), val);
+}
+void ShaderProgram::SetVec4(const std::string &name,
+                            const glm::vec4 &val) const {
+  glad_glUniform4fv(glGetUniformLocation(m_Handle, name.c_str()), 1,
+                    glm::value_ptr(val));
+}
+
+void ShaderProgram::SetVec3(const std::string &name,
+                            const glm::vec3 &val) const {
+  glad_glUniform3fv(glGetUniformLocation(m_Handle, name.c_str()), 1,
+                    glm::value_ptr(val));
 }
 
 } // namespace Renderer

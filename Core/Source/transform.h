@@ -17,6 +17,7 @@ public:
   //              const glm::vec3 &axis, const glm::vec3 &zerodegDir);
   Transform &moveto(const glm::vec3 &pos);
   Transform &scale(const glm::vec3 &scale);
+  Transform &scale(float scale);
 
 private:
   // pitch, yaw, roll

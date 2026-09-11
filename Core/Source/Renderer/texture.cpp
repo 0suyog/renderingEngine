@@ -13,10 +13,6 @@ static std::unordered_map<BuiltInTexture, std::shared_ptr<Texture>>
     builtintextures;
 
 static std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-// TODO: unlikely but key could match existing one
-static std::string defaultTextureKey = "defaultTextureKey";
-static std::string errorTextureKey = "errorTextureKey";
-static std::string blackTextureKey = "blackTextureKey";
 
 std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
 
@@ -65,7 +61,7 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
   }
   return textures[key];
 }
-
+// why is length int and not uint? I dont know
 std::shared_ptr<Texture> TextureFromMemory(unsigned char *data, int length) {
   auto image = Core::ReadImageFromMemory(data, length);
   if (!image) {
@@ -88,6 +84,9 @@ std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
       break;
     case BuiltInTexture::ERROR:
       e = embeddedImagesMap[EmbeddedImages::ERROR];
+      break;
+    case BuiltInTexture::WHITE:
+      e = embeddedImagesMap[EmbeddedImages::WHITE];
       break;
     }
     builtintextures[tex] = TextureFromMemory(e.data, e.length);
