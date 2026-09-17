@@ -1,8 +1,11 @@
 #include "Renderer/mesh.h"
 #include "Renderer/model.h"
+#include "Renderer/renderContext.h"
 #include "Renderer/shader.h"
+#include "Renderer/shapes3d.h"
 #include "regularPolygon.h"
 #include "Renderer/texture.h"
+#include "transform.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 namespace Renderer {
@@ -10,7 +13,7 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
             const glm::mat4 &modelMatrix, const ShaderProgram &s) {
   s.use();
   s.SetMat4("view", renderCtx.cam->lookAt());
-  s.SetMat4("projection", renderCtx.cam->orthographicMat());
+  s.SetMat4("projection", renderCtx.cam->prespectiveMat());
   s.SetMat4("model", modelMatrix);
   std::shared_ptr<Texture> diffuseTex;
   glm::vec4 color = {1, 1, 1, 1.0};
@@ -58,6 +61,8 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
   }
 
   glBindVertexArray(mesh.m_VAO);
+  // for wireframe
+  //  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
@@ -72,6 +77,22 @@ void render(const RenderContext &renderCtx, const RegularPolygon &shape,
             const glm::mat4 &modelMatrix) {
   for (const auto &mesh : shape.meshes) {
     render(renderCtx, mesh, modelMatrix, *getShader(EShaders::BasicShader));
+  }
+}
+
+void render(const RenderContext &renderCtx, const Shapes3D &shape,
+            const glm::mat4 &modelMatrix) {
+  Core::Transform transform = Core::Transform();
+  float angle = 360.0 / 2;
+  int color = 0.0f;
+  for (unsigned i = 0; i < shape.m_polygonNumber; i++) {
+    color = (color + 1) % 255;
+    transform.rotate(i * angle, 90, 0);
+    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
+    transform.rotate(0, i * angle, 90);
+    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
+    transform.rotate(90, 0, i * angle);
+    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
   }
 }
 

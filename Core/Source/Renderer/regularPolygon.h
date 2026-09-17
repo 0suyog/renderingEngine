@@ -8,7 +8,12 @@ namespace Renderer {
 class RegularPolygon {
 public:
   RegularPolygon(float radius, unsigned int sides,
-                 const glm::vec4 &color = {0.38f, 0.6f, 0.89f, 1.0f});
+                 const glm::vec4 &color = {0.38f, 0.6f, 0.89f, 1.0f},
+                 float startingAngle = 0.0,
+                 const glm::vec3 &normal = {0, 0, 1});
+  RegularPolygon(float radius, unsigned int sides, const Material &mat,
+                 float startingAngle = 0.0,
+                 const glm::vec3 &normal = {0, 0, 1});
   friend void render(const RenderContext &renderCtx,
                      const RegularPolygon &shape, const glm::mat4 &modelMatrix);
   Material mat;
@@ -19,6 +24,8 @@ private:
 private:
   unsigned int sides = 3;
   float radius = 1;
+  float startingAngle;
+  glm::vec3 normal;
   std::vector<Renderer::Mesh> meshes;
 };
 

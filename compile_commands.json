@@ -37,57 +37,39 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/collider.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/collider.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Physics/collider.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/collider.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/intersections.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/intersections.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Physics/intersections.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/intersections.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/physicsObject.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/physicsObject.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Physics/physicsObject.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/physicsObject.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/physicsEngine.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/physicsEngine.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Physics/physicsEngine.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/physicsEngine.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/application.cpp.o -c /hardDrive/renderingEngine/Core/Source/application.cpp",
   "file": "/hardDrive/renderingEngine/Core/Source/application.cpp",
   "output": "Core/CMakeFiles/engine.core.dir/Source/application.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/layer.cpp.o -c /hardDrive/renderingEngine/Core/Source/layer.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/layer.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/layer.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Vendors/stb/stb_image.cpp.o -c /hardDrive/renderingEngine/Core/Vendors/stb/stb_image.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Vendors/stb/stb_image.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Vendors/stb/stb_image.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/file.cpp.o -c /hardDrive/renderingEngine/Core/Source/file.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/file.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/file.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/shapes.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/shapes.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/shapes.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/shapes.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/camera.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/camera.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/camera.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/camera.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/shader.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/shader.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/shader.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/shader.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/texture.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/texture.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/texture.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/texture.cpp.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/model.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/model.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/model.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/model.cpp.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/entityManager.cpp.o -c /hardDrive/renderingEngine/Core/Source/entityManager.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/entityManager.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/entityManager.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -103,27 +85,51 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/boundingSphere.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/boundingSphere.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Physics/boundingSphere.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/boundingSphere.cpp.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/shader.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/shader.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/shader.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/shader.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/aabb.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/aabb.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Physics/aabb.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/aabb.cpp.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/model.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/model.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/model.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/model.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/plane.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/plane.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Physics/plane.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/plane.cpp.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/regularPolygon.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/regularPolygon.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/regularPolygon.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/regularPolygon.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Physics/physicsObject.cpp.o -c /hardDrive/renderingEngine/Core/Source/Physics/physicsObject.cpp",
-  "file": "/hardDrive/renderingEngine/Core/Source/Physics/physicsObject.cpp",
-  "output": "Core/CMakeFiles/engine.core.dir/Source/Physics/physicsObject.cpp.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/camera.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/camera.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/camera.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/camera.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/Renderer/texture.cpp.o -c /hardDrive/renderingEngine/Core/Source/Renderer/texture.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/Renderer/texture.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/Renderer/texture.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/layer.cpp.o -c /hardDrive/renderingEngine/Core/Source/layer.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/layer.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/layer.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Source/file.cpp.o -c /hardDrive/renderingEngine/Core/Source/file.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Source/file.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Source/file.cpp.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -g -std=c++20 -o CMakeFiles/engine.core.dir/Vendors/stb/stb_image.cpp.o -c /hardDrive/renderingEngine/Core/Vendors/stb/stb_image.cpp",
+  "file": "/hardDrive/renderingEngine/Core/Vendors/stb/stb_image.cpp",
+  "output": "Core/CMakeFiles/engine.core.dir/Vendors/stb/stb_image.cpp.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -145,9 +151,21 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/entity.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/entity.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/entity.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/entity.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/window.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/window.h.cxx",
   "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/window.h.cxx",
   "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/window.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/entityManager.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/entityManager.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/entityManager.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/entityManager.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -187,21 +205,45 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CTransform.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CTransform.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CTransform.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CTransform.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CCollider.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CCollider.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CCollider.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CCollider.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CCamera.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CCamera.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CCamera.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CCamera.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CShape.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CShape.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CShape.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CShape.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CStatic.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CStatic.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Components/CStatic.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Components/CStatic.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/collider.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/collider.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/collider.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/collider.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/boundingSphere.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/boundingSphere.h.cxx",
   "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/boundingSphere.h.cxx",
   "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/boundingSphere.h.cxx.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/plane.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/plane.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/plane.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/plane.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -211,15 +253,33 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/aabb.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/intersections.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/intersections.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/intersections.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/intersections.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/intersectData.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/intersectData.h.cxx",
   "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/intersectData.h.cxx",
   "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/intersectData.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/shapes.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/shapes.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/shapes.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/shapes.h.cxx.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/plane.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/plane.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/plane.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/plane.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/physicsEngine.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/physicsEngine.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Physics/physicsEngine.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Physics/physicsEngine.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -229,9 +289,9 @@
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx.o"
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -244,6 +304,30 @@
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/mesh.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/mesh.h.cxx",
   "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/mesh.h.cxx",
   "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/mesh.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/shapes3d.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/shapes3d.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/shapes3d.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/shapes3d.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/regularPolygon.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/regularPolygon.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/regularPolygon.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/regularPolygon.h.cxx.o"
+},
+{
+  "directory": "/hardDrive/renderingEngine/build/Core",
+  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx",
+  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx",
+  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/camera.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",
@@ -262,18 +346,6 @@
   "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/texture.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/texture.h.cxx",
   "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/texture.h.cxx",
   "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/texture.h.cxx.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/embededimages.h.cxx.o"
-},
-{
-  "directory": "/hardDrive/renderingEngine/build/Core",
-  "command": "/usr/bin/c++  -I/hardDrive/renderingEngine/Core/Source -I/hardDrive/renderingEngine/Core/Vendors -I/hardDrive/renderingEngine/Core/Renderer -I/hardDrive/renderingEngine/Core/Vendors/stb -I/hardDrive/renderingEngine/Core/Vendors/glad/include -I/hardDrive/renderingEngine/Core/Vendors/glfw/include -I/hardDrive/renderingEngine/Core/Vendors/assimp/code/../include -I/hardDrive/renderingEngine/build/Core/Vendors/assimp/code/../include -x c++ -g -std=c++20 -o CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx.o -c /hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx",
-  "file": "/hardDrive/renderingEngine/build/Core/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx",
-  "output": "Core/CMakeFiles/engine.core_verify_interface_header_sets.dir/engine.core_verify_interface_header_sets/Renderer/renderContext.h.cxx.o"
 },
 {
   "directory": "/hardDrive/renderingEngine/build/Core",

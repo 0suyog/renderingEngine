@@ -1,10 +1,9 @@
+#pragma once
 #include "glm/ext/vector_float3.hpp"
 namespace Physics {
+class PhysicsEngine;
 class PhysicsObject {
 public:
-  PhysicsObject(const glm::vec3 &position, const glm::vec3 &velocity)
-      : m_position(position), m_velocity(velocity) {}
-
   const glm::vec3 &GetPosition() const { return m_position; }
 
   const glm::vec3 &GetVelocity() const { return m_velocity; }
@@ -15,7 +14,15 @@ public:
 
   void Integrate(float timeStep);
 
+  const bool hasGravity;
+  const bool isStatic;
+  friend class PhysicsEngine;
+
 private:
+  PhysicsObject(const glm::vec3 &position, const glm::vec3 &velocity,
+                bool hasGravity = true, bool isStatic = false)
+      : m_position(position), m_velocity(velocity), hasGravity(hasGravity),
+        isStatic(isStatic) {}
   glm::vec3 m_position;
   glm::vec3 m_velocity;
 };

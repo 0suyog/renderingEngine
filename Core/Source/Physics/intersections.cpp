@@ -1,0 +1,101 @@
+#include "Physics/aabb.h"
+#include "Physics/boundingSphere.h"
+#include "Physics/intersectData.h"
+#include "Physics/plane.h"
+#include "glm/common.hpp"
+// #include "glm/ext/vector_common.hpp"
+#include "glm/geometric.hpp"
+#include "glm/vector_relational.hpp"
+namespace Physics {
+
+IntersectData Reverse(const IntersectData &id) {
+  return IntersectData(id.GetDoesIntersect(), id.GetDistance(),
+                       -1.0f * id.GetNormal());
+}
+
+// aabb aabb
+IntersectData IntersectAabbAabb(const Aabb &aabb1, const Aabb &aabb2) {
+  auto distance1 = aabb2.GetMinExtents() - aabb1.GetMaxExtents();
+  auto distance2 = aabb1.GetMaxExtents() - aabb2.GetMaxExtents();
+  auto maxDistances = glm::max(distance1, distance2);
+  auto maxDistance =
+      std::max(std::max(maxDistances.x, maxDistances.y), maxDistances.z);
+  auto normal = glm::normalize(aabb2.GetCenter() - aabb1.GetCenter());
+  return IntersectData(maxDistance < 0, fabs(maxDistance), normal);
+}
+
+// aabb sphere
+IntersectData IntersectAabbSphere(const Aabb &aabb,
+                                  const BoundingSphere &sphere) {
+  glm::vec3 centerDiff = aabb.GetCenter() - sphere.GetCenter();
+  bool isInside = (glm::all(glm::lessThan(centerDiff, aabb.GetHalfSize())));
+
+  if (isInside) {
+    auto distance = aabb.GetHalfSize() - glm::abs(centerDiff);
+    glm::vec3 normal = {1, 0, 0};
+    auto signs = glm::sign(glm::vec3(centerDiff));
+    float minDist = distance.x;
+    if (distance.y < minDist) {
+      minDist = distance.y;
+      normal = {0, 1, 0};
+    }
+    if (distance.z < minDist) {
+      minDist = distance.z;
+      normal = {0, 0, 1};
+    }
+    normal *= signs;
+
+    return IntersectData(true, minDist, normal);
+  } else {
+    auto nearestPoint = glm::clamp(sphere.GetCenter(), aabb.GetMinExtents(),
+                                   aabb.GetMaxExtents());
+    auto difference = sphere.GetCenter() - nearestPoint;
+    auto normal = glm::normalize(difference);
+    auto distance = glm::length(difference);
+    return IntersectData(distance < sphere.Getradius(),
+                         fabs(distance - sphere.Getradius()),
+                         glm::normalize(difference));
+  }
+}
+IntersectData IntersectSphereAabb(const BoundingSphere &sphere,
+                                  const Aabb &aabb) {
+  return Reverse(IntersectAabbSphere(aabb, sphere));
+}
+// aabb plane
+// IntersectData IntersectAabbPlane(const Aabb &aabb, const Plane &plane) {
+//   auto centerToPlane = glm::abs(glm::dot(aabb.GetCenter(), plane.getNormal())
+//   -
+//                                 plane.getDistance());
+//   glm::vec3 distances = aabb.GetHalfSize() - centerToPlane;
+// }
+IntersectData IntersectPlaneAabb(const Plane &plane, const Aabb &aabb);
+
+// sphere sphere
+IntersectData IntersectSphereSphere(const BoundingSphere &sphere1,
+                                    const BoundingSphere &sphere2) {
+  float radiusDistance = sphere1.Getradius() + sphere2.Getradius();
+  auto centerDiff = sphere2.GetCenter() - sphere1.GetCenter();
+  float centerDistance = glm::length(centerDiff);
+  return IntersectData(centerDistance < radiusDistance,
+                       fabs(centerDistance - radiusDistance),
+                       glm::normalize(centerDiff));
+}
+
+// sphere plane
+IntersectData IntersectSpherePlane(const BoundingSphere &sphere,
+                                   const Plane &plane) {
+  auto normal = glm::normalize(plane.getNormal());
+  float distanceToSphereCenter =
+      fabs(glm::dot(normal, sphere.GetCenter()) - plane.getDistance());
+  float distanceToSphere = distanceToSphereCenter - sphere.Getradius();
+  return IntersectData(distanceToSphere < 0, fabs(distanceToSphere),
+                       -glm::normalize(plane.getNormal()));
+}
+IntersectData IntersectPlaneSphere(const Plane &plane,
+                                   const BoundingSphere &sphere) {
+  return Reverse(IntersectSpherePlane(sphere, plane));
+}
+
+// plane plane
+IntersectData IntersectPlanePlane(const Plane &plane1, const Plane &plane2);
+} // namespace Physics

@@ -28,6 +28,7 @@
 #include "Renderer/renderContext.h"
 #include "Renderer/shader.h"
 #include "Renderer/regularPolygon.h"
+#include "Renderer/shapes3d.h"
 namespace Renderer {
 
 void render(const RenderContext &renderCtx, const Mesh &mesh,
@@ -37,6 +38,9 @@ void render(const RenderContext &renderCtx, const Model &model,
             const glm::mat4 &modelMatrix);
 
 void render(const RenderContext &renderCtx, const RegularPolygon &shape,
+            const glm::mat4 &modelMatrix);
+
+void render(const RenderContext &renderCtx, const Shapes3D &shape,
             const glm::mat4 &modelMatrix);
 
 } // namespace Renderer

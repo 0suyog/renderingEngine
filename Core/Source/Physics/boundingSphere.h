@@ -1,14 +1,18 @@
 #pragma once
-#include "Physics/intersectData.h"
+#include "Physics/collider.h"
 #include "glm/ext/vector_float3.hpp"
+#include <memory>
 namespace Physics {
-class BoundingSphere {
+class BoundingSphere : public Collider {
 public:
   BoundingSphere(glm::vec3 center, float radius)
-      : m_center(center), m_radius(radius) {}
-  IntersectData IntersectBoundingSphere(const BoundingSphere &other);
+      : Collider(Collider::SPHERE), m_center(center), m_radius(radius) {}
   float Getradius() const { return m_radius; };
   inline const glm::vec3 &GetCenter() const { return m_center; }
+
+  std::shared_ptr<Collider> UsingOrigin(glm::vec3 origin) override {
+    return std::make_shared<BoundingSphere>(m_center + origin, m_radius);
+  }
 
 private:
   const glm::vec3 m_center;
