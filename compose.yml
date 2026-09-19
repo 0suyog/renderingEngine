@@ -1,0 +1,8 @@
+services:
+  engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: renderer
+    volumes:
+      - .:/engine

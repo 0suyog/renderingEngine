@@ -11,9 +11,9 @@ target_sources(
   engine.core
 	 PRIVATE
 	 FILE_SET SOURCES
-		BASE_DIRS
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Source
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors
+	 BASE_DIRS
+	   ${CMAKE_CURRENT_SOURCE_DIR}/Source
+	   ${CMAKE_CURRENT_SOURCE_DIR}/Vendors
 		FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/transform.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/window.cpp
