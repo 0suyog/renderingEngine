@@ -62,12 +62,21 @@ IntersectData IntersectSphereAabb(const BoundingSphere &sphere,
   return Reverse(IntersectAabbSphere(aabb, sphere));
 }
 // aabb plane
-// IntersectData IntersectAabbPlane(const Aabb &aabb, const Plane &plane) {
-//   auto centerToPlane = glm::abs(glm::dot(aabb.GetCenter(), plane.getNormal())
-//   -
-//                                 plane.getDistance());
-//   glm::vec3 distances = aabb.GetHalfSize() - centerToPlane;
-// }
+IntersectData IntersectAabbPlane(const Aabb &aabb, const Plane &plane) {
+  float distanceOfCenterAlongNormal =
+      glm::dot(plane.getNormal(), aabb.GetCenter());
+  float RadiusAlongPlaneNormal =
+      fabs(glm::dot(aabb.GetHalfSize(), plane.getNormal()));
+  float maxExtent = distanceOfCenterAlongNormal + RadiusAlongPlaneNormal;
+  float minExtent = distanceOfCenterAlongNormal - RadiusAlongPlaneNormal;
+  return IntersectData(plane.getDistance() <= maxExtent &&
+                           plane.getDistance() >= minExtent,
+                       fmin(fabs(plane.getDistance() - minExtent),
+                            fabs(plane.getDistance() - maxExtent)),
+                       plane.getNormal());
+
+  // auto distance = glm::dot(closestPoint,plane.getNormal());
+}
 IntersectData IntersectPlaneAabb(const Plane &plane, const Aabb &aabb);
 
 // sphere sphere
