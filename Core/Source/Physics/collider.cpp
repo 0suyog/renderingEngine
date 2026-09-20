@@ -4,8 +4,10 @@
 #include "intersections.h"
 #include <cstdlib>
 #include <iostream>
-namespace Physics {
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
 
+namespace Physics {
 IntersectData Collider::Intersect(const Collider &colliderA,
                                   const Collider &colliderB) {
   if (colliderA.m_type == SPHERE && colliderB.m_type == SPHERE) {
@@ -35,6 +37,9 @@ IntersectData Collider::Intersect(const Collider &colliderA,
   if (colliderA.m_type == AABB && colliderB.m_type == AABB) {
     auto &self = static_cast<const Aabb &>(colliderA);
     auto &other = static_cast<const Aabb &>(colliderB);
+    std::cerr << "self position: " << glm::to_string(self.GetCenter()) << "\n";
+    std::cerr << "other position: " << glm::to_string(other.GetCenter())
+              << "\n\n";
     return IntersectAabbAabb(self, other);
   }
 

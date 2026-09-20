@@ -24,6 +24,7 @@ void PhysicsEngine::Simulate(float timeStep) {
 }
 
 void PhysicsEngine::AddCollision(Collision collision) {
+  std::cerr << "meow";
   m_collisions.push_back(collision);
 }
 
@@ -52,6 +53,8 @@ void PhysicsEngine::ResolveCollisions() {
     else if (objectA->isStatic && !objectB->isStatic) {
       objectB->m_position += toMove;
     }
+    objectA->m_velocity = glm::vec3(0.0f);
+    objectB->m_velocity = glm::vec3(0.0f);
   }
   // cloar all collisions after resolving them
   m_collisions.clear();

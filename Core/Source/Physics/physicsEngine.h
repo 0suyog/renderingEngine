@@ -17,7 +17,7 @@ public:
   void ResolveCollisions();
 
 public:
-  glm::vec3 gravity = {0, -20, 0};
+  glm::vec3 gravity = {0, -0.05, 0};
 
 private:
   std::vector<std::shared_ptr<PhysicsObject>> m_objects;

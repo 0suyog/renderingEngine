@@ -6,6 +6,7 @@
 // #include "glm/ext/vector_common.hpp"
 #include "glm/geometric.hpp"
 #include "glm/vector_relational.hpp"
+#include <iostream>
 namespace Physics {
 
 IntersectData Reverse(const IntersectData &id) {
@@ -21,6 +22,7 @@ IntersectData IntersectAabbAabb(const Aabb &aabb1, const Aabb &aabb2) {
   auto maxDistance =
       std::max(std::max(maxDistances.x, maxDistances.y), maxDistances.z);
   auto normal = glm::normalize(aabb2.GetCenter() - aabb1.GetCenter());
+  std::cerr << "maxDistance: " << maxDistance << "\n";
   return IntersectData(maxDistance < 0, fabs(maxDistance), normal);
 }
 

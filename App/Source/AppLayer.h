@@ -1,13 +1,12 @@
 #pragma once
-#include "Physics/boundingSphere.h"
+#include "Physics/aabb.h"
 #include "Physics/collider.h"
 #include "Physics/collision.h"
 #include "Physics/intersectData.h"
 #include "Physics/physicsObject.h"
-#include "Physics/plane.h"
 #include "Renderer/camera.h"
-#include "Renderer/regularPolygon.h"
 #include "Renderer/renderer.h"
+#include "Renderer/shapes3d.h"
 #include "entityManager.h"
 #include "Renderer/renderContext.h"
 #include "entity.h"
@@ -23,30 +22,30 @@
 #include <iostream>
 #include <memory>
 #include "Physics/physicsEngine.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
 class AppLayer : public Core::Layer {
 public:
   AppLayer() {
-    auto wall = entityManager.AddEntity("wall");
-    wall->addCShape(Renderer::RegularPolygon(15, 4, {0.38, 0.6, 0.89, 1.0}, 0.0,
-                                             {0, 1, 0}))
+    auto floor = entityManager.AddEntity("floor");
+    floor->addCShape(Renderer::Cuboid(10, 2, 20))
         .addCTransform(Core::Transform())
         .addCPhysicsObject(
             physicsEngine.AddObject({0, 0, 0}, {0, 0, 0}, false, true))
-        .addCCollider(std::make_shared<Physics::Plane>(glm::vec3({0, 1, 0}),
-                                                       glm::vec3({0, 0, 0})))
+        .addCCollider(std::make_shared<Physics::Aabb>(
+            glm::vec3({-2.5f, 7.5f, 10.0f}), glm::vec3({2.5f, 7.5f, 10.0f})))
         .addCStatic();
 
-    auto ball = entityManager.AddEntity("ball");
-    ball->addCShape(
-            Renderer::RegularPolygon(4, 32, {1.0, 0, 0, 0.5}, 0.0, {0, 0, 1}))
-        .addCTransform(Core::Transform().moveto({0, 10, 0}))
+    auto aabb = entityManager.AddEntity("aabb");
+    aabb->addCShape(Renderer::Cube(3, {0.5, 0.5, 0.5, 0.5}))
+        .addCTransform(Core::Transform().moveto({0, 0, 0}))
         .addCPhysicsObject(physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
         .addCCollider(
-            std::make_shared<Physics::BoundingSphere>(glm::vec3{0, 0, 0}, 5));
+            std::make_shared<Physics::Aabb>(glm::vec3(-1.5f), glm::vec3(1.5f)));
 
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    cam->position({0, 0, 0});
+    cam->position({0, 4, 10});
   }
 
   void OnUpdate(float ts) override {
@@ -62,7 +61,6 @@ public:
 
         std::shared_ptr<Physics::PhysicsObject> objectA =
             entities[i]->cPhysicsObject->physicsObject;
-
         auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
             objectA->GetPosition());
 
@@ -73,14 +71,20 @@ public:
             std::shared_ptr<Physics::PhysicsObject> objectB =
                 entities[j]->cPhysicsObject->physicsObject;
 
+            std::cerr << "objectA Position: "
+                      << glm::to_string(objectA->GetPosition()) << "\n";
+            std::cerr << "objectB Position: "
+                      << glm::to_string(objectB->GetPosition()) << "\n";
             auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
                 objectB->GetPosition());
 
             Physics::IntersectData id =
                 Physics::Collider::Intersect(*colliderA, *colliderB);
-
-            physicsEngine.AddCollision(Physics::Collision{
-                .intersection = id, .objectA = objectA, .objectB = objectB});
+            auto coll = Physics::Collision{
+                .intersection = id, .objectA = objectA, .objectB = objectB};
+            if (coll.intersection.GetDoesIntersect()) {
+              physicsEngine.AddCollision(coll);
+            }
           }
         }
       }

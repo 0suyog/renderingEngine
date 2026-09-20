@@ -1,9 +1,9 @@
 #pragma once
-#include "Renderer/regularPolygon.h"
+#include "Renderer/shapes3d.h"
 namespace Component {
 class CShape {
 public:
-  CShape(const Renderer::RegularPolygon &shape) : shape(shape) {}
-  Renderer::RegularPolygon shape;
+  CShape(const Renderer::Shapes3D &shape) : shape(shape) {}
+  Renderer::Shapes3D shape;
 };
 } // namespace Component

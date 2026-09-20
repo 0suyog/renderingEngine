@@ -82,17 +82,8 @@ void render(const RenderContext &renderCtx, const RegularPolygon &shape,
 
 void render(const RenderContext &renderCtx, const Shapes3D &shape,
             const glm::mat4 &modelMatrix) {
-  Core::Transform transform = Core::Transform();
-  float angle = 360.0 / 2;
-  int color = 0.0f;
-  for (unsigned i = 0; i < shape.m_polygonNumber; i++) {
-    color = (color + 1) % 255;
-    transform.rotate(i * angle, 90, 0);
-    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
-    transform.rotate(0, i * angle, 90);
-    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
-    transform.rotate(90, 0, i * angle);
-    render(renderCtx, shape.polygon, modelMatrix * transform.matrix());
+  for (const auto &mesh : shape.m_meshes) {
+    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::BasicShader));
   }
 }
 

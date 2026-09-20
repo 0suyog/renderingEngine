@@ -30,6 +30,7 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/regularPolygon.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shapes3d.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp

@@ -9,6 +9,7 @@
 #include "Physics/collider.h"
 #include "Physics/physicsObject.h"
 #include "Renderer/regularPolygon.h"
+#include "Renderer/shapes3d.h"
 #include "transform.h"
 #include <string>
 namespace Core {
@@ -39,7 +40,7 @@ public:
     return *this;
   }
 
-  Entity &addCShape(const Renderer::RegularPolygon shape) {
+  Entity &addCShape(const Renderer::Shapes3D shape) {
     cShape = std::make_shared<Component::CShape>(shape);
     return *this;
   }
