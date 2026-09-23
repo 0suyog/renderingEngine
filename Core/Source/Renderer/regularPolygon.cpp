@@ -67,8 +67,6 @@ std::vector<Renderer::Mesh> RegularPolygon::generateMesh() {
     indices.push_back(i + 1);
     indices.push_back(i + 2);
   }
-  std::cerr << mat.fillColor->x << " " << mat.fillColor->y << " "
-            << mat.fillColor->z << "\n";
   meshes.push_back(Renderer::Mesh(vertices, indices, mat));
 
   return meshes;

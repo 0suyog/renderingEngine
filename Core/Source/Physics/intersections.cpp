@@ -3,9 +3,11 @@
 #include "Physics/intersectData.h"
 #include "Physics/plane.h"
 #include "glm/common.hpp"
-// #include "glm/ext/vector_common.hpp"
 #include "glm/geometric.hpp"
 #include "glm/vector_relational.hpp"
+#include <linux/limits.h>
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
 #include <iostream>
 namespace Physics {
 
@@ -17,12 +19,20 @@ IntersectData Reverse(const IntersectData &id) {
 // aabb aabb
 IntersectData IntersectAabbAabb(const Aabb &aabb1, const Aabb &aabb2) {
   auto distance1 = aabb2.GetMinExtents() - aabb1.GetMaxExtents();
-  auto distance2 = aabb1.GetMaxExtents() - aabb2.GetMaxExtents();
+  auto distance2 = aabb1.GetMinExtents() - aabb2.GetMaxExtents();
   auto maxDistances = glm::max(distance1, distance2);
-  auto maxDistance =
-      std::max(std::max(maxDistances.x, maxDistances.y), maxDistances.z);
-  auto normal = glm::normalize(aabb2.GetCenter() - aabb1.GetCenter());
-  std::cerr << "maxDistance: " << maxDistance << "\n";
+  glm::vec3 normal = {1, 0, 0};
+
+  auto maxDistance = maxDistances.x;
+  if (maxDistances.y > maxDistance) {
+    normal = {0, 1, 0};
+    maxDistance = maxDistances.y;
+  }
+  if (maxDistances.z > maxDistance) {
+    normal = {0, 0, 1};
+    maxDistance = maxDistances.z;
+  }
+
   return IntersectData(maxDistance < 0, fabs(maxDistance), normal);
 }
 
@@ -79,7 +89,9 @@ IntersectData IntersectAabbPlane(const Aabb &aabb, const Plane &plane) {
 
   // auto distance = glm::dot(closestPoint,plane.getNormal());
 }
-IntersectData IntersectPlaneAabb(const Plane &plane, const Aabb &aabb);
+IntersectData IntersectPlaneAabb(const Plane &plane, const Aabb &aabb) {
+  return Reverse(IntersectAabbPlane(aabb, plane));
+}
 
 // sphere sphere
 IntersectData IntersectSphereSphere(const BoundingSphere &sphere1,

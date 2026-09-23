@@ -4,5 +4,7 @@
 namespace Renderer {
 struct RenderContext {
   std::shared_ptr<Camera> cam;
+  float viewPortWidth;
+  float viewPortHeight;
 };
 } // namespace Renderer

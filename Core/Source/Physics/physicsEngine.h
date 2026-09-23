@@ -18,6 +18,7 @@ public:
 
 public:
   glm::vec3 gravity = {0, -0.05, 0};
+  float isPaused = false;
 
 private:
   std::vector<std::shared_ptr<PhysicsObject>> m_objects;

@@ -37,17 +37,14 @@ IntersectData Collider::Intersect(const Collider &colliderA,
   if (colliderA.m_type == AABB && colliderB.m_type == AABB) {
     auto &self = static_cast<const Aabb &>(colliderA);
     auto &other = static_cast<const Aabb &>(colliderB);
-    std::cerr << "self position: " << glm::to_string(self.GetCenter()) << "\n";
-    std::cerr << "other position: " << glm::to_string(other.GetCenter())
-              << "\n\n";
     return IntersectAabbAabb(self, other);
   }
 
-  // if (colliderA.m_type == AABB && colliderB.m_type == PLANE) {
-  //   auto &self = static_cast<const Aabb &>(colliderA);
-  //   auto &other = static_cast<const Plane &>(colliderB);
-  //   return IntersectAabbPlane(self, other);
-  // }
+  if (colliderA.m_type == AABB && colliderB.m_type == PLANE) {
+    auto &self = static_cast<const Aabb &>(colliderA);
+    auto &other = static_cast<const Plane &>(colliderB);
+    return IntersectAabbPlane(self, other);
+  }
 
   if (colliderA.m_type == PLANE && colliderB.m_type == SPHERE) {
     auto &self = static_cast<const Plane &>(colliderA);
@@ -55,11 +52,11 @@ IntersectData Collider::Intersect(const Collider &colliderA,
     return IntersectPlaneSphere(self, other);
   }
 
-  // if (colliderA.m_type == PLANE && colliderB.m_type == AABB) {
-  //   auto &self = static_cast<const Plane &>(colliderA);
-  //   auto &other = static_cast<const Aabb &>(colliderB);
-  //   return IntersectPlaneAabb(self, other);
-  // }
+  if (colliderA.m_type == PLANE && colliderB.m_type == AABB) {
+    auto &self = static_cast<const Plane &>(colliderA);
+    auto &other = static_cast<const Aabb &>(colliderB);
+    return IntersectPlaneAabb(self, other);
+  }
 
   // if (colliderA.m_type == PLANE && colliderB.m_type == PLANE) {
   //   auto &self = static_cast<const Plane &>(colliderA);

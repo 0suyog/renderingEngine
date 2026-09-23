@@ -45,7 +45,7 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors
 		FILES
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/movement.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/action.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/entity.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/window.h
@@ -80,6 +80,8 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/scene.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/gameLayer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.h
 )
 

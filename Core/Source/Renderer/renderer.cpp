@@ -11,6 +11,7 @@
 namespace Renderer {
 void render(const RenderContext &renderCtx, const Mesh &mesh,
             const glm::mat4 &modelMatrix, const ShaderProgram &s) {
+  glViewport(0, 0, renderCtx.viewPortWidth, renderCtx.viewPortHeight);
   s.use();
   s.SetMat4("view", renderCtx.cam->lookAt());
   s.SetMat4("projection", renderCtx.cam->prespectiveMat());

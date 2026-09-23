@@ -5,14 +5,16 @@
 #include "Physics/intersectData.h"
 #include "Physics/physicsObject.h"
 #include "Renderer/camera.h"
+#include "Renderer/mesh.h"
 #include "Renderer/renderer.h"
 #include "Renderer/shapes3d.h"
+#include "Renderer/texture.h"
 #include "entityManager.h"
 #include "Renderer/renderContext.h"
 #include "entity.h"
 #include "transform.h"
 #include "windowevents.h"
-#include "movement.h"
+#include "action.h"
 #include "Renderer/shader.h"
 #include "application.h"
 #include "event.h"
@@ -28,62 +30,65 @@ class AppLayer : public Core::Layer {
 public:
   AppLayer() {
     auto floor = entityManager.AddEntity("floor");
-    floor->addCShape(Renderer::Cuboid(10, 2, 20))
+    floor
+        ->addCShape(Renderer::Cuboid(
+            100, 5, 200,
+            Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
+                                   Renderer::BuiltInTexture::DEFAULT)}))
         .addCTransform(Core::Transform())
         .addCPhysicsObject(
             physicsEngine.AddObject({0, 0, 0}, {0, 0, 0}, false, true))
-        .addCCollider(std::make_shared<Physics::Aabb>(
-            glm::vec3({-2.5f, 7.5f, 10.0f}), glm::vec3({2.5f, 7.5f, 10.0f})))
+        .addCCollider(Physics::Aabb::Generate(floor->cShape->shape.m_meshes))
         .addCStatic();
 
     auto aabb = entityManager.AddEntity("aabb");
-    aabb->addCShape(Renderer::Cube(3, {0.5, 0.5, 0.5, 0.5}))
+    aabb
+        ->addCShape(Renderer::Cube(
+            3, Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
+                                      Renderer::BuiltInTexture::DEFAULT)}))
         .addCTransform(Core::Transform().moveto({0, 0, 0}))
         .addCPhysicsObject(physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
-        .addCCollider(
-            std::make_shared<Physics::Aabb>(glm::vec3(-1.5f), glm::vec3(1.5f)));
+        .addCCollider(Physics::Aabb::Generate(aabb->cShape->shape.m_meshes));
 
     glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     cam->position({0, 4, 10});
+    physicsEngine.gravity.y = -2;
   }
 
   void OnUpdate(float ts) override {
-
+    physicsEngine.isPaused = isPaused;
     entityManager.update();
     physicsEngine.Simulate(ts);
 
     const auto &entities = entityManager.GetEntities();
+    if (!isPaused) {
+      for (unsigned int i = 0; i < entities.size(); i++) {
 
-    for (unsigned int i = 0; i < entities.size(); i++) {
+        if (entities[i]->cPhysicsObject && entities[i]->cCollider) {
 
-      if (entities[i]->cPhysicsObject && entities[i]->cCollider) {
+          std::shared_ptr<Physics::PhysicsObject> objectA =
+              entities[i]->cPhysicsObject->physicsObject;
+          auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
+              objectA->GetPosition());
 
-        std::shared_ptr<Physics::PhysicsObject> objectA =
-            entities[i]->cPhysicsObject->physicsObject;
-        auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
-            objectA->GetPosition());
+          for (unsigned int j = i + 1; j < entities.size(); j++) {
 
-        for (unsigned int j = i + 1; j < entities.size(); j++) {
+            if (entities[j]->cPhysicsObject && entities[j]->cCollider) {
 
-          if (entities[j]->cPhysicsObject && entities[j]->cCollider) {
+              std::shared_ptr<Physics::PhysicsObject> objectB =
+                  entities[j]->cPhysicsObject->physicsObject;
 
-            std::shared_ptr<Physics::PhysicsObject> objectB =
-                entities[j]->cPhysicsObject->physicsObject;
+              auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
+                  objectB->GetPosition());
 
-            std::cerr << "objectA Position: "
-                      << glm::to_string(objectA->GetPosition()) << "\n";
-            std::cerr << "objectB Position: "
-                      << glm::to_string(objectB->GetPosition()) << "\n";
-            auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
-                objectB->GetPosition());
-
-            Physics::IntersectData id =
-                Physics::Collider::Intersect(*colliderA, *colliderB);
-            auto coll = Physics::Collision{
-                .intersection = id, .objectA = objectA, .objectB = objectB};
-            if (coll.intersection.GetDoesIntersect()) {
-              physicsEngine.AddCollision(coll);
+              Physics::IntersectData id =
+                  Physics::Collider::Intersect(*colliderA, *colliderB);
+              auto coll = Physics::Collision{
+                  .intersection = id, .objectA = objectA, .objectB = objectB};
+              if (coll.intersection.GetDoesIntersect()) {
+                physicsEngine.AddCollision(coll);
+              }
             }
           }
         }
@@ -99,31 +104,31 @@ public:
       }
     }
 
-    Core::Movement camMovement = Core::NONE;
-
-    if (Core::KeyEvent::GetKey(GLFW_KEY_W) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::FORWARD);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_S) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::BACKWARD);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_A) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::LEFT);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_D) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::RIGHT);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::DOWN);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_SPACE) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::UP);
-    }
-    if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-      camMovement = static_cast<Core::Movement>(camMovement | Core::FAST);
-    }
-
-    cam->move(camMovement, ts);
+    // Core::Action camMovement = Core::NONE;
+    //
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_W) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::FORWARD);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_S) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::BACKWARD);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_A) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::LEFT);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_D) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::RIGHT);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::DOWN);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_SPACE) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::UP);
+    // }
+    // if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+    //   camMovement = static_cast<Core::Action>(camMovement | Core::FAST);
+    // }
+    //
+    // cam->move(camMovement, ts);
   }
 
   void OnRender() override {
@@ -157,7 +162,8 @@ public:
 
 private:
   bool handleMousePress(Core::MouseButtonPressedEvent &e) {
-    std::cerr << "button: " << e.GetMouseButton() << "\n";
+    auto box = entityManager.GetEntities("aabb")[0];
+    box->cPhysicsObject->physicsObject->applyForce(cam->getForward() * 100.0f);
     return true;
   }
 
@@ -167,6 +173,10 @@ private:
         e.GetKeyCode() == GLFW_KEY_CAPS_LOCK) {
       auto &app = Core::Application::Get();
       app.Stop();
+    }
+
+    if (e.GetKeyCode() == GLFW_KEY_R) {
+      isPaused = !isPaused;
     }
 
     return true;
@@ -189,4 +199,5 @@ private:
   Renderer::RenderContext renderContext = {this->cam};
   Core::EntityManager entityManager;
   Physics::PhysicsEngine physicsEngine;
+  bool isPaused = false;
 };

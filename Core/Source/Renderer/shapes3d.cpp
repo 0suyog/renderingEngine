@@ -10,7 +10,8 @@ namespace Renderer {
 //-1,-1__________________| 1,-1
 //
 
-Shapes3D Cuboid(float xLen, float yLen, float zLen, const glm::vec4 &color) {
+Shapes3D Cuboid(float xLen, float yLen, float zLen, const Material &mat) {
+
   float halfWidth = xLen / 2.0;
   float halfHeight = yLen / 2.0f;
   float halfThickness = zLen / 2.0f;
@@ -124,14 +125,21 @@ Shapes3D Cuboid(float xLen, float yLen, float zLen, const glm::vec4 &color) {
     indices.push_back(i + 3);
     indices.push_back(i + 0);
   }
-
-  Material mat{.fillColor = color};
   Mesh mesh(vertices, indices, mat);
   meshes.push_back(mesh);
   return Shapes3D(meshes, mat);
 }
 
+Shapes3D Cuboid(float xLen, float yLen, float zLen, const glm::vec4 &color) {
+  Material mat{.fillColor = color};
+  return Cuboid(xLen, yLen, zLen, mat);
+}
+
 Shapes3D Cube(float sideLen, const glm::vec4 &color) {
   return Cuboid(sideLen, sideLen, sideLen, color);
+}
+
+Shapes3D Cube(float sideLen, const Material &mat) {
+  return Cuboid(sideLen, sideLen, sideLen, mat);
 }
 } // namespace Renderer

@@ -48,7 +48,6 @@ GLuint ShaderProgram::init() {
     return -1;
   }
   shaderSource = fileData->c_str();
-  std::cerr << (void *)glCreateShader << "\n";
   auto vertexShader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertexShader, 1, &shaderSource, 0);
 

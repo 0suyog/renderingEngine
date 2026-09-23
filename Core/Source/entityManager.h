@@ -9,7 +9,7 @@ public:
   [[nodiscard]] std::shared_ptr<Entity> AddEntity(const std::string &tag);
   [[nodiscard]] std::vector<std::shared_ptr<Entity>> GetEntities();
   [[nodiscard]] std::vector<std::shared_ptr<Entity>>
-  GetEntities(const std::string &tag, bool &tagExist);
+  GetEntities(const std::string &tag);
   void update();
 
 private:

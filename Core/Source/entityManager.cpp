@@ -20,12 +20,10 @@ EntityManager::GetEntities() {
 }
 
 [[nodiscard]] std::vector<std::shared_ptr<Entity>>
-EntityManager::GetEntities(const std::string &tag, bool &tagExist) {
+EntityManager::GetEntities(const std::string &tag) {
   if (m_entitiesMap.contains(tag)) {
-    tagExist = true;
     return m_entitiesMap[tag];
   }
-  tagExist = false;
   return {};
 }
 

@@ -8,7 +8,6 @@
 #include "Components/CTransform.h"
 #include "Physics/collider.h"
 #include "Physics/physicsObject.h"
-#include "Renderer/regularPolygon.h"
 #include "Renderer/shapes3d.h"
 #include "transform.h"
 #include <string>

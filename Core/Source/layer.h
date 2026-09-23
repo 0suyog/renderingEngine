@@ -2,6 +2,8 @@
 #include <concepts>
 #include <memory>
 #include <utility>
+#include "GLFW/glfw3.h"
+#include "action.h"
 #include "event.h"
 namespace Core {
 

@@ -2,12 +2,11 @@
 #include "glm/common.hpp"
 #include "glm/geometric.hpp"
 #include "glm/trigonometric.hpp"
-#include "movement.h"
+#include "action.h"
 #include <glm/ext/matrix_clip_space.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
 #include <glm/ext/matrix_transform.hpp>
-#include <iostream>
 namespace Renderer {
 glm::mat4 Camera::prespectiveMat() const {
   // TODO: make this by myself without relying on glm
@@ -55,38 +54,39 @@ void Camera::rotateByMouse(float dx, float dy) {
   updateVectors();
 }
 
-void Camera::move(Core::Movement movement, float timeStep) {
-  glm::vec3 movementVector(0.0f);
-  float speed = walkSpeed;
-  if (movement & Core::LEFT) {
-    movementVector -= right;
-  }
-  if (movement & Core::RIGHT) {
-    movementVector += right;
-  }
-  if (movement & Core::UP) {
-    movementVector += up;
-  }
-  if (movement & Core::DOWN) {
-    movementVector -= up;
-  }
-  if (movement & Core::FORWARD) {
-    movementVector += forward;
-  }
-  if (movement & Core::BACKWARD) {
-    movementVector -= forward;
-  }
-  if (movement & Core::FAST) {
-    speed = sprintSpeed;
-  }
-
-  movementVector = glm::normalize(movementVector);
-
-  if (glm::isnan(movementVector).y) {
-    return;
-  }
-
-  transform.moveto(transform.getPosition() + speed * movementVector * timeStep);
-}
+// void Camera::move(Core::Action movement, float timeStep) {
+//   glm::vec3 movementVector(0.0f);
+//   float speed = walkSpeed;
+//   if (movement & Core::Action::LEFT) {
+//     movementVector -= right;
+//   }
+//   if (movement & Core::Action::RIGHT) {
+//     movementVector += right;
+//   }
+//   if (movement & Core::Action::UP) {
+//     movementVector += up;
+//   }
+//   if (movement & Core::Action::DOWN) {
+//     movementVector -= up;
+//   }
+//   if (movement & Core::Action::FORWARD) {
+//     movementVector += forward;
+//   }
+//   if (movement & Core::Action::BACKWARD) {
+//     movementVector -= forward;
+//   }
+//   if (movement & Core::Action::FAST) {
+//     speed = sprintSpeed;
+//   }
+//
+//   movementVector = glm::normalize(movementVector);
+//
+//   if (glm::isnan(movementVector).y) {
+//     return;
+//   }
+//
+//   transform.moveto(transform.getPosition() + speed * movementVector *
+//   timeStep);
+// }
 
 } // namespace Renderer
