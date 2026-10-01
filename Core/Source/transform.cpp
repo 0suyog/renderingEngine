@@ -59,7 +59,7 @@ Transform &Transform::scale(float scale) {
   return this->scale(glm::vec3(scale));
 }
 
-Transform &Transform::moveto(const glm::vec3 &pos) {
+Transform &Transform::setPosition(const glm::vec3 &pos) {
   m_position = pos;
   return *this;
 }

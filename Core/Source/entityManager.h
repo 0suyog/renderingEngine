@@ -7,13 +7,10 @@
 namespace Core {
 class EntityManager {
 public:
-  [[nodiscard]] std::shared_ptr<Entity> AddEntity(const std::string &tag);
-  [[nodiscard]] std::vector<std::shared_ptr<Entity>> GetEntities();
-  [[nodiscard]] std::vector<std::shared_ptr<Entity>>
-  GetEntities(const std::string &tag);
-  [[nodiscard]] unsigned int getTotalEntitiesCreated() {
-    return m_totalEntities;
-  }
+  std::shared_ptr<Entity> AddEntity(const std::string &tag);
+  std::vector<std::shared_ptr<Entity>> GetEntities();
+  std::vector<std::shared_ptr<Entity>> GetEntities(const std::string &tag);
+  unsigned int getTotalEntitiesCreated() { return m_totalEntities; }
   void update();
 
 private:

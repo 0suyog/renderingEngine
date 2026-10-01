@@ -37,7 +37,7 @@ Camera &Camera::setRotation(float pitch, float yaw, float roll) {
 }
 
 Camera &Camera::setPosition(const glm::vec3 &pos) {
-  transform.moveto(pos);
+  transform.setPosition(pos);
   return *this;
 }
 
@@ -55,9 +55,9 @@ void Camera::rotateByMouse(float dx, float dy) {
 }
 
 void Camera::move(glm::vec3 movementVector, float timeStep, bool isFast) {
-  transform.moveto(transform.getPosition() +
-                   (isFast ? sprintSpeed : walkSpeed) * movementVector *
-                       timeStep);
+  transform.setPosition(transform.getPosition() +
+                        (isFast ? sprintSpeed : walkSpeed) * movementVector *
+                            timeStep);
 }
 
 void Camera::follow(const glm::vec3 &anchor, float distance) {

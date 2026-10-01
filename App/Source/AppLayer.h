@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Components/CPhysicsObject.h"
+#include "Components/CShape.h"
+#include "Components/CTransform.h"
 #include "Game/scene.h"
 #include "GLFW/glfw3.h"
 #include "Physics/aabb.h"
@@ -20,108 +23,135 @@ public:
         .viewPortWidth = 600,
         .viewPortHeight = 800,
     };
+
     auto floor = entityManager.AddEntity("floor");
+
     floor
-        ->addCShape(Renderer::Cuboid(
+        ->addComponent<Component::CShape>(Renderer::Cuboid(
             500, 3, 500,
             Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
                                    Renderer::BuiltInTexture::DEFAULT),
                                .specularTexture = Renderer::GetBuiltInTexture(
                                    Renderer::BuiltInTexture::WHITE),
                                .shininess = 64}))
-        .addCTransform(Core::Transform())
-        .addCPhysicsObject(
+        .addComponent<Component::CTransform>(Core::Transform())
+        .addComponent<Component::CPhysicsObject>(
             physicsEngine.AddObject({0, 0, 0}, {0, 0, 0}, false, true))
-        .addCCollider(Physics::Aabb::Generate(floor->cShape->shape.m_meshes))
-        .addCStatic();
+        .addComponent<Component::CCollider>(Physics::Aabb::Generate(
+            floor->GetComponent<Component::CShape>()->shape.m_meshes))
+        .addComponent<Component::CStatic>();
 
     auto aabb = entityManager.AddEntity("aabb");
-    aabb->addCShape(
-            Renderer::Cube(5,
-                           Renderer::Material{
-                               .diffuseTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::DEFAULT),
-                           }))
-        .addCTransform(Core::Transform().moveto({0, 0, 0}))
-        .addCPhysicsObject(physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
-        .addCCollider(Physics::Aabb::Generate(aabb->cShape->shape.m_meshes))
-        .addCSpeed(10, 20)
-        .addCCamera(renderContext.cam, 40)
-        .addCLight(Renderer::PointLight({100, 100, 100}, 0.9, 0.32));
-    entityManager.AddEntity("sun")->addCLight(
+
+    aabb
+        ->addComponent<Component::CShape>(Renderer::Cube(
+            5, Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
+                                      Renderer::BuiltInTexture::DEFAULT)}))
+        .addComponent<Component::CTransform>(
+            Core::Transform().setPosition({0, 0, 0}))
+        .addComponent<Component::CPhysicsObject>(
+            physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
+        .addComponent<Component::CCollider>(Physics::Aabb::Generate(
+            aabb->GetComponent<Component::CShape>()->shape.m_meshes))
+        .addComponent<Component::CSpeed>(10, 20)
+        .addComponent<Component::CCamera>(renderContext.cam, 40)
+        .addComponent<Component::CLight>(
+            Renderer::PointLight({100, 100, 100}, 0.9, 0.32));
+
+    entityManager.AddEntity("sun")->addComponent<Component::CLight>(
         Renderer::DirectionalLight({0.5, 0.5, 0.5}, {0.5, 0.5, 0.0}));
+
     player = aabb;
+
     physicsEngine.gravity.y = -2;
+
     setUpActions();
   }
+
   void update(float ts) override {
     entityManager.update();
+
     physicsEngine.Simulate(ts);
+
     renderContext.lights = {};
 
     const auto &entities = entityManager.GetEntities();
 
+    // Collision detection
     for (unsigned int i = 0; i < entities.size(); i++) {
+      if (!entities[i]
+               ->HasComponents<Component::CPhysicsObject, Component::CTransform,
+                               Component::CCollider>()) {
+        continue;
+      }
 
-      if (entities[i]->cPhysicsObject && entities[i]->cCollider) {
-
-        std::shared_ptr<Physics::PhysicsObject> objectA =
-            entities[i]->cPhysicsObject->physicsObject;
-
-        auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
-            objectA->GetPosition());
-
-        for (unsigned int j = i + 1; j < entities.size(); j++) {
-
-          if (entities[j]->cPhysicsObject && entities[j]->cCollider) {
-
-            std::shared_ptr<Physics::PhysicsObject> objectB =
-                entities[j]->cPhysicsObject->physicsObject;
-
-            auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
-                objectB->GetPosition());
-
-            Physics::IntersectData id =
-                Physics::Collider::Intersect(*colliderA, *colliderB);
-
-            physicsEngine.AddCollision(Physics::Collision{
-                .intersection = id, .objectA = objectA, .objectB = objectB});
-          }
+      for (unsigned int j = i + 1; j < entities.size(); j++) {
+        if (!entities[j]
+                 ->HasComponents<Component::CPhysicsObject,
+                                 Component::CCollider>()) {
+          continue;
         }
       }
     }
+
     physicsEngine.ResolveCollisions();
+
+    // Sync physics -> transform and collect lights
     for (const auto &entity : entities) {
-      if (entity->cPhysicsObject && entity->cTransform) {
-        entity->cTransform->transform.moveto(
-            entity->cPhysicsObject->physicsObject->GetPosition());
+      if (entity->HasComponents<Component::CPhysicsObject,
+                                Component::CTransform>()) {
+
+        auto physicsObject =
+            entity->GetComponent<Component::CPhysicsObject>()->physicsObject;
+
+        entity->GetComponent<Component::CTransform>()->transform.setPosition(
+            physicsObject->GetPosition());
       }
 
-      if (entity->cLight) {
-        if (entity->cTransform) {
-          renderContext.lights.push_back(entity->cLight->light.UsingOrigin(
-              entity->cTransform->transform.getPosition()));
+      if (entity->HasComponents<Component::CLight>()) {
+        auto light = entity->GetComponent<Component::CLight>()->light;
+
+        if (entity->HasComponents<Component::CTransform>()) {
+          renderContext.lights.push_back(
+              light.UsingOrigin(entity->GetComponent<Component::CTransform>()
+                                    ->transform.getPosition()));
         } else {
-          renderContext.lights.push_back(entity->cLight->light);
+          renderContext.lights.push_back(light);
         }
       }
     }
-    if (player->cCamera) {
-      player->cCamera->camera->follow(
-          player->cTransform->transform.getPosition(),
-          player->cCamera->followDistance);
+
+    // Camera follows player
+    if (player->HasComponents<Component::CCamera, Component::CTransform>()) {
+
+      auto camera = player->GetComponent<Component::CCamera>();
+
+      auto transform = player->GetComponent<Component::CTransform>();
+
+      camera->camera->follow(transform->transform.getPosition(),
+                             camera->followDistance);
     }
 
-    if (player->cSpeed) {
+    // Player movement
+    if (player->HasComponents<Component::CSpeed, Component::CPhysicsObject>()) {
+
+      auto speedComponent = player->GetComponent<Component::CSpeed>();
+
+      auto physicsObject =
+          player->GetComponent<Component::CPhysicsObject>()->physicsObject;
+
       auto playerMovementVector = glm::vec3(0);
-      auto speed = player->cSpeed->walkSpeed;
-      // // move camera based on activeActions
+
+      auto speed = speedComponent->walkSpeed;
+
       if (activeActions[Core::Action::FORWARD]) {
         playerMovementVector += renderContext.cam->getForward();
       }
+
       if (activeActions[Core::Action::BACKWARD]) {
         playerMovementVector -= renderContext.cam->getForward();
       }
+
       if (activeActions[Core::Action::LEFT]) {
         playerMovementVector -= renderContext.cam->getRight();
       }
@@ -131,25 +161,24 @@ public:
       }
 
       if (activeActions[Core::Action::FAST]) {
-        speed = player->cSpeed->sprintSpeed;
+        speed = speedComponent->sprintSpeed;
       }
 
-      if (!(playerMovementVector == glm::vec3(0))) {
+      if (playerMovementVector != glm::vec3(0)) {
         playerMovementVector = glm::normalize(playerMovementVector);
-        auto &playerPhysicsObject = player->cPhysicsObject->physicsObject;
-        playerPhysicsObject->SetVelocity(playerPhysicsObject->GetVelocity() +
-                                         speed * playerMovementVector * ts);
+
+        physicsObject->SetPosition(physicsObject->GetPosition() +
+                                   speed * playerMovementVector * ts);
       }
 
       if (activeActions[Core::Action::JUMP]) {
-        player->cPhysicsObject->physicsObject->SetVelocity(
-            player->cPhysicsObject->physicsObject->GetVelocity() +
-            glm::vec3(0, 10, 0));
+        physicsObject->SetPosition(physicsObject->GetPosition() +
+                                   glm::vec3(0, 15, 0) * ts);
       }
+
       if (activeActions[Core::Action::DOWN]) {
-        player->cPhysicsObject->physicsObject->SetVelocity(
-            player->cPhysicsObject->physicsObject->GetVelocity() -
-            glm::vec3(0, 10, 0));
+        physicsObject->SetPosition(physicsObject->GetPosition() -
+                                   glm::vec3(0, 15, 0) * ts);
       }
     }
   }
@@ -175,52 +204,49 @@ public:
         auto &app = Core::Application::Get();
         app.Stop();
       }
-      if (action.type == Core::Action::FORWARD) {
+
+      if (action.type == Core::Action::FORWARD)
         activeActions[Core::Action::FORWARD] = true;
-      }
-      if (action.type == Core::Action::BACKWARD) {
+
+      if (action.type == Core::Action::BACKWARD)
         activeActions[Core::Action::BACKWARD] = true;
-      }
-      if (action.type == Core::Action::FAST) {
+
+      if (action.type == Core::Action::FAST)
         activeActions[Core::Action::FAST] = true;
-      }
-      if (action.type == Core::Action::LEFT) {
+
+      if (action.type == Core::Action::LEFT)
         activeActions[Core::Action::LEFT] = true;
-      }
-      if (action.type == Core::Action::RIGHT) {
+
+      if (action.type == Core::Action::RIGHT)
         activeActions[Core::Action::RIGHT] = true;
-      }
-      if (action.type == Core::Action::JUMP) {
+
+      if (action.type == Core::Action::JUMP)
         activeActions[Core::Action::JUMP] = true;
-      }
-      if (action.type == Core::Action::DOWN) {
+
+      if (action.type == Core::Action::DOWN)
         activeActions[Core::Action::DOWN] = true;
-      }
+
     } else {
-      if (action.type == Core::Action::FORWARD) {
+      if (action.type == Core::Action::FORWARD)
         activeActions[Core::Action::FORWARD] = false;
-      }
-      if (action.type == Core::Action::BACKWARD) {
+
+      if (action.type == Core::Action::BACKWARD)
         activeActions[Core::Action::BACKWARD] = false;
-      }
-      if (action.type == Core::Action::RIGHT) {
+
+      if (action.type == Core::Action::RIGHT)
         activeActions[Core::Action::RIGHT] = false;
-      }
-      if (action.type == Core::Action::LEFT) {
+
+      if (action.type == Core::Action::LEFT)
         activeActions[Core::Action::LEFT] = false;
-      }
-      if (action.type == Core::Action::FAST) {
+
+      if (action.type == Core::Action::FAST)
         activeActions[Core::Action::FAST] = false;
-      }
-      if (action.type == Core::Action::JUMP) {
+
+      if (action.type == Core::Action::JUMP)
         activeActions[Core::Action::JUMP] = false;
-      }
-      if (action.type == Core::Action::DOWN) {
+
+      if (action.type == Core::Action::DOWN)
         activeActions[Core::Action::DOWN] = false;
-      }
     }
   }
-
-private:
-  bool isCamMoving = false;
 };

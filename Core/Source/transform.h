@@ -15,7 +15,7 @@ public:
   Transform &rotate(float allAxisAngle);
   // void revolve(const glm::vec3 &around, float radius, float angleInDeg,
   //              const glm::vec3 &axis, const glm::vec3 &zerodegDir);
-  Transform &moveto(const glm::vec3 &pos);
+  Transform &setPosition(const glm::vec3 &pos);
   Transform &scale(const glm::vec3 &scale);
   Transform &scale(float scale);
 

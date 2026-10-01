@@ -1,6 +1,7 @@
 #pragma once
 #include "Components/CCamera.h"
 #include <memory>
+#include <typeindex>
 #include "Components/CLight.h"
 #include "Components/CPhysicsObject.h"
 #include "Components/CCollider.h"
@@ -72,8 +73,29 @@ public:
     cLight = std::make_shared<Component::CLight>(light);
     return *this;
   }
+  template <typename T, typename... Args> Entity &addComponent(Args &&...args) {
+    m_components[typeid(T)] = std::make_shared<T>(std::forward<Args>(args)...);
+    return *this;
+  }
+
+  template <typename T> std::shared_ptr<T> GetComponent() {
+    if (m_components.contains(typeid(T))) {
+      return static_cast<std::shared_ptr<T>>(m_components[typeid(T)]);
+    }
+  }
+
+  template <typename... Components> bool HasComponents() {
+    return (HasComponent<Components>() && ...);
+  }
 
 private:
+  template <typename Component> bool HasComponent() {
+    if (m_components.contains(typeid(Component)))
+      return true;
+    return false;
+  }
   Entity(unsigned int id, const std::string &tag) : m_id(id), m_tag(tag) {}
+  std::unordered_map<std::type_index, std::shared_ptr<void>> m_components;
+  ;
 };
 } // namespace Core

@@ -13,12 +13,11 @@ std::shared_ptr<Entity> EntityManager::AddEntity(const std::string &tag) {
   return e;
 }
 
-[[nodiscard]] std::vector<std::shared_ptr<Entity>>
-EntityManager::GetEntities() {
+std::vector<std::shared_ptr<Entity>> EntityManager::GetEntities() {
   return m_entities;
 }
 
-[[nodiscard]] std::vector<std::shared_ptr<Entity>>
+std::vector<std::shared_ptr<Entity>>
 EntityManager::GetEntities(const std::string &tag) {
   if (m_entitiesMap.contains(tag)) {
     return m_entitiesMap[tag];
