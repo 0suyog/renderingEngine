@@ -23,7 +23,7 @@ struct Material {
   std::optional<std::shared_ptr<Texture>> diffuseTexture;
   std::optional<std::shared_ptr<Texture>> specularTexture;
   std::optional<std::shared_ptr<Texture>> normalTexture;
-  float specularStrength = 0;
+  float shininess = 128;
 };
 
 class Mesh {

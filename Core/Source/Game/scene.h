@@ -2,9 +2,11 @@
 #include "../action.h"
 #include "../entity.h"
 #include "../entityManager.h"
-#include "../Renderer/renderContext.h"
 #include "../Physics/physicsEngine.h"
+#include "../Renderer/renderContext.h"
+#include <bitset>
 namespace Game {
+class GameLayer;
 class Scene {
 public:
   std::unordered_map<unsigned int, unsigned int> actionMap;
@@ -12,8 +14,23 @@ public:
   Physics::PhysicsEngine physicsEngine;
   Core::EntityManager entityManager;
   Renderer::RenderContext renderContext;
+  std::bitset<100> activeActions;
 
-  virtual void update(float ts) = 0;
-  virtual void doAction(Core::Action) = 0;
+  virtual void update(float ts) {};
+  virtual void doAction(const Core::Action &action) {};
+
+  virtual void onMouseMove(float dx, float dy) {};
+
+  /**
+   * @brief Takes either mouseButton or Keypress like GLFW_MOUSE_BUTTON_1 or
+   * GLFW_KEY_W and Core::Action::Forward as param
+   *
+   * @param input glfw mousebutton or key press
+   * @param action What action to perform with the particular input
+   */
+  // TODO: Make this check for collision on input maps
+  void registerAction(unsigned int input, unsigned int action) {
+    actionMap[input] = action;
+  }
 };
 } // namespace Game

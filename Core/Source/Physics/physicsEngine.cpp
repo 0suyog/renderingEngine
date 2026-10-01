@@ -8,9 +8,10 @@
 namespace Physics {
 std::shared_ptr<PhysicsObject>
 PhysicsEngine::AddObject(const glm::vec3 &position, const glm::vec3 &velocity,
-                         bool hasGravity, bool isStatic) {
-  std::shared_ptr<PhysicsObject> object(
-      new PhysicsObject(position, velocity, hasGravity, isStatic));
+                         bool hasGravity, bool isStatic, float mass,
+                         float friction) {
+  std::shared_ptr<PhysicsObject> object(new PhysicsObject(
+      position, velocity, hasGravity, isStatic, mass, friction));
   m_objects.push_back(object);
   return object;
 }
@@ -63,8 +64,10 @@ void PhysicsEngine::ResolveCollisions() {
     else if (objectA->isStatic && !objectB->isStatic) {
       objectB->m_position += toMove;
     }
-    objectA->m_velocity *= 0.99;
-    objectB->m_velocity *= 0.99;
+    objectA->m_velocity *= objectA->friction;
+    objectB->m_velocity *= objectB->friction;
+    // objectA->m_velocity *= 0.99;
+    // objectB->m_velocity *= 0.99;
   }
   // cloar all collisions after resolving them
   m_collisions.clear();

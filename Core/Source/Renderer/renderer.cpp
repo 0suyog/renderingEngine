@@ -1,3 +1,4 @@
+#include "light.h"
 #include "Renderer/mesh.h"
 #include "Renderer/model.h"
 #include "Renderer/renderContext.h"
@@ -5,10 +6,45 @@
 #include "Renderer/shapes3d.h"
 #include "regularPolygon.h"
 #include "Renderer/texture.h"
-#include "transform.h"
+#include <string>
+#include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 namespace Renderer {
+
+/**
+ * @brief Sends light to shader through uniforms
+ *
+ * @param s The shader program to use
+ * @param l Light to be sent
+ * @param index Index of light
+ */
+void sendLightToShader(ShaderProgram s, const Light &l, unsigned int index) {
+  const std::string prefix = "lights[" + std::to_string(index) + "].";
+
+  s.SetVec3(prefix + "ambient", l.ambient);
+  s.SetVec3(prefix + "diffuse", l.diffuse);
+  s.SetVec3(prefix + "specular", l.specular);
+
+  s.SetVec3(prefix + "pos", l.pos);
+  s.SetVec3(prefix + "dir", l.dir);
+
+  s.SetFloat(prefix + "cutoff", l.cutoff);
+  s.SetFloat(prefix + "outerCutoff", l.outerCutoff);
+
+  s.SetFloat(prefix + "constant", l.constant);
+  s.SetFloat(prefix + "linear", l.linear);
+  s.SetFloat(prefix + "quadratic", l.quadratic);
+
+  s.SetUInt(prefix + "type", static_cast<unsigned int>(l.type));
+}
+
+void sendLightsToShader(ShaderProgram s, std::vector<Light> lights) {
+  for (unsigned int i = 0; i < lights.size(); i++) {
+    sendLightToShader(s, lights[i], i);
+  }
+}
+
 void render(const RenderContext &renderCtx, const Mesh &mesh,
             const glm::mat4 &modelMatrix, const ShaderProgram &s) {
   glViewport(0, 0, renderCtx.viewPortWidth, renderCtx.viewPortHeight);
@@ -16,12 +52,12 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
   s.SetMat4("view", renderCtx.cam->lookAt());
   s.SetMat4("projection", renderCtx.cam->prespectiveMat());
   s.SetMat4("model", modelMatrix);
+  s.SetVec3("CameraPosition", renderCtx.cam->getPosition());
   std::shared_ptr<Texture> diffuseTex;
   glm::vec4 color = {1, 1, 1, 1.0};
   std::shared_ptr<Texture> specularTex;
-  float specularStrength = mesh.mat.specularStrength;
   // check if matrial has fillColor or diffuseTexture
-  // if none then just diffuse texture other wise set
+  // if none then just diffuse texture other wise
   // check if it has diffuseTexture and if not set it to
   // white 1x1 texture
   if (!mesh.mat.fillColor && !mesh.mat.diffuseTexture) {
@@ -41,9 +77,9 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
   if (mesh.mat.specularTexture) {
     specularTex = mesh.mat.specularTexture.value();
   } else {
-    specularTex = GetBuiltInTexture(BuiltInTexture::WHITE);
+    specularTex = GetBuiltInTexture(BuiltInTexture::BLACK);
   }
-
+  s.SetFloat("material.shininess", mesh.mat.shininess);
   glActiveTexture(GL_TEXTURE0);
   s.SetInt("material.diffuse", 0);
   glBindTexture(GL_TEXTURE_2D, diffuseTex->handle);
@@ -51,7 +87,6 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
   glActiveTexture(GL_TEXTURE1);
   s.SetInt("material.specular", 1);
   glBindTexture(GL_TEXTURE_2D, specularTex->handle);
-  s.SetFloat("material.specularStrength", specularStrength);
   if (mesh.mat.normalTexture) {
     glActiveTexture(GL_TEXTURE2);
     s.SetInt("material.normal", 2);
@@ -70,21 +105,23 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
 void render(const RenderContext &renderCtx, const Model &model,
             const glm::mat4 &modelMatrix) {
   for (const auto &mesh : model.m_meshes) {
-    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::BasicShader));
+    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::PhongShader));
   }
 }
 
 void render(const RenderContext &renderCtx, const RegularPolygon &shape,
             const glm::mat4 &modelMatrix) {
   for (const auto &mesh : shape.meshes) {
-    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::BasicShader));
+    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::PhongShader));
   }
 }
 
 void render(const RenderContext &renderCtx, const Shapes3D &shape,
             const glm::mat4 &modelMatrix) {
+  auto shader = getShader(EShaders::PhongShader);
+  sendLightsToShader(*shader, renderCtx.lights);
   for (const auto &mesh : shape.m_meshes) {
-    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::BasicShader));
+    render(renderCtx, mesh, modelMatrix, *shader);
   }
 }
 

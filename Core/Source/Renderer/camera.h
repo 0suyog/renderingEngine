@@ -1,5 +1,4 @@
 #pragma once
-#include "action.h"
 #include "transform.h"
 #include <glm/ext/matrix_float4x4.hpp>
 namespace Renderer {
@@ -8,10 +7,11 @@ public:
   glm::mat4 lookAt() const;
   glm::mat4 prespectiveMat() const;
   glm::mat4 orthographicMat() const;
-  void move(Core::Action directions, float timeStep);
+  void move(glm::vec3 direction, float timeStep, bool isFast);
 
-  Camera &position(const glm::vec3 &pos);
-  Camera &rotation(float pitch, float yaw, float roll);
+  Camera &setPosition(const glm::vec3 &pos);
+  Camera &setRotation(float pitch, float yaw, float roll);
+  glm::vec3 getPosition() { return transform.getPosition(); };
 
   void setWidth(float w) {
     v_Width = w;
@@ -28,6 +28,8 @@ public:
 
   void rotateByMouse(float dx, float dy);
   glm::vec3 getForward() { return forward; }
+  glm::vec3 getRight() { return right; }
+  void follow(const glm::vec3 &anchor, float distance);
   float fov = 45.0f;
   float sensitivity = 0.05;
   float walkSpeed = 5.0f;

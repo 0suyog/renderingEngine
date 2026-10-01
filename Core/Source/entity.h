@@ -1,5 +1,7 @@
 #pragma once
+#include "Components/CCamera.h"
 #include <memory>
+#include "Components/CLight.h"
 #include "Components/CPhysicsObject.h"
 #include "Components/CCollider.h"
 #include "Components/CShape.h"
@@ -7,10 +9,8 @@
 #include "Components/CShape.h"
 #include "Components/CTransform.h"
 #include "Physics/collider.h"
-#include "Physics/physicsObject.h"
-#include "Renderer/shapes3d.h"
+#include "Components/CSpeed.h"
 #include "transform.h"
-#include <string>
 namespace Core {
 
 class EntityManager;
@@ -27,6 +27,9 @@ public:
   std::shared_ptr<Component::CShape> cShape;
   std::shared_ptr<Component::CStatic> cStatic;
   std::shared_ptr<Component::CTransform> cTransform;
+  std::shared_ptr<Component::CSpeed> cSpeed;
+  std::shared_ptr<Component::CCamera> cCamera;
+  std::shared_ptr<Component::CLight> cLight;
 
   Entity &
   addCPhysicsObject(std::shared_ptr<Physics::PhysicsObject> physicsObject) {
@@ -51,6 +54,22 @@ public:
 
   Entity &addCTransform(const Core::Transform transform) {
     cTransform = std::make_shared<Component::CTransform>(transform);
+    return *this;
+  }
+
+  Entity &addCSpeed(const float walkspeed = 2, const float sprintSpeed = 4) {
+    cSpeed = std::make_shared<Component::CSpeed>(walkspeed, sprintSpeed);
+    return *this;
+  }
+
+  Entity &addCCamera(std::shared_ptr<Renderer::Camera> &cam,
+                     float followDistance) {
+    cCamera = std::make_shared<Component::CCamera>(cam, followDistance);
+    return *this;
+  }
+
+  Entity &addCLight(Renderer::Light light) {
+    cLight = std::make_shared<Component::CLight>(light);
     return *this;
   }
 

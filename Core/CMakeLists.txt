@@ -31,6 +31,7 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/camera.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shapes3d.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/light.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
@@ -77,6 +78,7 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/model.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/renderer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/light.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h

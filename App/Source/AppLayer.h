@@ -1,40 +1,34 @@
 #pragma once
+
+#include "Game/scene.h"
+#include "GLFW/glfw3.h"
 #include "Physics/aabb.h"
-#include "Physics/collider.h"
-#include "Physics/collision.h"
-#include "Physics/intersectData.h"
-#include "Physics/physicsObject.h"
 #include "Renderer/camera.h"
-#include "Renderer/mesh.h"
-#include "Renderer/renderer.h"
-#include "Renderer/shapes3d.h"
 #include "Renderer/texture.h"
-#include "entityManager.h"
-#include "Renderer/renderContext.h"
-#include "entity.h"
-#include "transform.h"
-#include "windowevents.h"
 #include "action.h"
-#include "Renderer/shader.h"
 #include "application.h"
-#include "event.h"
-#include "layer.h"
-#include "inputevents.h"
-#include <GLFW/glfw3.h>
+#include "glm/ext/vector_float3.hpp"
+#include "glm/geometric.hpp"
 #include <iostream>
 #include <memory>
-#include "Physics/physicsEngine.h"
-#define GLM_ENABLE_EXPERIMENTAL
-#include "glm/gtx/string_cast.hpp"
-class AppLayer : public Core::Layer {
+
+class Playground : public Game::Scene {
 public:
-  AppLayer() {
+  Playground() : Game::Scene() {
+    renderContext = {
+        .cam = std::make_shared<Renderer::Camera>(),
+        .viewPortWidth = 600,
+        .viewPortHeight = 800,
+    };
     auto floor = entityManager.AddEntity("floor");
     floor
         ->addCShape(Renderer::Cuboid(
-            100, 5, 200,
+            500, 3, 500,
             Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::DEFAULT)}))
+                                   Renderer::BuiltInTexture::DEFAULT),
+                               .specularTexture = Renderer::GetBuiltInTexture(
+                                   Renderer::BuiltInTexture::WHITE),
+                               .shininess = 64}))
         .addCTransform(Core::Transform())
         .addCPhysicsObject(
             physicsEngine.AddObject({0, 0, 0}, {0, 0, 0}, false, true))
@@ -42,162 +36,191 @@ public:
         .addCStatic();
 
     auto aabb = entityManager.AddEntity("aabb");
-    aabb
-        ->addCShape(Renderer::Cube(
-            3, Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
-                                      Renderer::BuiltInTexture::DEFAULT)}))
+    aabb->addCShape(
+            Renderer::Cube(5,
+                           Renderer::Material{
+                               .diffuseTexture = Renderer::GetBuiltInTexture(
+                                   Renderer::BuiltInTexture::DEFAULT),
+                           }))
         .addCTransform(Core::Transform().moveto({0, 0, 0}))
         .addCPhysicsObject(physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
-        .addCCollider(Physics::Aabb::Generate(aabb->cShape->shape.m_meshes));
-
-    glfwSetInputMode(Core::Application::Get().GetWindow()->GetHandle(),
-                     GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    cam->position({0, 4, 10});
+        .addCCollider(Physics::Aabb::Generate(aabb->cShape->shape.m_meshes))
+        .addCSpeed(10, 20)
+        .addCCamera(renderContext.cam, 40)
+        .addCLight(Renderer::PointLight({100, 100, 100}, 0.9, 0.32));
+    entityManager.AddEntity("sun")->addCLight(
+        Renderer::DirectionalLight({0.5, 0.5, 0.5}, {0.5, 0.5, 0.0}));
+    player = aabb;
     physicsEngine.gravity.y = -2;
+    setUpActions();
   }
-
-  void OnUpdate(float ts) override {
-    physicsEngine.isPaused = isPaused;
+  void update(float ts) override {
     entityManager.update();
     physicsEngine.Simulate(ts);
+    renderContext.lights = {};
 
     const auto &entities = entityManager.GetEntities();
-    if (!isPaused) {
-      for (unsigned int i = 0; i < entities.size(); i++) {
 
-        if (entities[i]->cPhysicsObject && entities[i]->cCollider) {
+    for (unsigned int i = 0; i < entities.size(); i++) {
 
-          std::shared_ptr<Physics::PhysicsObject> objectA =
-              entities[i]->cPhysicsObject->physicsObject;
-          auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
-              objectA->GetPosition());
+      if (entities[i]->cPhysicsObject && entities[i]->cCollider) {
 
-          for (unsigned int j = i + 1; j < entities.size(); j++) {
+        std::shared_ptr<Physics::PhysicsObject> objectA =
+            entities[i]->cPhysicsObject->physicsObject;
 
-            if (entities[j]->cPhysicsObject && entities[j]->cCollider) {
+        auto colliderA = entities[i]->cCollider->collider->UsingOrigin(
+            objectA->GetPosition());
 
-              std::shared_ptr<Physics::PhysicsObject> objectB =
-                  entities[j]->cPhysicsObject->physicsObject;
+        for (unsigned int j = i + 1; j < entities.size(); j++) {
 
-              auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
-                  objectB->GetPosition());
+          if (entities[j]->cPhysicsObject && entities[j]->cCollider) {
 
-              Physics::IntersectData id =
-                  Physics::Collider::Intersect(*colliderA, *colliderB);
-              auto coll = Physics::Collision{
-                  .intersection = id, .objectA = objectA, .objectB = objectB};
-              if (coll.intersection.GetDoesIntersect()) {
-                physicsEngine.AddCollision(coll);
-              }
-            }
+            std::shared_ptr<Physics::PhysicsObject> objectB =
+                entities[j]->cPhysicsObject->physicsObject;
+
+            auto colliderB = entities[j]->cCollider->collider->UsingOrigin(
+                objectB->GetPosition());
+
+            Physics::IntersectData id =
+                Physics::Collider::Intersect(*colliderA, *colliderB);
+
+            physicsEngine.AddCollision(Physics::Collision{
+                .intersection = id, .objectA = objectA, .objectB = objectB});
           }
         }
       }
     }
-
     physicsEngine.ResolveCollisions();
-
     for (const auto &entity : entities) {
-      if (entity->cPhysicsObject) {
+      if (entity->cPhysicsObject && entity->cTransform) {
         entity->cTransform->transform.moveto(
             entity->cPhysicsObject->physicsObject->GetPosition());
       }
+
+      if (entity->cLight) {
+        if (entity->cTransform) {
+          renderContext.lights.push_back(entity->cLight->light.UsingOrigin(
+              entity->cTransform->transform.getPosition()));
+        } else {
+          renderContext.lights.push_back(entity->cLight->light);
+        }
+      }
+    }
+    if (player->cCamera) {
+      player->cCamera->camera->follow(
+          player->cTransform->transform.getPosition(),
+          player->cCamera->followDistance);
     }
 
-    // Core::Action camMovement = Core::NONE;
-    //
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_W) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::FORWARD);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_S) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::BACKWARD);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_A) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::LEFT);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_D) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::RIGHT);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::DOWN);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_SPACE) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::UP);
-    // }
-    // if (Core::KeyEvent::GetKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-    //   camMovement = static_cast<Core::Action>(camMovement | Core::FAST);
-    // }
-    //
-    // cam->move(camMovement, ts);
-  }
+    if (player->cSpeed) {
+      auto playerMovementVector = glm::vec3(0);
+      auto speed = player->cSpeed->walkSpeed;
+      // // move camera based on activeActions
+      if (activeActions[Core::Action::FORWARD]) {
+        playerMovementVector += renderContext.cam->getForward();
+      }
+      if (activeActions[Core::Action::BACKWARD]) {
+        playerMovementVector -= renderContext.cam->getForward();
+      }
+      if (activeActions[Core::Action::LEFT]) {
+        playerMovementVector -= renderContext.cam->getRight();
+      }
 
-  void OnRender() override {
-    // glEnable(GL_CULL_FACE);
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, cam->getWidth(), cam->getHeight());
-    for (const auto &entity : entityManager.GetEntities()) {
-      if (entity->cShape && entity->cTransform) {
-        auto modelMatrix = entity->cTransform->transform.matrix();
-        Renderer::render(renderContext, entity->cShape->shape, modelMatrix);
+      if (activeActions[Core::Action::RIGHT]) {
+        playerMovementVector += renderContext.cam->getRight();
+      }
+
+      if (activeActions[Core::Action::FAST]) {
+        speed = player->cSpeed->sprintSpeed;
+      }
+
+      if (!(playerMovementVector == glm::vec3(0))) {
+        playerMovementVector = glm::normalize(playerMovementVector);
+        auto &playerPhysicsObject = player->cPhysicsObject->physicsObject;
+        playerPhysicsObject->SetVelocity(playerPhysicsObject->GetVelocity() +
+                                         speed * playerMovementVector * ts);
+      }
+
+      if (activeActions[Core::Action::JUMP]) {
+        player->cPhysicsObject->physicsObject->SetVelocity(
+            player->cPhysicsObject->physicsObject->GetVelocity() +
+            glm::vec3(0, 10, 0));
+      }
+      if (activeActions[Core::Action::DOWN]) {
+        player->cPhysicsObject->physicsObject->SetVelocity(
+            player->cPhysicsObject->physicsObject->GetVelocity() -
+            glm::vec3(0, 10, 0));
       }
     }
   }
 
-  void OnEvent(Core::Event &e) override {
-    // std::cerr << "[Event Occured]: " << e.ToString() << std::endl;
-    Core::EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<Core::MouseButtonPressedEvent>(
-        [this](Core::MouseButtonPressedEvent &e) {
-          return handleMousePress(e);
-        });
-    dispatcher.Dispatch<Core::KeyPressedEvent>(
-        [this](Core::KeyPressedEvent &e) { return handleKeyPress(e); });
-    dispatcher.Dispatch<Core::WindowResizeEvent>(
-        [this](Core::WindowResizeEvent &e) { return handleWindowResize(e); });
-    dispatcher.Dispatch<Core::MouseMovedEvent>(
-        [this](Core::MouseMovedEvent &e) { return handleMouseMove(e); });
+  void onMouseMove(float dx, float dy) override {
+    renderContext.cam->rotateByMouse(dx, dy);
+  }
+
+  void setUpActions() {
+    registerAction(GLFW_KEY_CAPS_LOCK, Core::Action::QUIT);
+    registerAction(GLFW_KEY_W, Core::Action::FORWARD);
+    registerAction(GLFW_KEY_S, Core::Action::BACKWARD);
+    registerAction(GLFW_KEY_A, Core::Action::LEFT);
+    registerAction(GLFW_KEY_D, Core::Action::RIGHT);
+    registerAction(GLFW_KEY_LEFT_SHIFT, Core::Action::DOWN);
+    registerAction(GLFW_KEY_SPACE, Core::Action::JUMP);
+    registerAction(GLFW_KEY_LEFT_CONTROL, Core::Action::FAST);
+  }
+
+  void doAction(const Core::Action &action) override {
+    if (action.isStart) {
+      if (action.type == Core::Action::QUIT) {
+        auto &app = Core::Application::Get();
+        app.Stop();
+      }
+      if (action.type == Core::Action::FORWARD) {
+        activeActions[Core::Action::FORWARD] = true;
+      }
+      if (action.type == Core::Action::BACKWARD) {
+        activeActions[Core::Action::BACKWARD] = true;
+      }
+      if (action.type == Core::Action::FAST) {
+        activeActions[Core::Action::FAST] = true;
+      }
+      if (action.type == Core::Action::LEFT) {
+        activeActions[Core::Action::LEFT] = true;
+      }
+      if (action.type == Core::Action::RIGHT) {
+        activeActions[Core::Action::RIGHT] = true;
+      }
+      if (action.type == Core::Action::JUMP) {
+        activeActions[Core::Action::JUMP] = true;
+      }
+      if (action.type == Core::Action::DOWN) {
+        activeActions[Core::Action::DOWN] = true;
+      }
+    } else {
+      if (action.type == Core::Action::FORWARD) {
+        activeActions[Core::Action::FORWARD] = false;
+      }
+      if (action.type == Core::Action::BACKWARD) {
+        activeActions[Core::Action::BACKWARD] = false;
+      }
+      if (action.type == Core::Action::RIGHT) {
+        activeActions[Core::Action::RIGHT] = false;
+      }
+      if (action.type == Core::Action::LEFT) {
+        activeActions[Core::Action::LEFT] = false;
+      }
+      if (action.type == Core::Action::FAST) {
+        activeActions[Core::Action::FAST] = false;
+      }
+      if (action.type == Core::Action::JUMP) {
+        activeActions[Core::Action::JUMP] = false;
+      }
+      if (action.type == Core::Action::DOWN) {
+        activeActions[Core::Action::DOWN] = false;
+      }
+    }
   }
 
 private:
-  bool handleMousePress(Core::MouseButtonPressedEvent &e) {
-    auto box = entityManager.GetEntities("aabb")[0];
-    box->cPhysicsObject->physicsObject->applyForce(cam->getForward() * 100.0f);
-    return true;
-  }
-
-  bool handleKeyPress(Core::KeyPressedEvent &e) {
-    // std::cerr << "char: " << e.GetPrintableChar() << '\n';
-    if (e.GetKeyCode() == GLFW_KEY_ESCAPE ||
-        e.GetKeyCode() == GLFW_KEY_CAPS_LOCK) {
-      auto &app = Core::Application::Get();
-      app.Stop();
-    }
-
-    if (e.GetKeyCode() == GLFW_KEY_R) {
-      isPaused = !isPaused;
-    }
-
-    return true;
-  }
-
-  bool handleWindowResize(Core::WindowResizeEvent &e) {
-    cam->setWidth(e.GetWidth());
-    cam->setHeight(e.GetHeight());
-    return false;
-  }
-
-  bool handleMouseMove(Core::MouseMovedEvent &e) {
-    cam->rotateByMouse(e.GetdX(), e.GetdY());
-    // std::cerr << "dx: " << e.GetdX() << "dy: " << e.GetdY() << "\n";
-    return false;
-  }
-
-private:
-  std::shared_ptr<Renderer::Camera> cam = std::make_shared<Renderer::Camera>();
-  Renderer::RenderContext renderContext = {this->cam};
-  Core::EntityManager entityManager;
-  Physics::PhysicsEngine physicsEngine;
-  bool isPaused = false;
+  bool isCamMoving = false;
 };

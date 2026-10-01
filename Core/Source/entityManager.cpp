@@ -7,8 +7,7 @@ void removeSafely(std::vector<std::shared_ptr<Entity>> &v, unsigned int i) {
   v.pop_back();
 }
 
-[[nodiscard]] std::shared_ptr<Entity>
-EntityManager::AddEntity(const std::string &tag) {
+std::shared_ptr<Entity> EntityManager::AddEntity(const std::string &tag) {
   std::shared_ptr<Entity> e(new Entity(++m_totalEntities, tag));
   m_toAdd.push_back(e);
   return e;

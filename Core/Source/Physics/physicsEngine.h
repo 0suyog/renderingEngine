@@ -1,16 +1,15 @@
 #include <memory>
 #include <vector>
 #include "Physics/collision.h"
-#include "physicsObject.h"
 namespace Physics {
 class PhysicsEngine {
 public:
   PhysicsEngine() {};
 
-  std::shared_ptr<PhysicsObject> AddObject(const glm::vec3 &position,
-                                           const glm::vec3 &velocity,
-                                           bool hasGravity = true,
-                                           bool isStatic = false);
+  std::shared_ptr<PhysicsObject>
+  AddObject(const glm::vec3 &position, const glm::vec3 &velocity = {0, 0, 0},
+            bool hasGravity = true, bool isStatic = false, float mass = 1.0f,
+            float friction = 0.0);
   void AddCollision(Collision collision);
   void Simulate(float timeStep);
 

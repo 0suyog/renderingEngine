@@ -1,10 +1,7 @@
 #pragma once
 #include "assimp/scene.h"
-#include "renderables.h"
-#include "shader.h"
 #include "mesh.h"
 #include <filesystem>
-#include <iostream>
 #include <memory>
 
 namespace Renderer {

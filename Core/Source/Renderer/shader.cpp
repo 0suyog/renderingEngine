@@ -4,23 +4,24 @@
 #include <filesystem>
 #include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 #include "glm/ext.hpp"
 #include "glm/ext/vector_float4.hpp"
 #include "glm/gtc/type_ptr.hpp"
 namespace Renderer {
 
-std::shared_ptr<ShaderProgram> basicShader;
+static std::shared_ptr<ShaderProgram> s_PhongShader;
 
 std::shared_ptr<ShaderProgram> getShader(EShaders es) {
   switch (es) {
-  case EShaders::BasicShader:
-    if (!basicShader) {
-      basicShader =
-          std::make_shared<ShaderProgram>("../assets/shaders/basicShader.vert",
-                                          "../assets/shaders/basicShader.frag");
+  case EShaders::PhongShader:
+    if (!s_PhongShader) {
+      s_PhongShader =
+          std::make_shared<ShaderProgram>("../assets/shaders/phongShader.vert",
+                                          "../assets/shaders/phongShader.frag");
     }
-    return basicShader;
+    return s_PhongShader;
     break;
   default:
     std::cerr << "[getShader] No Shader of that type";
@@ -134,9 +135,15 @@ void ShaderProgram::SetMat4(const std::string &name,
 void ShaderProgram::SetInt(const std::string &name, GLint val) const {
   glUniform1i(glGetUniformLocation(m_Handle, name.c_str()), val);
 }
+
+void ShaderProgram::SetUInt(const std::string &name, GLuint val) const {
+  glUniform1ui(glGetUniformLocation(m_Handle, name.c_str()), val);
+}
+
 void ShaderProgram::SetFloat(const std::string &name, GLfloat val) const {
   glUniform1f(glGetUniformLocation(m_Handle, name.c_str()), val);
 }
+
 void ShaderProgram::SetVec4(const std::string &name,
                             const glm::vec4 &val) const {
   glad_glUniform4fv(glGetUniformLocation(m_Handle, name.c_str()), 1,

@@ -1,3 +1,4 @@
+#pragma once
 #include "entity.h"
 #include <memory>
 #include <string>
@@ -10,6 +11,9 @@ public:
   [[nodiscard]] std::vector<std::shared_ptr<Entity>> GetEntities();
   [[nodiscard]] std::vector<std::shared_ptr<Entity>>
   GetEntities(const std::string &tag);
+  [[nodiscard]] unsigned int getTotalEntitiesCreated() {
+    return m_totalEntities;
+  }
   void update();
 
 private:

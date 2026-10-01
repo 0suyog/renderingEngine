@@ -1,7 +1,17 @@
 #pragma once
 namespace Core {
 struct Action {
-  enum : unsigned int { NONE, LEFT, RIGHT, UP, DOWN, FORWARD, BACKWARD, FAST };
+  enum : unsigned int {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+    FORWARD,
+    BACKWARD,
+    FAST,
+    QUIT,
+    JUMP,
+  };
   unsigned int type;
   bool isStart;
 };

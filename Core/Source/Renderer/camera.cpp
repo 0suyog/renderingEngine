@@ -30,13 +30,13 @@ void Camera::updateVectors() {
   up = glm::normalize(glm::cross(right, forward));
 }
 
-Camera &Camera::rotation(float pitch, float yaw, float roll) {
+Camera &Camera::setRotation(float pitch, float yaw, float roll) {
   transform.rotate(pitch, yaw, roll);
   updateVectors();
   return *this;
 }
 
-Camera &Camera::position(const glm::vec3 &pos) {
+Camera &Camera::setPosition(const glm::vec3 &pos) {
   transform.moveto(pos);
   return *this;
 }
@@ -54,39 +54,15 @@ void Camera::rotateByMouse(float dx, float dy) {
   updateVectors();
 }
 
-// void Camera::move(Core::Action movement, float timeStep) {
-//   glm::vec3 movementVector(0.0f);
-//   float speed = walkSpeed;
-//   if (movement & Core::Action::LEFT) {
-//     movementVector -= right;
-//   }
-//   if (movement & Core::Action::RIGHT) {
-//     movementVector += right;
-//   }
-//   if (movement & Core::Action::UP) {
-//     movementVector += up;
-//   }
-//   if (movement & Core::Action::DOWN) {
-//     movementVector -= up;
-//   }
-//   if (movement & Core::Action::FORWARD) {
-//     movementVector += forward;
-//   }
-//   if (movement & Core::Action::BACKWARD) {
-//     movementVector -= forward;
-//   }
-//   if (movement & Core::Action::FAST) {
-//     speed = sprintSpeed;
-//   }
-//
-//   movementVector = glm::normalize(movementVector);
-//
-//   if (glm::isnan(movementVector).y) {
-//     return;
-//   }
-//
-//   transform.moveto(transform.getPosition() + speed * movementVector *
-//   timeStep);
-// }
+void Camera::move(glm::vec3 movementVector, float timeStep, bool isFast) {
+  transform.moveto(transform.getPosition() +
+                   (isFast ? sprintSpeed : walkSpeed) * movementVector *
+                       timeStep);
+}
+
+void Camera::follow(const glm::vec3 &anchor, float distance) {
+  auto pos = anchor - (distance * forward);
+  setPosition(pos);
+}
 
 } // namespace Renderer

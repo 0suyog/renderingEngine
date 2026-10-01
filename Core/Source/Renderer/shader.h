@@ -4,7 +4,7 @@
 #include <filesystem>
 namespace Renderer {
 
-enum class EShaders { BasicShader = 1 };
+enum class EShaders { PhongShader = 1 };
 
 class ShaderProgram {
 
@@ -19,6 +19,7 @@ public:
 
   void SetMat4(const std::string &name, const glm::mat4 &mat) const;
   void SetInt(const std::string &name, const GLint val) const;
+  void SetUInt(const std::string &name, GLuint val) const;
   void SetFloat(const std::string &name, GLfloat val) const;
   void SetVec4(const std::string &name, const glm::vec4 &val) const;
   void SetVec3(const std::string &name, const glm::vec3 &val) const;
