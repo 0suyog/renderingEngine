@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 #include "stb_image.h"
+#include "stb_image_write.h"
 namespace Core {
 std::optional<std::string> ReadTextFile(const std::filesystem::path &path) {
   std::ifstream f(path);
@@ -45,6 +46,28 @@ std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length) {
   }
 
   return result;
+}
+
+/**
+ * @brief Creates a new png image of given name with specified name. This
+ * function only takes contigious arraf for buffer and stride is used as
+ * width*components
+ *
+ * @param name Name of Image
+ * @param width Width of Image
+ * @param height Height of Image
+ * @param components Components of Image ie (1 for Monochrome, 2 for alpha
+ * monochrome, 3 for rgb, 4 for rgba, I don't know what happens if i pass more
+ * than 4)
+ * @param buffer
+ * @param length
+ * @return returns true if success false if not success
+ */
+
+bool WritePng(std::string name, int width, int height, int components,
+              unsigned char *buffer) {
+  return stbi_write_png(name.c_str(), width, height, components, buffer,
+                        width * components);
 }
 
 }; // namespace Core

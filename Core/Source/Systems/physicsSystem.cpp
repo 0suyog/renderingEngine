@@ -1,7 +1,8 @@
 #include "physicsSystem.h"
+#include "Components/CPhysicsObject.h"
 
-void SPhysicsSystem::collision(std::shared_ptr<Core::Entity> e1,
-                               std::shared_ptr<Core::Entity> e2) {
+void SPhysicsSystem::detectCollision(std::shared_ptr<Core::Entity> e1,
+                                     std::shared_ptr<Core::Entity> e2) {
 
   auto objectA = e1->GetComponent<Component::CPhysicsObject>()->physicsObject;
 
@@ -22,10 +23,12 @@ void SPhysicsSystem::collision(std::shared_ptr<Core::Entity> e1,
       .intersection = id, .objectA = objectA, .objectB = objectB});
 }
 
-void SPhysicsSystem::update(float ts) {
-  physicsEngine.Simulate(ts);
-  physicsEngine.ResolveCollisions();
+void SPhysicsSystem::update(std::shared_ptr<Core::Entity> entity, float ts) {
+  physicsEngine.Simulate(
+      entity->GetComponent<Component::CPhysicsObject>()->physicsObject, ts);
 }
+
+void SPhysicsSystem::resolveCollisions() { physicsEngine.ResolveCollisions(); }
 
 void SPhysicsSystem::sync(std::shared_ptr<Core::Entity> e) {
   auto t = e->GetComponent<Component::CTransform>();

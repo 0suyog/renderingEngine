@@ -26,7 +26,7 @@ void Camera::updateVectors() {
   forward = glm::normalize(
       glm::vec3(sin(yaw) * cos(pitch), sin(pitch), -cos(yaw) * cos(pitch)));
 
-  right = glm::normalize(glm::cross(forward, glm::vec3(0, 1, 0)));
+  right = glm::normalize(glm::cross(forward, worldUp));
   up = glm::normalize(glm::cross(right, forward));
 }
 

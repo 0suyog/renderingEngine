@@ -6,24 +6,24 @@
 #include <iostream>
 #include <memory>
 namespace Physics {
-std::shared_ptr<PhysicsObject>
-PhysicsEngine::AddObject(const glm::vec3 &position, const glm::vec3 &velocity,
-                         bool hasGravity, bool isStatic, float mass,
-                         float friction) {
-  std::shared_ptr<PhysicsObject> object(new PhysicsObject(
-      position, velocity, hasGravity, isStatic, mass, friction));
-  m_objects.push_back(object);
-  return object;
-}
+// std::shared_ptr<PhysicsObject>
+// PhysicsEngine::AddObject(const glm::vec3 &position, const glm::vec3
+// &velocity,
+//                          bool hasGravity, bool isStatic, float mass,
+//                          float friction) {
+//   std::shared_ptr<PhysicsObject> object(new PhysicsObject(
+//       position, velocity, hasGravity, isStatic, mass, friction));
+//   m_objects.push_back(object);
+//   return object;
+// }
 
-void PhysicsEngine::Simulate(float timeStep) {
+void PhysicsEngine::Simulate(std::shared_ptr<PhysicsObject> object,
+                             float timeStep) {
   if (isPaused)
     return;
-  for (auto &obj : m_objects) {
-    if (!obj->isStatic && obj->hasGravity) {
-      obj->SetAcceleration(obj->GetAcceleration() + gravity);
-      obj->Integrate(timeStep);
-    }
+  if (!object->isStatic && object->hasGravity) {
+    object->SetAcceleration(object->GetAcceleration() + gravity * worldUp);
+    object->Integrate(timeStep);
   }
 }
 

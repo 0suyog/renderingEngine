@@ -4,6 +4,7 @@
 #include "../entityManager.h"
 #include "../Physics/physicsEngine.h"
 #include "../Renderer/renderContext.h"
+#include "../Systems/physicsSystem.h"
 #include <bitset>
 namespace Game {
 class GameLayer;
@@ -11,10 +12,12 @@ class Scene {
 public:
   std::unordered_map<unsigned int, unsigned int> actionMap;
   std::shared_ptr<Core::Entity> player;
+  SPhysicsSystem sPhysics = SPhysicsSystem();
   Physics::PhysicsEngine physicsEngine;
   Core::EntityManager entityManager;
   Renderer::RenderContext renderContext;
   std::bitset<100> activeActions;
+  glm::vec3 worldUp = {0, 1, 0};
 
   virtual void update(float ts) {};
   virtual void doAction(const Core::Action &action) {};

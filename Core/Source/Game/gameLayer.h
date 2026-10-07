@@ -1,5 +1,8 @@
 #pragma once
 #include "Components/CLight.h"
+#include "Components/CModel.h"
+#include "Components/CShape.h"
+#include "Components/CTransform.h"
 #include "GLFW/glfw3.h"
 #include "action.h"
 #include "scene.h"
@@ -18,7 +21,7 @@ public:
                      GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   }
 
-  void setCurrenScene(std::shared_ptr<Scene> scene) {
+  void setCurrentScene(std::shared_ptr<Scene> scene) {
     currentScene = scene;
     scene->renderContext.cam->setHeight(windowHeight);
     scene->renderContext.cam->setWidth(windowWidth);
@@ -36,9 +39,18 @@ private:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (currentScene) {
       for (const auto &entity : currentScene->entityManager.GetEntities()) {
-        if (entity->cShape && entity->cTransform) {
-          auto modelMatrix = entity->cTransform->transform.matrix();
-          Renderer::render(currentScene->renderContext, entity->cShape->shape,
+        if (entity->HasComponents<Component::CTransform, Component::CShape>()) {
+          auto modelMatrix =
+              entity->GetComponent<Component::CTransform>()->transform.matrix();
+          Renderer::render(currentScene->renderContext,
+                           entity->GetComponent<Component::CShape>()->shape,
+                           modelMatrix);
+        }
+        if (entity->HasComponents<Component::CTransform, Component::CModel>()) {
+          auto modelMatrix =
+              entity->GetComponent<Component::CTransform>()->transform.matrix();
+          Renderer::render(currentScene->renderContext,
+                           entity->GetComponent<Component::CModel>()->model,
                            modelMatrix);
         }
       }

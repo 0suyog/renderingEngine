@@ -1,5 +1,6 @@
 #pragma once
 #include "stb_image.h"
+#include "stb_image_write.h"
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -49,4 +50,6 @@ struct Image {
 std::optional<std::string> ReadTextFile(const std::filesystem::path &path);
 std::optional<Image> ReadImage(const std::filesystem::path &path);
 std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length);
+bool WritePng(std::string name, int width, int height, int components,
+              unsigned char *buffer);
 } // namespace Core

@@ -34,6 +34,7 @@ public:
   float sensitivity = 0.05;
   float walkSpeed = 5.0f;
   float sprintSpeed = 9.0f;
+  glm::vec3 worldUp = {0, 1, 0};
 
 private:
   Core::Transform transform;

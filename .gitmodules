@@ -1,3 +1,9 @@
 [submodule "Vendors/googletest"]
 	path = Vendors/googletest
 	url = https://github.com/google/googletest.git
+[submodule "Core/Vendors/msdfgen"]
+	path = Core/Vendors/msdfgen
+	url = https://github.com/Chlumsky/msdfgen.git
+[submodule "Core/Vendors/msdf-atlas-gen"]
+	path = Core/Vendors/msdf-atlas-gen
+	url = https://github.com/Chlumsky/msdf-atlas-gen.git

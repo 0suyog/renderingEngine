@@ -5,6 +5,11 @@ namespace Physics {
 class PhysicsEngine;
 class PhysicsObject {
 public:
+  PhysicsObject(const glm::vec3 &position,
+                const glm::vec3 &velocity = {0, 0, 0}, bool hasGravity = true,
+                bool isStatic = false, float mass = 1.0f, float friction = 0.0f)
+      : m_position(position), m_velocity(velocity), hasGravity(hasGravity),
+        isStatic(isStatic), mass(mass), friction(std::max(friction, 0.1f)) {}
   const glm::vec3 &GetPosition() const { return m_position; }
 
   const glm::vec3 &GetVelocity() const { return m_velocity; }
@@ -25,11 +30,6 @@ public:
   void applyForce(const glm::vec3 &force);
 
 private:
-  PhysicsObject(const glm::vec3 &position, const glm::vec3 &velocity,
-                bool hasGravity = true, bool isStatic = false,
-                float mass = 1.0f, float friction = 0.0f)
-      : m_position(position), m_velocity(velocity), hasGravity(hasGravity),
-        isStatic(isStatic), mass(mass), friction(std::max(friction, 0.1f)) {}
   glm::vec3 m_position;
   glm::vec3 m_velocity = {0, 0, 0};
   glm::vec3 m_acceleration = {0, 0, 0};

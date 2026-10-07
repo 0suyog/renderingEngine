@@ -3,21 +3,32 @@
 #include "Components/CPhysicsObject.h"
 #include "Components/CShape.h"
 #include "Components/CTransform.h"
+#include "Font/font.h"
 #include "Game/scene.h"
 #include "GLFW/glfw3.h"
 #include "Physics/aabb.h"
+#include "Physics/physicsObject.h"
 #include "Renderer/camera.h"
 #include "Renderer/texture.h"
 #include "action.h"
 #include "application.h"
+#include "file.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
+#include "msdf-atlas-gen/BitmapAtlasStorage.h"
+#include "msdf-atlas-gen/GlyphGeometry.h"
+#include "msdfgen/core/YAxisOrientation.h"
 #include <iostream>
 #include <memory>
+#include <vector>
 
 class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
+    Core::Font f =
+        Core::Font("/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf",
+                   glyphs, generatedSmtg);
+    doSmtgWithFont();
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
         .viewPortWidth = 600,
@@ -36,7 +47,8 @@ public:
                                .shininess = 64}))
         .addComponent<Component::CTransform>(Core::Transform())
         .addComponent<Component::CPhysicsObject>(
-            physicsEngine.AddObject({0, 0, 0}, {0, 0, 0}, false, true))
+            std::make_shared<Physics::PhysicsObject>(
+                glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), false, true))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
             floor->GetComponent<Component::CShape>()->shape.m_meshes))
         .addComponent<Component::CStatic>();
@@ -50,7 +62,8 @@ public:
         .addComponent<Component::CTransform>(
             Core::Transform().setPosition({0, 0, 0}))
         .addComponent<Component::CPhysicsObject>(
-            physicsEngine.AddObject({0, 10, 0}, {0, 0, 0}))
+            std::make_shared<Physics::PhysicsObject>(glm::vec3(0, 10, 0),
+                                                     glm::vec3(0, 0, 0)))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
             aabb->GetComponent<Component::CShape>()->shape.m_meshes))
         .addComponent<Component::CSpeed>(10, 20)
@@ -63,49 +76,39 @@ public:
 
     player = aabb;
 
-    physicsEngine.gravity.y = -2;
+    sPhysics.setGravity(-2);
 
     setUpActions();
   }
 
   void update(float ts) override {
-    entityManager.update();
-
-    physicsEngine.Simulate(ts);
-
     renderContext.lights = {};
 
+    entityManager.update();
     const auto &entities = entityManager.GetEntities();
 
-    // Collision detection
     for (unsigned int i = 0; i < entities.size(); i++) {
-      if (!entities[i]
-               ->HasComponents<Component::CPhysicsObject, Component::CTransform,
-                               Component::CCollider>()) {
-        continue;
+      if (entities[i]
+              ->HasComponents<Component::CPhysicsObject, Component::CTransform,
+                              Component::CCollider>()) {
+        sPhysics.update(entities[i], ts);
       }
 
       for (unsigned int j = i + 1; j < entities.size(); j++) {
-        if (!entities[j]
-                 ->HasComponents<Component::CPhysicsObject,
-                                 Component::CCollider>()) {
-          continue;
+        if (entities[j]
+                ->HasComponents<Component::CPhysicsObject,
+                                Component::CCollider>()) {
+          sPhysics.detectCollision(entities[i], entities[j]);
         }
       }
     }
 
-    physicsEngine.ResolveCollisions();
+    sPhysics.resolveCollisions();
 
-    // Sync physics -> transform and collect lights
     for (const auto &entity : entities) {
       if (entity->HasComponents<Component::CPhysicsObject,
                                 Component::CTransform>()) {
-
-        auto physicsObject =
-            entity->GetComponent<Component::CPhysicsObject>()->physicsObject;
-
-        entity->GetComponent<Component::CTransform>()->transform.setPosition(
-            physicsObject->GetPosition());
+        sPhysics.sync(entity);
       }
 
       if (entity->HasComponents<Component::CLight>()) {
@@ -121,7 +124,6 @@ public:
       }
     }
 
-    // Camera follows player
     if (player->HasComponents<Component::CCamera, Component::CTransform>()) {
 
       auto camera = player->GetComponent<Component::CCamera>();
@@ -132,7 +134,6 @@ public:
                              camera->followDistance);
     }
 
-    // Player movement
     if (player->HasComponents<Component::CSpeed, Component::CPhysicsObject>()) {
 
       auto speedComponent = player->GetComponent<Component::CSpeed>();
@@ -249,4 +250,33 @@ public:
         activeActions[Core::Action::DOWN] = false;
     }
   }
+
+  void doSmtgWithFont() {
+    auto subBitmap = msdfgen::BitmapSection<unsigned char, 3>();
+    subBitmap = generatedSmtg;
+    subBitmap.reorient(msdfgen::YAxisOrientation::Y_DOWNWARD);
+    std::cerr << "size: " << glyphs.size() << "\n";
+    auto glyph = glyphs[0];
+    auto rect = glyph.getBoxRect();
+    auto w = rect.w;
+    auto h = rect.h;
+    msdfgen::BitmapSection<unsigned char, 3> singleSubBitmap =
+        subBitmap.getSection(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);
+    // auto thing = subBitmap.getSection(0, 0, w, h);
+
+    std::cerr << "width: " << singleSubBitmap.width
+              << " height: " << singleSubBitmap.height
+              << "stride: " << singleSubBitmap.rowStride
+              << " codepoint: " << glyph.getCodepoint() << "\n";
+    stbi_write_png("atlas.png", singleSubBitmap.width, singleSubBitmap.height,
+                   3, singleSubBitmap.pixels, singleSubBitmap.rowStride);
+
+    // Core::WritePng("testes.png", w, h, 3, thing.pixels);
+    // auto thing1 = generatedSmtg.get(0, 0, const
+    // msdfgen::BitmapSection<unsigned char, 3> &subBitmap);
+  }
+
+private:
+  std::vector<msdf_atlas::GlyphGeometry> glyphs;
+  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> generatedSmtg;
 };
