@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <optional>
+#include <string>
 #include <unordered_map>
 namespace Renderer {
 
@@ -69,6 +70,7 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
   return textures[key];
 }
 
+static int count = 1;
 // why is length int and not uint? I dont know
 std::shared_ptr<Texture> TextureFromImageInMemory(unsigned char *data,
                                                   int length) {
@@ -77,6 +79,10 @@ std::shared_ptr<Texture> TextureFromImageInMemory(unsigned char *data,
     std::cerr << "[TEXTURE] Reading from memory but data doesnt exist";
     exit(-1);
   }
+  // Core::WriteTestDefault("image" + std::to_string(count) + ".png",
+  //                        image.value());
+
+  count++;
   return TextureFromImage(image.value());
 }
 

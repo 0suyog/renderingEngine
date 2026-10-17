@@ -3,6 +3,7 @@ out vec4 FragColor;
 in vec3 Position;
 in vec2 TexCoord;
 in vec3 Normal;
+
 #define DIRECTIONAL 1
 #define POINT 2
 #define SPOT 3
@@ -110,6 +111,7 @@ void main() {
       accumulatedColor += calculateSpotLight(l, diffuseColor, specularColor);
     }
   }
+  FragColor = specularColor;
   // FragColor = vec4((Normal + 1.0) / 2.0, 1.0);
-  FragColor = accumulatedColor;
+  // FragColor = accumulatedColor;
 }

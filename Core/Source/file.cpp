@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include "Renderer/embededimages.h"
 #include "stb_image.h"
 #include "stb_image_write.h"
 namespace Core {
@@ -68,6 +69,14 @@ bool WritePng(std::string name, int width, int height, int components,
               unsigned char *buffer) {
   return stbi_write_png(name.c_str(), width, height, components, buffer,
                         width * components);
+}
+
+void WriteTestDefault(const std::string name, const Image &im) {
+  auto defaultIm = &im;
+  stbi_flip_vertically_on_write(1);
+  stbi_write_png(name.c_str(), defaultIm->width, defaultIm->height,
+                 defaultIm->channels, defaultIm->data,
+                 defaultIm->width * defaultIm->channels);
 }
 
 }; // namespace Core

@@ -73,8 +73,8 @@ public:
         //     Renderer::PointLight({100, 100, 100}, 0.9, 0.32))
         ;
 
-    entityManager.AddEntity("sun")->addComponent<Component::CLight>(
-        Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
+    // entityManager.AddEntity("sun")->addComponent<Component::CLight>(
+    //     Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
 
     player = aabb;
 

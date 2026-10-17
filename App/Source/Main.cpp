@@ -7,6 +7,9 @@
 // DEBUG: main function is being called twice when gameLayer->setCurrenScene is
 // called
 int main() {
+
+  // Core::WriteTestDefault();
+
   // Core::Font f = Core::Font(
   //     "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFontMono-Bold.ttf");
   auto appSpec = Core::ApplicationSpecification();

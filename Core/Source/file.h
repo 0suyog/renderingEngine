@@ -52,4 +52,6 @@ std::optional<Image> ReadImage(const std::filesystem::path &path);
 std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length);
 bool WritePng(std::string name, int width, int height, int components,
               unsigned char *buffer);
+
+void WriteTestDefault(const std::string name, const Image &im);
 } // namespace Core
