@@ -35,8 +35,8 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/physicsSystem.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/fontLib.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/utf8Str.cpp
-		# ${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/font.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/src/glad.c
 )
@@ -82,13 +82,14 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/renderer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/light.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/text.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/physicsSystem.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/system.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/utf8Str.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/font.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/fontLib.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/scene.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/gameLayer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.h
@@ -111,14 +112,16 @@ add_subdirectory(Vendors/glfw)
 set(MSDF_ATLAS_USE_VCPKG OFF)
 set(MSDF_ATLAS_USE_SKIA OFF)
 
+add_subdirectory(Vendors/freetype)
 add_subdirectory(Vendors/msdf-atlas-gen)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 add_subdirectory(Vendors/assimp)
+add_subdirectory(Vendors/harfbuzz)
 
 add_custom_target(copy_assets_core ALL 
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/assets  ${CMAKE_BINARY_DIR}/assets
 )
-target_link_libraries(engine.core PUBLIC glfw assimp msdf-atlas-gen)
+target_link_libraries(engine.core PUBLIC glfw assimp harfbuzz freetype msdf-atlas-gen::msdf-atlas-gen)
 
 option(BUILD_CORE_TESTS "Build Core tests" OFF)
 

@@ -25,9 +25,10 @@
 class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
-    Core::Font f =
-        Core::Font("/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf",
-                   glyphs, generatedSmtg);
+    // auto fontSel = Core::FontSelector("meow");
+    // Core::FontLib f = Core::FontLib(
+    //     "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf", glyphs,
+    //     generatedSmtg);
     doSmtgWithFont();
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
@@ -68,11 +69,12 @@ public:
             aabb->GetComponent<Component::CShape>()->shape.m_meshes))
         .addComponent<Component::CSpeed>(10, 20)
         .addComponent<Component::CCamera>(renderContext.cam, 40)
-        .addComponent<Component::CLight>(
-            Renderer::PointLight({100, 100, 100}, 0.9, 0.32));
+        // .addComponent<Component::CLight>(
+        //     Renderer::PointLight({100, 100, 100}, 0.9, 0.32))
+        ;
 
     entityManager.AddEntity("sun")->addComponent<Component::CLight>(
-        Renderer::DirectionalLight({0.5, 0.5, 0.5}, {0.5, 0.5, 0.0}));
+        Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
 
     player = aabb;
 
@@ -252,28 +254,30 @@ public:
   }
 
   void doSmtgWithFont() {
-    auto subBitmap = msdfgen::BitmapSection<unsigned char, 3>();
-    subBitmap = generatedSmtg;
-    subBitmap.reorient(msdfgen::YAxisOrientation::Y_DOWNWARD);
-    std::cerr << "size: " << glyphs.size() << "\n";
-    auto glyph = glyphs[0];
-    auto rect = glyph.getBoxRect();
-    auto w = rect.w;
-    auto h = rect.h;
-    msdfgen::BitmapSection<unsigned char, 3> singleSubBitmap =
-        subBitmap.getSection(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h);
-    // auto thing = subBitmap.getSection(0, 0, w, h);
-
-    std::cerr << "width: " << singleSubBitmap.width
-              << " height: " << singleSubBitmap.height
-              << "stride: " << singleSubBitmap.rowStride
-              << " codepoint: " << glyph.getCodepoint() << "\n";
-    stbi_write_png("atlas.png", singleSubBitmap.width, singleSubBitmap.height,
-                   3, singleSubBitmap.pixels, singleSubBitmap.rowStride);
-
-    // Core::WritePng("testes.png", w, h, 3, thing.pixels);
-    // auto thing1 = generatedSmtg.get(0, 0, const
-    // msdfgen::BitmapSection<unsigned char, 3> &subBitmap);
+    // auto subBitmap = msdfgen::BitmapSection<unsigned char, 3>();
+    // subBitmap = generatedSmtg;
+    // subBitmap.reorient(msdfgen::YAxisOrientation::Y_DOWNWARD);
+    // std::cerr << "size: " << glyphs.size() << "\n";
+    // auto glyph = glyphs[0];
+    // auto rect = glyph.getBoxRect();
+    // auto w = rect.w;
+    // auto h = rect.h;
+    // msdfgen::BitmapSection<unsigned char, 3> singleSubBitmap =
+    //     subBitmap.getSection(rect.x, rect.y, rect.x + rect.w, rect.y +
+    //     rect.h);
+    // // auto thing = subBitmap.getSection(0, 0, w, h);
+    //
+    // std::cerr << "width: " << singleSubBitmap.width
+    //           << " height: " << singleSubBitmap.height
+    //           << "stride: " << singleSubBitmap.rowStride
+    //           << " codepoint: " << glyph.getCodepoint() << "\n";
+    // stbi_write_png("atlas.png", singleSubBitmap.width,
+    // singleSubBitmap.height,
+    //                3, singleSubBitmap.pixels, singleSubBitmap.rowStride);
+    //
+    // // Core::WritePng("testes.png", w, h, 3, thing.pixels);
+    // // auto thing1 = generatedSmtg.get(0, 0, const
+    // // msdfgen::BitmapSection<unsigned char, 3> &subBitmap);
   }
 
 private:

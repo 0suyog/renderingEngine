@@ -14,7 +14,9 @@ static std::unordered_map<BuiltInTexture, std::shared_ptr<Texture>>
 
 static std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
-std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
+std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
+                                           int height, int channels,
+                                           int internalChannels) {
 
   std::shared_ptr<Texture> result = std::make_shared<Texture>();
 
@@ -25,21 +27,26 @@ std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
   glTextureParameteri(result->handle, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTextureParameteri(result->handle, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  GLenum format = i.channels == 1   ? GL_RED
-                  : i.channels == 3 ? GL_RGB
-                  : i.channels == 4 ? GL_RGBA
-                                    : GL_RED;
+  GLenum format = channels == 1   ? GL_RED
+                  : channels == 3 ? GL_RGB
+                  : channels == 4 ? GL_RGBA
+                                  : GL_RED;
 
-  GLenum internalFormat = i.channels == 1   ? GL_R8
-                          : i.channels == 3 ? GL_RGB8
-                          : i.channels == 4 ? GL_RGBA8
-                                            : GL_R8;
+  GLenum internalFormat = channels == 1   ? GL_R8
+                          : channels == 3 ? GL_RGB8
+                          : channels == 4 ? GL_RGBA8
+                                          : GL_R8;
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glTextureStorage2D(result->handle, 1, internalFormat, i.width, i.height);
-  glTextureSubImage2D(result->handle, 0, 0, 0, i.width, i.height, format,
-                      GL_UNSIGNED_BYTE, i.data);
+  glTextureStorage2D(result->handle, 1, internalFormat, width, height);
+  glTextureSubImage2D(result->handle, 0, 0, 0, width, height, format,
+                      GL_UNSIGNED_BYTE, data);
   glGenerateTextureMipmap(result->handle);
   return result;
+}
+
+std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
+
+  return TextureFromMemory(i.data, i.channels, i.height, i.width, i.channels);
 }
 
 std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
@@ -61,8 +68,10 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
   }
   return textures[key];
 }
+
 // why is length int and not uint? I dont know
-std::shared_ptr<Texture> TextureFromMemory(unsigned char *data, int length) {
+std::shared_ptr<Texture> TextureFromImageInMemory(unsigned char *data,
+                                                  int length) {
   auto image = Core::ReadImageFromMemory(data, length);
   if (!image) {
     std::cerr << "[TEXTURE] Reading from memory but data doesnt exist";
@@ -89,9 +98,11 @@ std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
       e = embeddedImagesMap[EmbeddedImages::WHITE];
       break;
     }
-    builtintextures[tex] = TextureFromMemory(e.data, e.length);
+    builtintextures[tex] = TextureFromImageInMemory(e.data, e.length);
   }
   return builtintextures[tex];
 }
+
+// std::shared_ptr<Texture> AtlasTexture(const std::string &path) {}
 
 } // namespace Renderer

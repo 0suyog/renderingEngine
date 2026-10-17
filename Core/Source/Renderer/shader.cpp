@@ -12,6 +12,7 @@
 namespace Renderer {
 
 static std::shared_ptr<ShaderProgram> s_PhongShader;
+static std::shared_ptr<ShaderProgram> s_TextShader;
 
 std::shared_ptr<ShaderProgram> getShader(EShaders es) {
   switch (es) {
@@ -23,6 +24,13 @@ std::shared_ptr<ShaderProgram> getShader(EShaders es) {
     }
     return s_PhongShader;
     break;
+  case EShaders::TEXTSHADER:
+    if (!s_TextShader) {
+      s_TextShader =
+          std::make_shared<ShaderProgram>("../assets/shaders/textShader.vert",
+                                          "../assets/shaders/textShader.frag");
+    }
+    return s_TextShader;
   default:
     std::cerr << "[getShader] No Shader of that type";
     return nullptr;

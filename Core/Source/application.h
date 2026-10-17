@@ -1,4 +1,5 @@
 #pragma once
+#include "Font/fontLib.h"
 #include "layer.h"
 #include "window.h"
 #include <memory>
@@ -47,6 +48,7 @@ private:
   ApplicationSpecification m_Specification;
   std::shared_ptr<Window> m_Window;
   bool m_Running = false;
+  FontLib m_fontLib;
 
   std::vector<std::unique_ptr<Layer>> m_LayerStack;
 

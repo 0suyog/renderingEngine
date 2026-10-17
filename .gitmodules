@@ -7,3 +7,9 @@
 [submodule "Core/Vendors/msdf-atlas-gen"]
 	path = Core/Vendors/msdf-atlas-gen
 	url = https://github.com/Chlumsky/msdf-atlas-gen.git
+[submodule "Core/Vendors/harfbuzz"]
+	path = Core/Vendors/harfbuzz
+	url = https://github.com/harfbuzz/harfbuzz.git
+[submodule "Core/Vendors/freetype"]
+	path = Core/Vendors/freetype
+	url = https://gitlab.freedesktop.org/freetype/freetype.git

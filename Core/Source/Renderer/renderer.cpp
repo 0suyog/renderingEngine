@@ -1,4 +1,5 @@
 #include "light.h"
+#include "text.h"
 #include "Renderer/mesh.h"
 #include "Renderer/model.h"
 #include "Renderer/renderContext.h"
@@ -6,6 +7,7 @@
 #include "Renderer/shapes3d.h"
 #include "regularPolygon.h"
 #include "Renderer/texture.h"
+#include "transform.h"
 #include <string>
 #include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -123,6 +125,23 @@ void render(const RenderContext &renderCtx, const Shapes3D &shape,
   for (const auto &mesh : shape.m_meshes) {
     render(renderCtx, mesh, modelMatrix, *shader);
   }
+}
+
+// static Text text;
+
+void render(const RenderContext &renderCtx, const std::string &str,
+            glm::mat4 modelMatrix) {
+  auto shader = getShader(EShaders::TEXTSHADER);
+  // auto shapedText = text.shapeText(str);
+  float penX = 0.0f;
+  float penY = 0.0f;
+  // for (const auto &st : shapedText) {
+  //   auto w = fabs(st.xAdvance);
+  //   auto h = fabs(st.yAdvance);
+  //   auto s = Renderer::RegularPolygon(fmax(w, h), 4);
+  //   auto localTransform = Core::Transform();
+  //   localTransform.setPosition({penX + st.xOffset, st.yOffset, 0});
+  // }
 }
 
 } // namespace Renderer

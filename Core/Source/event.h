@@ -3,7 +3,6 @@
 #include <string>
 namespace Core {
 enum class EventType {
-  None = 0,
   WindowClose,
   WindowResize,
   KeyPressed,

@@ -4,7 +4,7 @@
 #include <filesystem>
 namespace Renderer {
 
-enum class EShaders { PhongShader = 1 };
+enum class EShaders { PhongShader = 1, TEXTSHADER };
 
 class ShaderProgram {
 
