@@ -2,9 +2,11 @@
 #include "file.h"
 #include "glad/glad.h"
 #include <filesystem>
-#include <memory>
-#include <string>
+#include <iostream>
+
 namespace Renderer {
+
+class Font;
 
 /**
  * @struct Texture
@@ -12,9 +14,14 @@ namespace Renderer {
  * texture (may not always be available) and texture id of OpenGl Texture
  *
  */
-struct Texture {
+class Texture {
+public:
   GLuint handle;
-  std::string path = "";
+  ~Texture() {
+    std::cerr << "runs";
+    glDeleteTextures(1, &handle);
+    std::cerr << "doesn't run";
+  }
 };
 
 enum class BuiltInTexture { DEFAULT = 1, BLACK, ERROR, WHITE };
@@ -63,6 +70,6 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
                                            int height, int channels,
                                            int internalChannels);
 
-std::shared_ptr<Texture> AtlasTexture(const std::string *path);
+std::shared_ptr<Texture> AtlasTexture(const Font &font);
 
 } // namespace Renderer

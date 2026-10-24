@@ -1,12 +1,8 @@
-#include "texture.h"
-#include "embededimages.h"
-#include "file.h"
-#include <cstdlib>
-#include <filesystem>
+#include "Renderer/texture.h"
+#include "Renderer/text.h"
+#include "Renderer/embededimages.h"
+#include "core/BitmapRef.hpp"
 #include <iostream>
-#include <memory>
-#include <optional>
-#include <string>
 #include <unordered_map>
 namespace Renderer {
 
@@ -33,10 +29,12 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
                   : channels == 4 ? GL_RGBA
                                   : GL_RED;
 
-  GLenum internalFormat = channels == 1   ? GL_R8
-                          : channels == 3 ? GL_RGB8
-                          : channels == 4 ? GL_RGBA8
-                                          : GL_R8;
+  GLenum internalFormat = internalChannels == 1   ? GL_R8
+                          : internalChannels == 3 ? GL_RGB8
+                          : internalChannels == 4 ? GL_RGBA8
+                                                  : GL_R8;
+  // std::cerr << "channels:" << channels
+  //           << "internalChannels: " << internalChannels << "\n";
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   glTextureStorage2D(result->handle, 1, internalFormat, width, height);
   glTextureSubImage2D(result->handle, 0, 0, 0, width, height, format,
@@ -46,8 +44,8 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
 }
 
 std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
-
-  return TextureFromMemory(i.data, i.channels, i.height, i.width, i.channels);
+  // std::cerr << ""
+  return TextureFromMemory(i.data, i.width, i.height, i.channels, i.channels);
 }
 
 std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
@@ -64,7 +62,6 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
     std::cerr << "New texture created of key " << key << "\n";
 
     std::shared_ptr<Texture> result = TextureFromImage(i.value());
-    result->path = path;
     textures[key] = result;
   }
   return textures[key];
@@ -109,6 +106,13 @@ std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
   return builtintextures[tex];
 }
 
-// std::shared_ptr<Texture> AtlasTexture(const std::string &path) {}
+// TODO: Make a Font class that can be passed to this to generate a atlas
+// texture
+
+std::shared_ptr<Texture> AtlasTexture(const Font &font) {
+  auto atlas = font.getAtlas();
+  msdfgen::BitmapConstRef<unsigned char, 3> bmp = atlas;
+  return TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
+}
 
 } // namespace Renderer

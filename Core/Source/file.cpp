@@ -67,6 +67,7 @@ std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length) {
 
 bool WritePng(std::string name, int width, int height, int components,
               unsigned char *buffer) {
+  stbi_flip_vertically_on_write(1);
   return stbi_write_png(name.c_str(), width, height, components, buffer,
                         width * components);
 }

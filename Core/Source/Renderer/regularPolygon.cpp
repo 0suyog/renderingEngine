@@ -1,9 +1,4 @@
 #include "regularPolygon.h"
-#include "Renderer/mesh.h"
-#include "glm/ext/vector_float3.hpp"
-#include "glm/geometric.hpp"
-#include "glm/trigonometric.hpp"
-#include <iostream>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 namespace Renderer {

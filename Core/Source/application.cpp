@@ -1,6 +1,5 @@
+#include "Renderer/text.h"
 #include "application.h"
-#include <GLFW/glfw3.h>
-#include "Font/fontLib.h"
 #include "glm/common.hpp"
 #include <iostream>
 #include <ranges>
@@ -28,10 +27,11 @@ Application::Application(const ApplicationSpecification &spec)
 
   m_Window = std::make_shared<Window>(m_Specification.WindowSpec);
   m_Window->Create();
-  m_fontLib = FontLib();
+  Renderer::initFontLoader();
 }
 
 Application::~Application() {
+  Renderer::freeFontLibrary();
   m_Window->Destroy();
   glfwTerminate();
   s_Application = nullptr;

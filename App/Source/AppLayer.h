@@ -3,33 +3,27 @@
 #include "Components/CPhysicsObject.h"
 #include "Components/CShape.h"
 #include "Components/CTransform.h"
-#include "Font/font.h"
 #include "Game/scene.h"
 #include "GLFW/glfw3.h"
 #include "Physics/aabb.h"
 #include "Physics/physicsObject.h"
 #include "Renderer/camera.h"
+#include "Renderer/text.h"
 #include "Renderer/texture.h"
 #include "action.h"
 #include "application.h"
-#include "file.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
-#include "msdf-atlas-gen/BitmapAtlasStorage.h"
-#include "msdf-atlas-gen/GlyphGeometry.h"
-#include "msdfgen/core/YAxisOrientation.h"
-#include <iostream>
 #include <memory>
 #include <vector>
 
 class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
-    // auto fontSel = Core::FontSelector("meow");
-    // Core::FontLib f = Core::FontLib(
-    //     "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf", glyphs,
-    //     generatedSmtg);
-    doSmtgWithFont();
+
+    font = Renderer::loadFont(
+        "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
+
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
         .viewPortWidth = 600,
@@ -41,10 +35,9 @@ public:
     floor
         ->addComponent<Component::CShape>(Renderer::Cuboid(
             500, 3, 500,
-            Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::DEFAULT),
+            Renderer::Material{.diffuseTexture = font->getAtlasTexture(40, 40),
                                .specularTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::WHITE),
+                                   Renderer::BuiltInTexture::BLACK),
                                .shininess = 64}))
         .addComponent<Component::CTransform>(Core::Transform())
         .addComponent<Component::CPhysicsObject>(
@@ -56,10 +49,14 @@ public:
 
     auto aabb = entityManager.AddEntity("aabb");
 
-    aabb
-        ->addComponent<Component::CShape>(Renderer::Cube(
-            5, Renderer::Material{.diffuseTexture = Renderer::GetBuiltInTexture(
-                                      Renderer::BuiltInTexture::DEFAULT)}))
+    aabb->addComponent<Component::CShape>(
+            Renderer::Cube(5,
+                           Renderer::Material{
+                               .diffuseTexture = Renderer::GetBuiltInTexture(
+                                   Renderer::BuiltInTexture::DEFAULT),
+                               .specularTexture = Renderer::GetBuiltInTexture(
+                                   Renderer::BuiltInTexture::BLACK),
+                           }))
         .addComponent<Component::CTransform>(
             Core::Transform().setPosition({0, 0, 0}))
         .addComponent<Component::CPhysicsObject>(
@@ -69,12 +66,11 @@ public:
             aabb->GetComponent<Component::CShape>()->shape.m_meshes))
         .addComponent<Component::CSpeed>(10, 20)
         .addComponent<Component::CCamera>(renderContext.cam, 40)
-        // .addComponent<Component::CLight>(
-        //     Renderer::PointLight({100, 100, 100}, 0.9, 0.32))
-        ;
+        .addComponent<Component::CLight>(
+            Renderer::PointLight({100, 100, 100}, 0.9, 0.32));
 
-    // entityManager.AddEntity("sun")->addComponent<Component::CLight>(
-    //     Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
+    entityManager.AddEntity("sun")->addComponent<Component::CLight>(
+        Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
 
     player = aabb;
 
@@ -176,7 +172,7 @@ public:
 
       if (activeActions[Core::Action::JUMP]) {
         physicsObject->SetPosition(physicsObject->GetPosition() +
-                                   glm::vec3(0, 15, 0) * ts);
+                                   glm::vec3(0, 5, 0) * ts);
       }
 
       if (activeActions[Core::Action::DOWN]) {
@@ -253,34 +249,6 @@ public:
     }
   }
 
-  void doSmtgWithFont() {
-    // auto subBitmap = msdfgen::BitmapSection<unsigned char, 3>();
-    // subBitmap = generatedSmtg;
-    // subBitmap.reorient(msdfgen::YAxisOrientation::Y_DOWNWARD);
-    // std::cerr << "size: " << glyphs.size() << "\n";
-    // auto glyph = glyphs[0];
-    // auto rect = glyph.getBoxRect();
-    // auto w = rect.w;
-    // auto h = rect.h;
-    // msdfgen::BitmapSection<unsigned char, 3> singleSubBitmap =
-    //     subBitmap.getSection(rect.x, rect.y, rect.x + rect.w, rect.y +
-    //     rect.h);
-    // // auto thing = subBitmap.getSection(0, 0, w, h);
-    //
-    // std::cerr << "width: " << singleSubBitmap.width
-    //           << " height: " << singleSubBitmap.height
-    //           << "stride: " << singleSubBitmap.rowStride
-    //           << " codepoint: " << glyph.getCodepoint() << "\n";
-    // stbi_write_png("atlas.png", singleSubBitmap.width,
-    // singleSubBitmap.height,
-    //                3, singleSubBitmap.pixels, singleSubBitmap.rowStride);
-    //
-    // // Core::WritePng("testes.png", w, h, 3, thing.pixels);
-    // // auto thing1 = generatedSmtg.get(0, 0, const
-    // // msdfgen::BitmapSection<unsigned char, 3> &subBitmap);
-  }
-
 private:
-  std::vector<msdf_atlas::GlyphGeometry> glyphs;
-  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> generatedSmtg;
+  std::shared_ptr<Renderer::Font> font;
 };

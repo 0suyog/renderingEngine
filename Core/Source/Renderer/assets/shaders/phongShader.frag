@@ -111,7 +111,5 @@ void main() {
       accumulatedColor += calculateSpotLight(l, diffuseColor, specularColor);
     }
   }
-  FragColor = specularColor;
-  // FragColor = vec4((Normal + 1.0) / 2.0, 1.0);
-  // FragColor = accumulatedColor;
+  FragColor = accumulatedColor;
 }

@@ -1,14 +1,12 @@
 #pragma once
 #include "Renderer/renderContext.h"
 #include "Renderer/shader.h"
-#include "glm/ext/matrix_float4x4.hpp"
+#include "Renderer/texture.h"
 #include "glm/ext/vector_float2.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/ext/vector_float4.hpp"
-#include "texture.h"
 #include <memory>
 #include <optional>
-#include <vector>
 namespace Renderer {
 
 class Vertex {
