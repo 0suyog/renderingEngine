@@ -80,28 +80,21 @@ bool cacheFontAtlas(const Font &font, const std::string &cacheName) {
   return Core::WritePng(cachePath, bmp.width, bmp.height, 3, bmp.pixels);
 }
 
-std::shared_ptr<Texture> getCachedFontAtlas(const std::string &cacheName) {
+std::optional<msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>
+generateAtlasFromCache(const std::string &cacheName) {
   auto cachePath = cacheDir;
   cachePath.append(cacheName);
   auto im = Core::ReadImage(cachePath);
   if (!im)
-    return nullptr;
-  return TextureFromImage(im.value());
-}
-
-std::optional<msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>
-generateAtlasFromCache(const std::string &cacheName) {
-  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> atlas;
-
-  auto cachePath = cacheDir;
-  cachePath.append(cacheName);
-  auto im = Core::ReadImage(cachePath);
+    return std::optional<msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>();
 
   msdfgen::BitmapConstSection<unsigned char, 3> sec;
   sec.pixels = im->data;
   sec.width = im->width;
   sec.height = im->height;
   sec.rowStride = im->channels * im->width;
+  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> atlas =
+      msdf_atlas::BitmapAtlasStorage<unsigned char, 3>(sec.width, sec.height);
   atlas.put(0, 0, sec);
   return atlas;
 }
