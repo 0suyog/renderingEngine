@@ -17,6 +17,7 @@ void Window::Create() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+  glfwWindowHint(GLFW_SAMPLES, 4);
 
   m_Handle = glfwCreateWindow(m_Specification.Width, m_Specification.Height,
                               m_Specification.Title.c_str(), NULL, NULL);

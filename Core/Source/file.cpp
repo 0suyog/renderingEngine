@@ -61,12 +61,15 @@ std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length) {
  * monochrome, 3 for rgb, 4 for rgba, I don't know what happens if i pass more
  * than 4)
  * @param buffer
- * @param length
  * @return returns true if success false if not success
  */
 
-bool WritePng(std::string name, int width, int height, int components,
-              unsigned char *buffer) {
+bool WritePng(const std::filesystem::path &name, int width, int height,
+              int components, const unsigned char *buffer) {
+  auto parentPath = name.parent_path();
+  if (name.has_parent_path()) {
+    std::filesystem::create_directories(parentPath);
+  }
   stbi_flip_vertically_on_write(1);
   return stbi_write_png(name.c_str(), width, height, components, buffer,
                         width * components);

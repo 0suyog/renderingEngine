@@ -1,6 +1,7 @@
 #pragma once
-#include "file.h"
 #include "glad/glad.h"
+#include "application.h"
+#include "file.h"
 #include <filesystem>
 #include <iostream>
 
@@ -14,14 +15,10 @@ class Font;
  * texture (may not always be available) and texture id of OpenGl Texture
  *
  */
+
 class Texture {
 public:
-  GLuint handle;
-  ~Texture() {
-    std::cerr << "runs";
-    glDeleteTextures(1, &handle);
-    std::cerr << "doesn't run";
-  }
+  GLuint handle = 0;
 };
 
 enum class BuiltInTexture { DEFAULT = 1, BLACK, ERROR, WHITE };

@@ -19,10 +19,10 @@ typedef uint64_t UIntHash;
  * @param p a pair of unsigned ints
  * @return uint64_t
  */
-inline UIntHash hashUIntPair(const std::pair<unsigned int, unsigned int> &p) {
+inline UIntHash hashUIntPair(const unsigned first, unsigned int second) {
   auto numOfBits = sizeof(unsigned int) * CHAR_BIT;
-  return (static_cast<UIntHash>(p.first) << numOfBits) |
-         static_cast<UIntHash>(p.second);
+  return (static_cast<UIntHash>(first) << numOfBits) |
+         static_cast<UIntHash>(second);
 }
 
 } // namespace Core

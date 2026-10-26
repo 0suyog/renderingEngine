@@ -11,6 +11,7 @@
 #include "layer.h"
 #include "Renderer/renderer.h"
 #include "windowevents.h"
+#include <GL/gl.h>
 #include <iostream>
 #include <memory>
 namespace Game {
@@ -37,6 +38,7 @@ private:
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.1, 0.1, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_MULTISAMPLE);
     if (currentScene) {
       for (const auto &entity : currentScene->entityManager.GetEntities()) {
         if (entity->HasComponents<Component::CTransform, Component::CShape>()) {

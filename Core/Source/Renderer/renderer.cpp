@@ -1,5 +1,4 @@
 #include "light.h"
-#include "text.h"
 #include "Renderer/mesh.h"
 #include "Renderer/model.h"
 #include "Renderer/renderContext.h"
@@ -7,7 +6,6 @@
 #include "Renderer/shapes3d.h"
 #include "regularPolygon.h"
 #include "Renderer/texture.h"
-#include "transform.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -56,9 +54,8 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
   s.SetMat4("projection", renderCtx.cam->prespectiveMat());
   s.SetMat4("model", modelMatrix);
   s.SetVec3("CameraPosition", renderCtx.cam->getPosition());
-  std::shared_ptr<Texture> diffuseTex;
+  std::shared_ptr<Texture> diffuseTex, specularTex;
   glm::vec4 color = {1, 1, 1, 1.0};
-  std::shared_ptr<Texture> specularTex;
   // check if matrial has fillColor or diffuseTexture
   // if none then just diffuse texture other wise
   // check if it has diffuseTexture and if not set it to

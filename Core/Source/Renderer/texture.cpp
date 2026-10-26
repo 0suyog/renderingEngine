@@ -84,7 +84,6 @@ std::shared_ptr<Texture> TextureFromImageInMemory(unsigned char *data,
 }
 
 std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
-
   if (builtintextures.find(tex) == builtintextures.end()) {
     EmbeddedImage e;
     switch (tex) {

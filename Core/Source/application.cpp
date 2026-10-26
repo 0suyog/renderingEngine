@@ -32,6 +32,7 @@ Application::Application(const ApplicationSpecification &spec)
 
 Application::~Application() {
   Renderer::freeFontLibrary();
+  m_LayerStack.clear();
   m_Window->Destroy();
   glfwTerminate();
   s_Application = nullptr;

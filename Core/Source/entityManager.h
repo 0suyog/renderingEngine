@@ -12,6 +12,10 @@ public:
   std::vector<std::shared_ptr<Entity>> GetEntities(const std::string &tag);
   unsigned int getTotalEntitiesCreated() { return m_totalEntities; }
   void update();
+  ~EntityManager() {
+    m_entities.clear();
+    m_entitiesMap.clear();
+  }
 
 private:
   std::vector<std::shared_ptr<Entity>> m_entities;

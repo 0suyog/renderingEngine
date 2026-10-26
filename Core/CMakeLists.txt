@@ -32,6 +32,7 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/shapes3d.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/light.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/text.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/physicsSystem.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp

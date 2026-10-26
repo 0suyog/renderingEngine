@@ -14,6 +14,7 @@
 #include "application.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -35,10 +36,10 @@ public:
     floor
         ->addComponent<Component::CShape>(Renderer::Cuboid(
             500, 3, 500,
-            Renderer::Material{.diffuseTexture = font->getAtlasTexture(40, 40),
-                               .specularTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::BLACK),
-                               .shininess = 64}))
+            Renderer::Material{
+                .diffuseTexture = font->getAtlasTexture(150, 150),
+                .specularTexture = font->getAtlasTexture(150, 150),
+                .shininess = 64}))
         .addComponent<Component::CTransform>(Core::Transform())
         .addComponent<Component::CPhysicsObject>(
             std::make_shared<Physics::PhysicsObject>(
@@ -48,20 +49,19 @@ public:
         .addComponent<Component::CStatic>();
 
     auto aabb = entityManager.AddEntity("aabb");
-
-    aabb->addComponent<Component::CShape>(
-            Renderer::Cube(5,
-                           Renderer::Material{
-                               .diffuseTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::DEFAULT),
-                               .specularTexture = Renderer::GetBuiltInTexture(
-                                   Renderer::BuiltInTexture::BLACK),
-                           }))
+    //
+    aabb
+        ->addComponent<Component::CShape>(Renderer::Cube(
+            5,
+            Renderer::Material{
+                .diffuseTexture = font->getAtlasTexture(150, 150),
+                .specularTexture = font->getAtlasTexture(150, 150),
+            }))
         .addComponent<Component::CTransform>(
             Core::Transform().setPosition({0, 0, 0}))
         .addComponent<Component::CPhysicsObject>(
             std::make_shared<Physics::PhysicsObject>(glm::vec3(0, 10, 0),
-                                                     glm::vec3(0, 0, 0)))
+                                                     glm::vec3(0, 0, 0), false))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
             aabb->GetComponent<Component::CShape>()->shape.m_meshes))
         .addComponent<Component::CSpeed>(10, 20)
@@ -71,7 +71,7 @@ public:
 
     entityManager.AddEntity("sun")->addComponent<Component::CLight>(
         Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
-
+    //
     player = aabb;
 
     sPhysics.setGravity(-2);
