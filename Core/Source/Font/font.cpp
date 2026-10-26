@@ -7,12 +7,13 @@
 #include "msdf-atlas-gen/ImmediateAtlasGenerator.h"
 #include "msdf-atlas-gen/TightAtlasPacker.h"
 #include "msdf-atlas-gen/glyph-generators.h"
+#include "transform.h"
 #include <iostream>
 namespace Core {
-Renderer::RenderableText
-shapedGlyphsToRenderableText(Font font,
-                             const std::vector<ShapedGlyph> &shapedGlyphs,
-                             const glm::vec3 &normal) {
+Renderer::RenderableText shapedGlyphsToRenderableText(
+    Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    const glm::vec3 &normal, const Transform &transform,
+    const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
   msdfgen::BitmapConstSection<unsigned char, 3> atlas = font.getAtlas();
   std::vector<msdf_atlas::GlyphGeometry> glyphs = font.getGlyphs();
   std::vector<Renderer::Mesh> meshes;
@@ -56,7 +57,10 @@ shapedGlyphsToRenderableText(Font font,
   }
   Renderer::Mesh m{vertices, indices};
   meshes.push_back(m);
-  return Renderer::RenderableText{.meshes = meshes};
+  return Renderer::RenderableText{.meshes = meshes,
+                                  .transform = transform,
+                                  .foregroundColor = foregroundColor,
+                                  .backgroundColor = backgroundColor};
 }
 
 void initFontLoader() { FT_Init_FreeType(&ftLibrary); }

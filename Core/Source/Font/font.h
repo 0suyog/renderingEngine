@@ -6,6 +6,7 @@
 #include "hb.h"
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"
 #include "msdf-atlas-gen/GlyphGeometry.h"
+#include "transform.h"
 #include "utils.h"
 #include <cstdint>
 #include <filesystem>
@@ -68,7 +69,7 @@ private:
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
     Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
-    const glm::vec3 &normal, const Renderer::Material &mat);
+    const glm::vec3 &normal, const Transform &transform);
 
 inline std::unordered_map<std::string, std::shared_ptr<Font>> fontMap;
 

@@ -6,9 +6,11 @@
 
 namespace Renderer {
 
-class RenderableText {
-  std::vector<Mesh> m_meshes;
+struct RenderableText {
+  std::vector<Mesh> meshes;
   Core::Transform transform;
+  glm::vec4 foregroundColor;
+  glm::vec4 backgroundColor;
 };
 
 class TextManager {

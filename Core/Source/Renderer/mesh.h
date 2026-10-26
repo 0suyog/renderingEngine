@@ -24,6 +24,14 @@ struct Material {
   float shininess = 128;
 };
 
+class MeshGeometry {
+  std::vector<Vertex> vertices;
+  std::vector<unsigned int> indices;
+
+public:
+  unsigned int m_VAO, m_VBO, m_EBO;
+};
+
 class Mesh {
 public:
   std::vector<Vertex> vertices;
@@ -39,7 +47,7 @@ public:
   void setupMesh();
 
   friend void render(const RenderContext &renderCtx, const Mesh &mesh,
-                     const glm::mat4 &modelMatrix, const ShaderProgram &s);
+                     const glm::mat4 &modelMatrix);
 
 private:
   unsigned int m_VAO, m_VBO, m_EBO;

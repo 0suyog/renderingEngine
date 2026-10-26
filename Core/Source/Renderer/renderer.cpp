@@ -1,12 +1,8 @@
-#include "light.h"
+#include "renderer.h"
 #include "Renderer/mesh.h"
-#include "Renderer/model.h"
 #include "Renderer/renderContext.h"
 #include "Renderer/shader.h"
-#include "Renderer/shapes3d.h"
-#include "regularPolygon.h"
-#include "Renderer/texture.h"
-#include <iostream>
+#include "glm/ext/vector_float4.hpp"
 #include <string>
 #include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -46,56 +42,63 @@ void sendLightsToShader(ShaderProgram s, std::vector<Light> lights) {
   }
 }
 
-void render(const RenderContext &renderCtx, const Mesh &mesh,
-            const glm::mat4 &modelMatrix, const ShaderProgram &s) {
+void sendPhongUniformsToShader(const ShaderProgram &s,
+                               const RenderContext &renderCtx,
+                               const glm::mat4 &modelMatrix,
+                               const Material &mat) {
   glViewport(0, 0, renderCtx.viewPortWidth, renderCtx.viewPortHeight);
   s.use();
   s.SetMat4("view", renderCtx.cam->lookAt());
   s.SetMat4("projection", renderCtx.cam->prespectiveMat());
   s.SetMat4("model", modelMatrix);
   s.SetVec3("CameraPosition", renderCtx.cam->getPosition());
+
   std::shared_ptr<Texture> diffuseTex, specularTex;
-  glm::vec4 color = {1, 1, 1, 1.0};
-  // check if matrial has fillColor or diffuseTexture
-  // if none then just diffuse texture other wise
-  // check if it has diffuseTexture and if not set it to
-  // white 1x1 texture
-  if (!mesh.mat.fillColor && !mesh.mat.diffuseTexture) {
+  glm::vec4 color = {1, 1, 1, 1.0f};
+
+  if (!mat.fillColor && !mat.diffuseTexture) {
     diffuseTex = GetBuiltInTexture(BuiltInTexture::DEFAULT);
   } else {
-    if (mesh.mat.diffuseTexture) {
-      diffuseTex = mesh.mat.diffuseTexture.value();
+    if (mat.diffuseTexture) {
+      diffuseTex = mat.diffuseTexture.value();
     } else {
       diffuseTex = GetBuiltInTexture(BuiltInTexture::WHITE);
     }
 
-    if (mesh.mat.fillColor) {
-      color = mesh.mat.fillColor.value();
+    if (mat.fillColor) {
+      color = mat.fillColor.value();
     }
   }
 
-  if (mesh.mat.specularTexture) {
-    specularTex = mesh.mat.specularTexture.value();
+  if (mat.specularTexture) {
+    specularTex = mat.specularTexture.value();
   } else {
     specularTex = GetBuiltInTexture(BuiltInTexture::BLACK);
   }
-  s.SetFloat("material.shininess", mesh.mat.shininess);
+
+  s.SetFloat("material.shininess", mat.shininess);
+
   glActiveTexture(GL_TEXTURE0);
   s.SetInt("material.diffuse", 0);
   glBindTexture(GL_TEXTURE_2D, diffuseTex->handle);
   s.SetVec4("material.fillColor", color);
+
   glActiveTexture(GL_TEXTURE1);
   s.SetInt("material.specular", 1);
   glBindTexture(GL_TEXTURE_2D, specularTex->handle);
-  if (mesh.mat.normalTexture) {
+
+  if (mat.normalTexture) {
     glActiveTexture(GL_TEXTURE2);
     s.SetInt("material.normal", 2);
-    glBindTexture(GL_TEXTURE_2D, mesh.mat.normalTexture.value()->handle);
+    glBindTexture(GL_TEXTURE_2D, mat.normalTexture.value()->handle);
     s.SetInt("material.hasNormal", 1);
   } else {
     s.SetInt("material.hasNormal", 0);
   }
+}
 
+void render(const RenderContext &renderCtx, const Mesh &mesh,
+            const glm::mat4 &modelMatrix) {
   glBindVertexArray(mesh.m_VAO);
   // for wireframe
   //  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -104,15 +107,17 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
 
 void render(const RenderContext &renderCtx, const Model &model,
             const glm::mat4 &modelMatrix) {
+  auto s = *getShader(EShaders::PhongShader);
+  sendPhongUniformsToShader(s, renderCtx, modelMatrix);
   for (const auto &mesh : model.m_meshes) {
-    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::PhongShader));
+    render(renderCtx, mesh, modelMatrix);
   }
 }
 
 void render(const RenderContext &renderCtx, const RegularPolygon &shape,
             const glm::mat4 &modelMatrix) {
   for (const auto &mesh : shape.meshes) {
-    render(renderCtx, mesh, modelMatrix, *getShader(EShaders::PhongShader));
+    render(renderCtx, mesh, modelMatrix);
   }
 }
 
@@ -121,7 +126,15 @@ void render(const RenderContext &renderCtx, const Shapes3D &shape,
   auto shader = getShader(EShaders::PhongShader);
   sendLightsToShader(*shader, renderCtx.lights);
   for (const auto &mesh : shape.m_meshes) {
-    render(renderCtx, mesh, modelMatrix, *shader);
+    render(renderCtx, mesh, modelMatrix);
+  }
+}
+
+void render(const RenderContext &renderCtx, const RenderableText &text,
+            const glm::mat4 &modelMatrix) {
+  auto shader = getShader(EShaders::TEXTSHADER);
+  sendLightsToShader(*shader, renderCtx.lights);
+  for (const auto &mesh : text.meshes) {
   }
 }
 

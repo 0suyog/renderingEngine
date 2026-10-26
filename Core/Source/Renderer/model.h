@@ -20,11 +20,6 @@ public:
     // }
   }
 
-  static Model Cube();
-  static Model Triangle();
-  static Model Quad();
-  static Model Quad(float width, float height);
-  static Model Pyramid(float s = 0.5f, float h = 1.0f);
   friend void render(const RenderContext &renderCtx, const Model &model,
                      const glm::mat4 &modelMatrix);
 

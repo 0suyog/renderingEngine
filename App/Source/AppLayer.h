@@ -8,13 +8,11 @@
 #include "Physics/aabb.h"
 #include "Physics/physicsObject.h"
 #include "Renderer/camera.h"
-#include "Renderer/text.h"
-#include "Renderer/texture.h"
 #include "action.h"
 #include "application.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
-#include <iostream>
+#include "Font/font.h"
 #include <memory>
 #include <vector>
 
@@ -22,7 +20,7 @@ class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
 
-    font = Renderer::loadFont(
+    font = Core::loadFont(
         "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
 
     renderContext = {
@@ -250,5 +248,5 @@ public:
   }
 
 private:
-  std::shared_ptr<Renderer::Font> font;
+  std::shared_ptr<Core::Font> font;
 };
