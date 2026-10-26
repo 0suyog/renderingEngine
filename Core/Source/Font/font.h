@@ -1,42 +1,94 @@
 #pragma once
-#include "Font/fontLib.h"
-#include "utf8Str.h"
-#include "freetype/freetype.h"
-#include <exception>
+#include "Renderer/mesh.h"
+#include "Renderer/texture.h"
+#include "core/BitmapRef.hpp"
+#include "glm/ext/vector_float3.hpp"
+#include "hb.h"
+#include "msdf-atlas-gen/BitmapAtlasStorage.h"
+#include "msdf-atlas-gen/GlyphGeometry.h"
+#include "utils.h"
+#include <cstdint>
 #include <filesystem>
-#include <freetype2/freetype/freetype.h>
-#include <optional>
-#include <type_traits>
+#include <ft2build.h>
+#include <string>
+#include <unordered_map>
 #include <vector>
-namespace Core {
-class FontCollection {
-  /**
-   * @brief loads provided fonts from disk if one path is invalid then none of
-   * the fonts are loaded
-   *
-   * @tparam Args anything that can construct std::filesystem::path ie string,
-   * *char
-   * @param first atleast one path is required
-   * @param args all other path to be loaded
-   * @return is a constructor, creates FontCollection object
-   */
-  template <typename... Args>
-    requires(std::is_constructible_v<std::filesystem::path, Args> && ...)
-  FontCollection(std::filesystem::path first, Args... args) {
-    try {
+#include FT_FREETYPE_H
 
-      FontLib::get().loadFont(first);
-      (FontLib::get().loadFont(args) && ...);
-    } catch (std::exception e) {
-      m_fontFaces.clear();
-      throw e;
-    }
+namespace Renderer {
+struct RenderableText;
+}
+
+namespace Core {
+
+struct ShapedGlyph {
+  uint32_t id;
+  float xAdvance, yAdvance;
+  float xOffset, yOffset;
+};
+
+inline FT_Library ftLibrary = FT_Library();
+
+void initFontLoader();
+
+void freeFontLibrary();
+
+class Font {
+public:
+  std::shared_ptr<Renderer::Texture> getAtlasTexture(unsigned int width,
+                                                     unsigned int height);
+
+  ~Font();
+
+  const msdf_atlas::BitmapAtlasStorage<unsigned char, 3> getAtlas() const {
+    return m_atlas;
   }
 
-  std::optional<FT_Face> selectFont(rune r);
+  const std::vector<msdf_atlas::GlyphGeometry> getGlyphs() const {
+    return m_glyphs;
+  }
+
+  std::vector<ShapedGlyph> shapeText(const std::string &text) const;
+
+  void generateAtlas(int width, int height);
+
+  friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path);
 
 private:
-  std::vector<FT_Face> m_fontFaces;
+  Font(const FT_Face &ftFace, const std::filesystem::path &path);
+
+  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> m_atlas;
+  std::vector<msdf_atlas::GlyphGeometry> m_glyphs;
+  FT_Face m_ftFace;
+  hb_font_t *m_hbFont;
+  std::unordered_map<Core::UIntHash, std::shared_ptr<Renderer::Texture>>
+      m_texturesMap;
+  std::filesystem::path path;
 };
+
+Renderer::RenderableText shapedGlyphsToRenderableText(
+    Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    const glm::vec3 &normal, const Renderer::Material &mat);
+
+inline std::unordered_map<std::string, std::shared_ptr<Font>> fontMap;
+
+std::string fontAtlasCacheName(std::filesystem::path path,
+                               uint64_t sizePairHash);
+
+inline std::filesystem::path cacheDir = "./cache/";
+
+bool cacheFontAtlas(const Font &font, const std::string &cacheName);
+
+inline std::shared_ptr<Renderer::Texture>
+getCachedFontAtlas(const std::string &cacheName);
+
+/**
+ * @brief Loads provided font with provided width and height, leave height as 0
+ * to make it same as width
+ *
+ * @param path font path
+ * @return
+ */
+std::shared_ptr<Font> loadFont(const std::filesystem::path &path);
 
 } // namespace Core
