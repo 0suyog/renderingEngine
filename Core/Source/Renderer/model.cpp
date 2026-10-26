@@ -122,7 +122,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     if (specularTextures.size() > 0) {
       meshMaterial.specularTexture = specularTextures[0];
     }
-    return Mesh(vertices, indices, meshMaterial);
+    return Mesh(MeshGeometry(vertices, indices), meshMaterial);
     // TODO: For now  I am going to use only one Diffuse and Specular Texture
     // will deal with array later
 
@@ -133,7 +133,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     //   textures[TextureType::SPECULAR] = specularTextures;
     // }
   }
-  return Mesh(vertices, indices);
+  return Mesh(MeshGeometry(vertices, indices));
 };
 
 std::vector<std::shared_ptr<Texture>>

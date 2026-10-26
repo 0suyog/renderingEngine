@@ -105,13 +105,4 @@ std::shared_ptr<Texture> GetBuiltInTexture(BuiltInTexture tex) {
   return builtintextures[tex];
 }
 
-// TODO: Make a Font class that can be passed to this to generate a atlas
-// texture
-
-std::shared_ptr<Texture> AtlasTexture(const Font &font) {
-  auto atlas = font.getAtlas();
-  msdfgen::BitmapConstRef<unsigned char, 3> bmp = atlas;
-  return TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
-}
-
 } // namespace Renderer

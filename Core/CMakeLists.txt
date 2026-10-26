@@ -36,7 +36,7 @@ target_sources(
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/physicsSystem.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/layer.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/file.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/fontLib.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/font.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Source/utf8Str.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/src/glad.c
@@ -90,7 +90,7 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/inputevents.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/file.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/utf8Str.h
-		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/fontLib.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Font/font.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/scene.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/gameLayer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.h

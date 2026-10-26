@@ -1,4 +1,3 @@
-#include "Renderer/text.h"
 #include "application.h"
 #include "glm/common.hpp"
 #include <iostream>
@@ -27,11 +26,9 @@ Application::Application(const ApplicationSpecification &spec)
 
   m_Window = std::make_shared<Window>(m_Specification.WindowSpec);
   m_Window->Create();
-  Renderer::initFontLoader();
 }
 
 Application::~Application() {
-  Renderer::freeFontLibrary();
   m_LayerStack.clear();
   m_Window->Destroy();
   glfwTerminate();

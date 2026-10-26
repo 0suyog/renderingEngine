@@ -24,32 +24,41 @@ struct Material {
   float shininess = 128;
 };
 
+class Mesh;
+
 class MeshGeometry {
+public:
+  MeshGeometry(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+      : vertices(vertices), indices(indices) {
+    setupMeshGeometry();
+  }
+
+  friend void render(const RenderContext &renderCtx, const MeshGeometry &mesh,
+                     const glm::mat4 &modelMatrix);
+
+  const std::vector<Vertex> &getVertices() const { return vertices; }
+  const std::vector<unsigned int> &getIndiges() const { return indices; }
+
+private:
+  void setupMeshGeometry();
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
-
-public:
   unsigned int m_VAO, m_VBO, m_EBO;
 };
 
 class Mesh {
 public:
-  std::vector<Vertex> vertices;
-  std::vector<unsigned int> indices;
   Material mat;
 
-  Mesh(const std::vector<Vertex> &vertices,
-       const std::vector<unsigned int> &indices, const Material &mat);
+  Mesh(const MeshGeometry &meshGeometry, const Material &mat);
+  Mesh(const MeshGeometry &meshGeometry);
 
-  Mesh(const std::vector<Vertex> &vertices,
-       const std::vector<unsigned int> &indices);
-
-  void setupMesh();
+  const MeshGeometry &getMeshGeometry() const { return m_geometry; }
 
   friend void render(const RenderContext &renderCtx, const Mesh &mesh,
                      const glm::mat4 &modelMatrix);
 
 private:
-  unsigned int m_VAO, m_VBO, m_EBO;
+  MeshGeometry m_geometry;
 };
 } // namespace Renderer

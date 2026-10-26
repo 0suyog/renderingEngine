@@ -1,4 +1,5 @@
 #include "Font/font.h"
+#include "Renderer/mesh.h"
 #include "Renderer/text.h"
 #include "core/BitmapRef.hpp"
 #include "hb-ft.h"
@@ -16,7 +17,7 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
   msdfgen::BitmapConstSection<unsigned char, 3> atlas = font.getAtlas();
   std::vector<msdf_atlas::GlyphGeometry> glyphs = font.getGlyphs();
-  std::vector<Renderer::Mesh> meshes;
+  std::vector<Renderer::MeshGeometry> meshGeometries;
   std::vector<Renderer::Vertex> vertices;
   std::vector<unsigned int> indices;
   glm::vec3 pen = glm::vec3(0.0f);
@@ -55,12 +56,16 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
     indices.insert(indices.end(), {0 + size, 1 + size, 2 + size, 0 + size,
                                    2 + size, 3 + size});
   }
-  Renderer::Mesh m{vertices, indices};
-  meshes.push_back(m);
-  return Renderer::RenderableText{.meshes = meshes,
-                                  .transform = transform,
-                                  .foregroundColor = foregroundColor,
-                                  .backgroundColor = backgroundColor};
+  auto meshGeometry = Renderer::MeshGeometry(vertices, indices);
+  meshGeometries.push_back(meshGeometry);
+  return Renderer::RenderableText{
+      .meshGeometryes = meshGeometries,
+      .transform = transform,
+      .foregroundColor = foregroundColor,
+      .backgroundColor = backgroundColor,
+      // set atlas size
+      // TODO: make this somewhat good rn its just hardcoded
+      .atlas = font.getAtlasTexture(150, 150)};
 }
 
 void initFontLoader() { FT_Init_FreeType(&ftLibrary); }

@@ -19,14 +19,14 @@ public:
   Material mat;
 
 private:
-  std::vector<Renderer::Mesh> generateMesh();
+  std::vector<Renderer::MeshGeometry> generateMeshGeometry();
 
 private:
   unsigned int sides = 3;
   float radius = 1;
   float startingAngle;
   glm::vec3 normal;
-  std::vector<Renderer::Mesh> meshes;
+  std::vector<Renderer::MeshGeometry> meshGeometries;
 };
 
 } // namespace Renderer

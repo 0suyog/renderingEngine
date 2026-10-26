@@ -1,7 +1,5 @@
 #pragma once
-#include "Renderer/mesh.h"
 #include "Renderer/texture.h"
-#include "core/BitmapRef.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "hb.h"
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"

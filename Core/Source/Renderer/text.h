@@ -1,16 +1,18 @@
 #pragma once
 #include "Font/font.h"
 #include "Renderer/mesh.h"
+#include "Renderer/texture.h"
 #include "transform.h"
 #include <string>
 
 namespace Renderer {
 
 struct RenderableText {
-  std::vector<Mesh> meshes;
+  std::vector<MeshGeometry> meshGeometryes;
   Core::Transform transform;
   glm::vec4 foregroundColor;
   glm::vec4 backgroundColor;
+  std::shared_ptr<Texture> atlas;
 };
 
 class TextManager {

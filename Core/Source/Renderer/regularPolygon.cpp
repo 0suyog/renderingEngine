@@ -1,4 +1,5 @@
 #include "regularPolygon.h"
+#include "Renderer/mesh.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 namespace Renderer {
@@ -7,16 +8,16 @@ RegularPolygon::RegularPolygon(float radius, unsigned int sides,
                                const glm::vec3 &normal)
     : sides(sides < 3 ? 3 : sides), radius(radius),
       mat(Material{.fillColor = color}), startingAngle(startingAngle),
-      normal(glm::normalize(normal)), meshes(generateMesh()) {}
+      normal(glm::normalize(normal)), meshGeometries(generateMeshGeometry()) {}
 
 RegularPolygon::RegularPolygon(float radius, unsigned int sides,
                                const Material &mat, float startingAngle,
                                const glm::vec3 &normal)
     : sides(sides < 3 ? 3 : sides), radius(radius), mat(mat),
       startingAngle(startingAngle), normal(glm::normalize(normal)),
-      meshes(generateMesh()) {}
+      meshGeometries(generateMeshGeometry()) {}
 
-std::vector<Renderer::Mesh> RegularPolygon::generateMesh() {
+std::vector<Renderer::MeshGeometry> RegularPolygon::generateMeshGeometry() {
   float angle = 360.0f / sides;
   float offset = 90.0 - (180.0 / sides);
   if (sides % 2 == 1) {
@@ -37,7 +38,7 @@ std::vector<Renderer::Mesh> RegularPolygon::generateMesh() {
 
   basisU = glm::normalize(glm::cross(reference, normal));
   basisV = glm::cross(normal, basisU);
-  std::vector<Renderer::Mesh> meshes;
+  std::vector<Renderer::MeshGeometry> meshGeometries;
   std::vector<Renderer::Vertex> vertices;
   std::vector<unsigned int> indices;
   indices.reserve((sides - 2) * 3);
@@ -62,8 +63,8 @@ std::vector<Renderer::Mesh> RegularPolygon::generateMesh() {
     indices.push_back(i + 1);
     indices.push_back(i + 2);
   }
-  meshes.push_back(Renderer::Mesh(vertices, indices, mat));
+  meshGeometries.push_back(MeshGeometry(vertices, indices));
 
-  return meshes;
+  return meshGeometries;
 }
 } // namespace Renderer

@@ -24,11 +24,37 @@ public:
   }
 
   static std::shared_ptr<Aabb>
+  Generate(const std::vector<Renderer::MeshGeometry> meshGeometries) {
+    {
+      float maxX = -INFINITY, maxY = -INFINITY, maxZ = -INFINITY,
+            minX = INFINITY, minY = INFINITY, minZ = INFINITY;
+      for (const auto &meshGeometry : meshGeometries) {
+        for (const auto &vertex : meshGeometry.getVertices()) {
+          if (vertex.position.x > maxX)
+            maxX = vertex.position.x;
+          if (vertex.position.y > maxY)
+            maxY = vertex.position.y;
+          if (vertex.position.z > maxZ)
+            maxZ = vertex.position.z;
+          if (vertex.position.x < minX)
+            minX = vertex.position.x;
+          if (vertex.position.y < minY)
+            minY = vertex.position.y;
+          if (vertex.position.z < minZ)
+            minZ = vertex.position.z;
+        }
+      }
+      return std::make_shared<Aabb>(glm::vec3(minX, minY, minZ),
+                                    glm::vec3(maxX, maxY, maxZ));
+    }
+  }
+
+  static std::shared_ptr<Aabb>
   Generate(const std::vector<Renderer::Mesh> meshes) {
     float maxX = -INFINITY, maxY = -INFINITY, maxZ = -INFINITY, minX = INFINITY,
           minY = INFINITY, minZ = INFINITY;
     for (const auto &mesh : meshes) {
-      for (const auto &vertex : mesh.vertices) {
+      for (const auto &vertex : mesh.getMeshGeometry().getVertices()) {
         if (vertex.position.x > maxX)
           maxX = vertex.position.x;
         if (vertex.position.y > maxY)

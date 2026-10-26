@@ -97,18 +97,25 @@ void sendPhongUniformsToShader(const ShaderProgram &s,
   }
 }
 
-void render(const RenderContext &renderCtx, const Mesh &mesh,
+void render(const RenderContext &renderCtx, const MeshGeometry &mesh,
             const glm::mat4 &modelMatrix) {
   glBindVertexArray(mesh.m_VAO);
-  // for wireframe
   //  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, nullptr);
+}
+
+void render(const RenderContext &renderCtx, const Mesh &mesh,
+            const glm::mat4 &modelMatrix) {
+
+  auto s = *getShader(EShaders::PhongShader);
+  sendPhongUniformsToShader(s, renderCtx, modelMatrix, mesh.mat);
+  render(renderCtx, mesh.m_geometry, modelMatrix);
 }
 
 void render(const RenderContext &renderCtx, const Model &model,
             const glm::mat4 &modelMatrix) {
   auto s = *getShader(EShaders::PhongShader);
-  sendPhongUniformsToShader(s, renderCtx, modelMatrix);
+  sendLightsToShader(s, renderCtx.lights);
   for (const auto &mesh : model.m_meshes) {
     render(renderCtx, mesh, modelMatrix);
   }
@@ -116,8 +123,11 @@ void render(const RenderContext &renderCtx, const Model &model,
 
 void render(const RenderContext &renderCtx, const RegularPolygon &shape,
             const glm::mat4 &modelMatrix) {
-  for (const auto &mesh : shape.meshes) {
-    render(renderCtx, mesh, modelMatrix);
+  auto s = *getShader(EShaders::PhongShader);
+  sendPhongUniformsToShader(s, renderCtx, modelMatrix, shape.mat);
+  sendLightsToShader(s, renderCtx.lights);
+  for (const auto &meshGeometry : shape.meshGeometries) {
+    render(renderCtx, meshGeometry, modelMatrix);
   }
 }
 
@@ -125,34 +135,29 @@ void render(const RenderContext &renderCtx, const Shapes3D &shape,
             const glm::mat4 &modelMatrix) {
   auto shader = getShader(EShaders::PhongShader);
   sendLightsToShader(*shader, renderCtx.lights);
-  for (const auto &mesh : shape.m_meshes) {
-    render(renderCtx, mesh, modelMatrix);
+  for (const auto &meshGeometry : shape.m_meshGeometries) {
+    render(renderCtx, meshGeometry, modelMatrix);
   }
+}
+
+void sendTextUniformsToShader(const ShaderProgram &s,
+                              const std::shared_ptr<Texture> &atlas,
+                              const glm::vec4 &fgColor,
+                              const glm::vec4 &bgColor) {
+  s.SetVec4("fgColor", fgColor);
+  s.SetVec4("bgColor", bgColor);
+  s.SetUInt("atlasTexture", atlas->handle);
 }
 
 void render(const RenderContext &renderCtx, const RenderableText &text,
             const glm::mat4 &modelMatrix) {
   auto shader = getShader(EShaders::TEXTSHADER);
+  sendTextUniformsToShader(*shader, text.atlas, text.foregroundColor,
+                           text.backgroundColor);
   sendLightsToShader(*shader, renderCtx.lights);
-  for (const auto &mesh : text.meshes) {
+  for (const auto &meshGeometry : text.meshGeometryes) {
+    render(renderCtx, meshGeometry, modelMatrix);
   }
 }
-
-// static Text text;
-
-// void render(const RenderContext &renderCtx, const std::string &str,
-//             glm::mat4 modelMatrix) {
-//   auto shader = getShader(EShaders::TEXTSHADER);
-//   // auto shapedText = text.shapeText(str);
-//   float penX = 0.0f;
-//   float penY = 0.0f;
-//   // for (const auto &st : shapedText) {
-//   //   auto w = fabs(st.xAdvance);
-//   //   auto h = fabs(st.yAdvance);
-//   //   auto s = Renderer::RegularPolygon(fmax(w, h), 4);
-//   //   auto localTransform = Core::Transform();
-//   //   localTransform.setPosition({penX + st.xOffset, st.yOffset, 0});
-//   // }
-// }
 
 } // namespace Renderer

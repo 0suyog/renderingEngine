@@ -43,7 +43,7 @@ public:
             std::make_shared<Physics::PhysicsObject>(
                 glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), false, true))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
-            floor->GetComponent<Component::CShape>()->shape.m_meshes))
+            floor->GetComponent<Component::CShape>()->shape.m_meshGeometries))
         .addComponent<Component::CStatic>();
 
     auto aabb = entityManager.AddEntity("aabb");
@@ -61,7 +61,7 @@ public:
             std::make_shared<Physics::PhysicsObject>(glm::vec3(0, 10, 0),
                                                      glm::vec3(0, 0, 0), false))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
-            aabb->GetComponent<Component::CShape>()->shape.m_meshes))
+            aabb->GetComponent<Component::CShape>()->shape.m_meshGeometries))
         .addComponent<Component::CSpeed>(10, 20)
         .addComponent<Component::CCamera>(renderContext.cam, 40)
         .addComponent<Component::CLight>(

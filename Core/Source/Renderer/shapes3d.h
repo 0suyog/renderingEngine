@@ -4,13 +4,13 @@
 namespace Renderer {
 class Shapes3D {
 public:
-  Shapes3D(const std::vector<Mesh> &meshes, const Material &mat)
-      : m_mat(mat), m_meshes(meshes) {}
+  Shapes3D(const std::vector<MeshGeometry> &meshGeometries, const Material &mat)
+      : m_mat(mat), m_meshGeometries(meshGeometries) {}
   friend void render(const RenderContext &renderCtx, const Shapes3D &shape,
                      const glm::mat4 &modelMatrix);
 
   Material m_mat;
-  std::vector<Mesh> m_meshes;
+  std::vector<MeshGeometry> m_meshGeometries;
 };
 
 Shapes3D Cube(float sideLen,

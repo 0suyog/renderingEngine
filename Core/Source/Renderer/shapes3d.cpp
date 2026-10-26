@@ -15,7 +15,7 @@ Shapes3D Cuboid(float xLen, float yLen, float zLen, const Material &mat) {
   float halfWidth = xLen / 2.0;
   float halfHeight = yLen / 2.0f;
   float halfThickness = zLen / 2.0f;
-  std::vector<Mesh> meshes;
+  std::vector<MeshGeometry> meshGeometry;
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
 
@@ -125,9 +125,9 @@ Shapes3D Cuboid(float xLen, float yLen, float zLen, const Material &mat) {
     indices.push_back(i + 3);
     indices.push_back(i + 0);
   }
-  Mesh mesh(vertices, indices, mat);
-  meshes.push_back(mesh);
-  return Shapes3D(meshes, mat);
+  MeshGeometry mg(vertices, indices);
+  meshGeometry.push_back(mg);
+  return Shapes3D(meshGeometry, mat);
 }
 
 Shapes3D Cuboid(float xLen, float yLen, float zLen, const glm::vec4 &color) {
