@@ -95,7 +95,6 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Game/gameLayer.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/stb/stb_image_write.h
-
 )
 
 set_target_properties(engine.core 

@@ -2,6 +2,7 @@
 #include "Renderer/mesh.h"
 #include "Renderer/text.h"
 #include "core/BitmapRef.hpp"
+#include "freetype/ftsystem.h"
 #include "hb-ft.h"
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"
 #include "msdf-atlas-gen/FontGeometry.h"
@@ -133,12 +134,16 @@ std::shared_ptr<Renderer::Texture> Font::getAtlasTexture(unsigned int width,
 
 Font::Font(const FT_Face &ftFace, const std::filesystem::path &path)
     : m_ftFace(ftFace), path(path) {
-  m_hbFont = hb_ft_font_create_referenced(ftFace);
+  // m_hbFont = hb_ft_font_create_referenced(m_ftFace);
 }
 
 Font::~Font() {
-  hb_free(m_hbFont);
-  FT_Free_Func(ftFace);
+  if (m_hbFont) {
+    hb_free(m_hbFont);
+  }
+  if (m_ftFace) {
+    FT_Free_Func(m_ftFace);
+  }
 }
 
 std::vector<ShapedGlyph> Font::shapeText(const std::string &text) const {
@@ -204,9 +209,7 @@ void Font::generateAtlas(int width, int height) {
 }
 
 /**
- * @brief Loads provided font with provided width and height, leave height as 0
- * to make it same as width
- *
+ * @brief Loads provided font from path
  * @param path font path
  * @return
  */
@@ -215,9 +218,11 @@ std::shared_ptr<Font> loadFont(const std::filesystem::path &path) {
     return fontMap[path.string()];
   }
 
-  FT_Face ftFace;
+  FT_Face ftFace = nullptr;
   FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
+  std::cerr << "from here";
   fontMap[path.string()] = std::shared_ptr<Font>(new Font(ftFace, path));
+  std::cerr << "\n no getting here\n";
   return fontMap[path.string()];
 }
 

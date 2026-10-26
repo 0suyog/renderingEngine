@@ -58,8 +58,8 @@ private:
 
   msdf_atlas::BitmapAtlasStorage<unsigned char, 3> m_atlas;
   std::vector<msdf_atlas::GlyphGeometry> m_glyphs;
-  FT_Face m_ftFace;
-  hb_font_t *m_hbFont;
+  FT_Face m_ftFace = nullptr;
+  hb_font_t *m_hbFont = nullptr;
   std::unordered_map<Core::UIntHash, std::shared_ptr<Renderer::Texture>>
       m_texturesMap;
   std::filesystem::path path;

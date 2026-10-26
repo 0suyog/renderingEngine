@@ -13,6 +13,7 @@
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
 #include "Font/font.h"
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -20,8 +21,10 @@ class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
 
+    std::cerr << "this is fine\n";
     font = Core::loadFont(
         "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
+    std::cerr << "this is not fine\n";
 
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
