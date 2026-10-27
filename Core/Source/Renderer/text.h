@@ -21,6 +21,7 @@ public:
            const Core::Transform &transform,
            const glm::vec4 &foregroundColor = {1, 1, 1, 1},
            const glm::vec4 &backgroundColor = {0, 0, 0, 1});
+  const std::vector<RenderableText> &getTexts() const { return m_texts; }
 
 private:
   std::vector<RenderableText> m_texts;

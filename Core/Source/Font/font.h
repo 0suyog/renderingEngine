@@ -26,8 +26,6 @@ struct ShapedGlyph {
   float xOffset, yOffset;
 };
 
-inline FT_Library ftLibrary = FT_Library();
-
 void initFontLoader();
 
 void freeFontLibrary();
@@ -43,7 +41,7 @@ public:
     return m_atlas;
   }
 
-  const std::vector<msdf_atlas::GlyphGeometry> getGlyphs() const {
+  const std::vector<msdf_atlas::GlyphGeometry> &getGlyphs() const {
     return m_glyphs;
   }
 
@@ -51,10 +49,13 @@ public:
 
   void generateAtlas(int width, int height);
 
-  friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path);
+  friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path,
+                                        int width, int height);
+  ;
 
 private:
-  Font(const FT_Face &ftFace, const std::filesystem::path &path);
+  Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
+       int height);
 
   msdf_atlas::BitmapAtlasStorage<unsigned char, 3> m_atlas;
   std::vector<msdf_atlas::GlyphGeometry> m_glyphs;
@@ -67,7 +68,9 @@ private:
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
     Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
-    const glm::vec3 &normal, const Transform &transform);
+    const glm::vec3 &normal, const Transform &transform,
+    const glm::vec4 &foregroundColor = {0, 0, 0, 1},
+    const glm::vec4 &backgroundColor = {1, 1, 1, 1});
 
 inline std::unordered_map<std::string, std::shared_ptr<Font>> fontMap;
 
@@ -88,6 +91,7 @@ getCachedFontAtlas(const std::string &cacheName);
  * @param path font path
  * @return
  */
-std::shared_ptr<Font> loadFont(const std::filesystem::path &path);
+std::shared_ptr<Font> loadFont(const std::filesystem::path &path,
+                               int width = 100, int height = 0);
 
 } // namespace Core

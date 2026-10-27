@@ -2,6 +2,7 @@
 #include "../action.h"
 #include "../entity.h"
 #include "../entityManager.h"
+#include "../Renderer/text.h"
 #include "../Physics/physicsEngine.h"
 #include "../Renderer/renderContext.h"
 #include "../Systems/physicsSystem.h"
@@ -16,6 +17,7 @@ public:
   Physics::PhysicsEngine physicsEngine;
   Core::EntityManager entityManager;
   Renderer::RenderContext renderContext;
+  Renderer::TextManager textManager;
   std::bitset<100> activeActions;
   glm::vec3 worldUp = {0, 1, 0};
 

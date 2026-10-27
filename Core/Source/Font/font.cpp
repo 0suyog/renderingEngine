@@ -2,6 +2,7 @@
 #include "Renderer/mesh.h"
 #include "Renderer/text.h"
 #include "core/BitmapRef.hpp"
+#include "freetype/freetype.h"
 #include "freetype/ftsystem.h"
 #include "hb-ft.h"
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"
@@ -10,18 +11,26 @@
 #include "msdf-atlas-gen/TightAtlasPacker.h"
 #include "msdf-atlas-gen/glyph-generators.h"
 #include "transform.h"
+#include <cstdlib>
 #include <iostream>
 namespace Core {
+
+static FT_Library ftLibrary = FT_Library();
+
 Renderer::RenderableText shapedGlyphsToRenderableText(
     Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
     const glm::vec3 &normal, const Transform &transform,
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
   msdfgen::BitmapConstSection<unsigned char, 3> atlas = font.getAtlas();
-  std::vector<msdf_atlas::GlyphGeometry> glyphs = font.getGlyphs();
+  const std::vector<msdf_atlas::GlyphGeometry> &glyphs = font.getGlyphs();
   std::vector<Renderer::MeshGeometry> meshGeometries;
   std::vector<Renderer::Vertex> vertices;
   std::vector<unsigned int> indices;
   glm::vec3 pen = glm::vec3(0.0f);
+  std::cerr << glyphs.size() << "\n";
+  for (const auto &g : glyphs) {
+    std::cerr << "glyph codepoint: " << g.getCodepoint() << "\n";
+  }
   for (const auto &sg : shapedGlyphs) {
     auto glyph =
         std::ranges::find_if(glyphs.begin(), glyphs.end(),
@@ -132,9 +141,13 @@ std::shared_ptr<Renderer::Texture> Font::getAtlasTexture(unsigned int width,
   return m_texturesMap[key];
 }
 
-Font::Font(const FT_Face &ftFace, const std::filesystem::path &path)
+Font::Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
+           int height)
     : m_ftFace(ftFace), path(path) {
-  // m_hbFont = hb_ft_font_create_referenced(m_ftFace);
+
+  assert(m_ftFace);
+  m_hbFont = hb_ft_font_create_referenced(m_ftFace);
+  generateAtlas(width, height);
 }
 
 Font::~Font() {
@@ -151,6 +164,7 @@ std::vector<ShapedGlyph> Font::shapeText(const std::string &text) const {
   hb_buffer_add_utf8(buffer, text.c_str(), static_cast<int>(text.size()), 0,
                      static_cast<int>(text.size()));
   hb_buffer_guess_segment_properties(buffer);
+  assert(m_hbFont);
   hb_shape(m_hbFont, buffer, nullptr, 0);
   unsigned int count = 0;
   auto *infos = hb_buffer_get_glyph_infos(buffer, &count);
@@ -203,26 +217,38 @@ void Font::generateAtlas(int width, int height) {
       msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>
       generator(width, height);
   generator.generate(glyphs.data(), glyphs.size());
-
+  std::cerr << "glyphs length: " << glyphs.size() << "\n";
   m_atlas = generator.atlasStorage();
+  m_glyphs = glyphs;
   msdfgen::BitmapRef<unsigned char, 3> m = m_atlas;
 }
 
 /**
- * @brief Loads provided font from path
+ * @brief Loads provided font from path with provided width and height, leave
+ * height to 0 to make it same as width
  * @param path font path
+ * @param width font width def:100
+ * @param height font height def:100
  * @return
  */
-std::shared_ptr<Font> loadFont(const std::filesystem::path &path) {
+std::shared_ptr<Font> loadFont(const std::filesystem::path &path, int width,
+                               int height) {
+  if (!ftLibrary) {
+    initFontLoader();
+  }
   if (fontMap.contains(path.string())) {
     return fontMap[path.string()];
   }
 
-  FT_Face ftFace = nullptr;
-  FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
-  std::cerr << "from here";
-  fontMap[path.string()] = std::shared_ptr<Font>(new Font(ftFace, path));
-  std::cerr << "\n no getting here\n";
+  FT_Face ftFace;
+  auto err = FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
+  if (err) {
+    if (err) {
+      std::cerr << "Failed creating FT face: " << FT_Error_String(err) << '\n';
+    }
+  }
+  fontMap[path.string()] =
+      std::shared_ptr<Font>(new Font(ftFace, path, width, height));
   return fontMap[path.string()];
 }
 

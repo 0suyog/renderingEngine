@@ -55,6 +55,10 @@ private:
                            modelMatrix);
         }
       }
+      for (const auto &text : currentScene->textManager.getTexts()) {
+        auto modelMatrix = text.transform.matrix();
+        Renderer::render(currentScene->renderContext, text, modelMatrix);
+      }
     }
   }
 

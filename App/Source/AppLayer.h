@@ -21,10 +21,8 @@ class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
 
-    std::cerr << "this is fine\n";
     font = Core::loadFont(
         "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
-    std::cerr << "this is not fine\n";
 
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
@@ -74,6 +72,9 @@ public:
         Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
     //
     player = aabb;
+
+    textManager.add(*font, "meow",
+                    Core::Transform().setPosition(glm::vec3(20)));
 
     sPhysics.setGravity(-2);
 
