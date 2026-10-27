@@ -3,6 +3,7 @@
 #include "Renderer/renderContext.h"
 #include "Renderer/shader.h"
 #include "glm/ext/vector_float4.hpp"
+#include <iostream>
 #include <string>
 #include <vector>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -97,17 +98,19 @@ void sendPhongUniformsToShader(const ShaderProgram &s,
   }
 }
 
-void render(const RenderContext &renderCtx, const MeshGeometry &mesh,
+void render(const RenderContext &renderCtx, const MeshGeometry &meshGeometry,
             const glm::mat4 &modelMatrix) {
-  glBindVertexArray(mesh.m_VAO);
+  glBindVertexArray(meshGeometry.m_VAO);
   //  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, nullptr);
+  glDrawElements(GL_TRIANGLES, meshGeometry.indices.size(), GL_UNSIGNED_INT,
+                 nullptr);
 }
 
 void render(const RenderContext &renderCtx, const Mesh &mesh,
             const glm::mat4 &modelMatrix) {
 
   auto s = *getShader(EShaders::PhongShader);
+  s.use();
   sendPhongUniformsToShader(s, renderCtx, modelMatrix, mesh.mat);
   render(renderCtx, mesh.m_geometry, modelMatrix);
 }
@@ -115,6 +118,7 @@ void render(const RenderContext &renderCtx, const Mesh &mesh,
 void render(const RenderContext &renderCtx, const Model &model,
             const glm::mat4 &modelMatrix) {
   auto s = *getShader(EShaders::PhongShader);
+  s.use();
   sendLightsToShader(s, renderCtx.lights);
   for (const auto &mesh : model.m_meshes) {
     render(renderCtx, mesh, modelMatrix);
@@ -124,6 +128,7 @@ void render(const RenderContext &renderCtx, const Model &model,
 void render(const RenderContext &renderCtx, const RegularPolygon &shape,
             const glm::mat4 &modelMatrix) {
   auto s = *getShader(EShaders::PhongShader);
+  s.use();
   sendPhongUniformsToShader(s, renderCtx, modelMatrix, shape.mat);
   sendLightsToShader(s, renderCtx.lights);
   for (const auto &meshGeometry : shape.meshGeometries) {
@@ -133,8 +138,10 @@ void render(const RenderContext &renderCtx, const RegularPolygon &shape,
 
 void render(const RenderContext &renderCtx, const Shapes3D &shape,
             const glm::mat4 &modelMatrix) {
-  auto shader = getShader(EShaders::PhongShader);
-  sendLightsToShader(*shader, renderCtx.lights);
+  auto s = *getShader(EShaders::PhongShader);
+  s.use();
+  sendPhongUniformsToShader(s, renderCtx, modelMatrix, shape.m_mat);
+  sendLightsToShader(s, renderCtx.lights);
   for (const auto &meshGeometry : shape.m_meshGeometries) {
     render(renderCtx, meshGeometry, modelMatrix);
   }
@@ -151,10 +158,11 @@ void sendTextUniformsToShader(const ShaderProgram &s,
 
 void render(const RenderContext &renderCtx, const RenderableText &text,
             const glm::mat4 &modelMatrix) {
-  auto shader = getShader(EShaders::TEXTSHADER);
-  sendTextUniformsToShader(*shader, text.atlas, text.foregroundColor,
+  auto s = *getShader(EShaders::TEXTSHADER);
+  s.use();
+  sendTextUniformsToShader(s, text.atlas, text.foregroundColor,
                            text.backgroundColor);
-  sendLightsToShader(*shader, renderCtx.lights);
+  sendLightsToShader(s, renderCtx.lights);
   for (const auto &meshGeometry : text.meshGeometryes) {
     render(renderCtx, meshGeometry, modelMatrix);
   }

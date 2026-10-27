@@ -67,6 +67,4 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
                                            int height, int channels,
                                            int internalChannels);
 
-std::shared_ptr<Texture> AtlasTexture(const Font &font);
-
 } // namespace Renderer

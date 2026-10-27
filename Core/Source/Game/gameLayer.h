@@ -1,5 +1,4 @@
 #pragma once
-#include "Components/CLight.h"
 #include "Components/CModel.h"
 #include "Components/CShape.h"
 #include "Components/CTransform.h"
@@ -125,6 +124,7 @@ private:
     Core::Action action{.type = currentScene->actionMap[e.GetMouseButton()],
                         .isStart = true};
     currentScene->doAction(action);
+    return true;
   }
 
   bool handleMouseButtonRelease(const Core::MouseButtonReleasedEvent &e) {
@@ -134,6 +134,7 @@ private:
                         .isStart = false};
 
     currentScene->doAction(action);
+    return true;
   }
 };
 } // namespace Game
