@@ -150,10 +150,11 @@ void render(const RenderContext &renderCtx, const Shapes3D &shape,
 void sendTextUniformsToShader(const ShaderProgram &s,
                               const std::shared_ptr<Texture> &atlas,
                               const glm::vec4 &fgColor,
-                              const glm::vec4 &bgColor) {
+                              const glm::vec4 &bgColor,
+                              const glm::mat4 &modelMatrix) {
   s.SetVec4("fgColor", fgColor);
   s.SetVec4("bgColor", bgColor);
-  s.SetUInt("atlasTexture", atlas->handle);
+  s.SetUInt("atlas", atlas->handle);
 }
 
 void render(const RenderContext &renderCtx, const RenderableText &text,
@@ -161,7 +162,7 @@ void render(const RenderContext &renderCtx, const RenderableText &text,
   auto s = *getShader(EShaders::TEXTSHADER);
   s.use();
   sendTextUniformsToShader(s, text.atlas, text.foregroundColor,
-                           text.backgroundColor);
+                           text.backgroundColor, modelMatrix);
   sendLightsToShader(s, renderCtx.lights);
   for (const auto &meshGeometry : text.meshGeometryes) {
     render(renderCtx, meshGeometry, modelMatrix);

@@ -57,6 +57,7 @@ private:
       }
       for (const auto &text : currentScene->textManager.getTexts()) {
         auto modelMatrix = text.transform.matrix();
+        std::cerr << "meow?";
         Renderer::render(currentScene->renderContext, text, modelMatrix);
       }
     }

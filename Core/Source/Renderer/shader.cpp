@@ -89,7 +89,8 @@ GLuint ShaderProgram::init() {
 
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
   if (status == GL_FALSE) {
-    std::cerr << "[SHADER] Fragment shader compilation failed" << "\n";
+    std::cerr << "[SHADER] Fragment shader compilation failed" << m_fragmentPath
+              << "\n";
     int infoLogLen;
     glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLen);
     std::string infoLog(infoLogLen, '\0');

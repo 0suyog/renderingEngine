@@ -3,6 +3,7 @@
 #include "Renderer/mesh.h"
 #include "Renderer/texture.h"
 #include "transform.h"
+#include <iostream>
 #include <string>
 
 namespace Renderer {

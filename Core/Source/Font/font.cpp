@@ -147,7 +147,7 @@ Font::Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
 
   assert(m_ftFace);
   m_hbFont = hb_ft_font_create_referenced(m_ftFace);
-  generateAtlas(width, height);
+  getAtlasTexture(width, height);
 }
 
 Font::~Font() {
@@ -155,7 +155,7 @@ Font::~Font() {
     hb_free(m_hbFont);
   }
   if (m_ftFace) {
-    FT_Free_Func(m_ftFace);
+    FT_Done_Face(m_ftFace);
   }
 }
 
