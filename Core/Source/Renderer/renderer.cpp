@@ -147,21 +147,30 @@ void render(const RenderContext &renderCtx, const Shapes3D &shape,
   }
 }
 
-void sendTextUniformsToShader(const ShaderProgram &s,
+void sendTextUniformsToShader(const RenderContext &renderCtx,
+                              const ShaderProgram &s,
                               const std::shared_ptr<Texture> &atlas,
                               const glm::vec4 &fgColor,
                               const glm::vec4 &bgColor,
                               const glm::mat4 &modelMatrix) {
   s.SetVec4("fgColor", fgColor);
   s.SetVec4("bgColor", bgColor);
-  s.SetUInt("atlas", atlas->handle);
+
+  s.SetMat4("view", renderCtx.cam->lookAt());
+  s.SetMat4("projection", renderCtx.cam->prespectiveMat());
+  s.SetMat4("model", modelMatrix);
+  s.SetVec3("CameraPosition", renderCtx.cam->getPosition());
+
+  glActiveTexture(GL_TEXTURE1);
+  s.SetInt("atlas", 1);
+  glBindTexture(GL_TEXTURE_2D, atlas->handle);
 }
 
 void render(const RenderContext &renderCtx, const RenderableText &text,
             const glm::mat4 &modelMatrix) {
   auto s = *getShader(EShaders::TEXTSHADER);
   s.use();
-  sendTextUniformsToShader(s, text.atlas, text.foregroundColor,
+  sendTextUniformsToShader(renderCtx, s, text.atlas, text.foregroundColor,
                            text.backgroundColor, modelMatrix);
   sendLightsToShader(s, renderCtx.lights);
   for (const auto &meshGeometry : text.meshGeometryes) {

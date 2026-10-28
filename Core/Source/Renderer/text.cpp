@@ -1,5 +1,6 @@
 #include "text.h"
 #include "Font/font.h"
+#include <iostream>
 
 namespace Renderer {
 void TextManager::add(const Core::Font &font, const std::string &string,

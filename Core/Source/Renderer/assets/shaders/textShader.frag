@@ -31,4 +31,5 @@ void main() {
   float screenPxDistance = screenPxRange() * (sd - 0.5);
   float opacity = clamp(screenPxDistance + 0.5, 0.0, 1.0);
   FragColor = mix(bgColor, fgColor, opacity);
+  // FragColor = vec4(0, 1, 0, 1);
 }

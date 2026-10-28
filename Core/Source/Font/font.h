@@ -1,4 +1,7 @@
 #pragma once
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include "ext/import-font.h"
 #include "Renderer/texture.h"
 #include "glm/ext/vector_float3.hpp"
 #include "hb.h"
@@ -8,11 +11,9 @@
 #include "utils.h"
 #include <cstdint>
 #include <filesystem>
-#include <ft2build.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include FT_FREETYPE_H
 
 namespace Renderer {
 struct RenderableText;
@@ -47,7 +48,9 @@ public:
 
   std::vector<ShapedGlyph> shapeText(const std::string &text) const;
 
-  void generateAtlas(int width, int height);
+  void generateGlyphs(int width, int height);
+
+  void generateAtlas();
 
   friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path,
                                         int width, int height);
@@ -61,6 +64,7 @@ private:
   std::vector<msdf_atlas::GlyphGeometry> m_glyphs;
   FT_Face m_ftFace = nullptr;
   hb_font_t *m_hbFont = nullptr;
+  msdfgen::FontHandle *m_msdfFont = nullptr;
   std::unordered_map<Core::UIntHash, std::shared_ptr<Renderer::Texture>>
       m_texturesMap;
   std::filesystem::path path;
