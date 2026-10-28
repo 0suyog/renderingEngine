@@ -73,11 +73,13 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
               << " y: " << bottomLeft.position.y
               << " z: " << bottomLeft.position.z << "\n";
     pen = pen + glm::vec3({w, 0, 0});
+    unsigned int offset = vertices.size();
+
     vertices.insert(vertices.end(),
                     {topLeft, topRight, bottomRight, bottomLeft});
-    unsigned int size = indices.size();
-    indices.insert(indices.end(), {0 + size, 1 + size, 2 + size, 0 + size,
-                                   2 + size, 3 + size});
+
+    indices.insert(indices.end(), {offset, offset + 1, offset + 2, offset,
+                                   offset + 2, offset + 3});
   }
   auto meshGeometry = Renderer::MeshGeometry(vertices, indices);
   meshGeometries.push_back(meshGeometry);

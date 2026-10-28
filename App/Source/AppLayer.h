@@ -74,8 +74,7 @@ public:
     //
     player = aabb;
 
-    textManager.add(*font, "apple",
-                    Core::Transform().setPosition(glm::vec3(0)));
+    textManager.add(*font, "ba", Core::Transform().setPosition(glm::vec3(0)));
 
     sPhysics.setGravity(-2);
 
