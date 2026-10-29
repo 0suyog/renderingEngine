@@ -31,34 +31,34 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
     auto glyph =
         std::ranges::find_if(glyphs.begin(), glyphs.end(),
                              [sg](const msdf_atlas::GlyphGeometry &glyph) {
-                               return glyph.getGlyphIndex().getIndex() == sg.id;
+                               return glyph.getIndex() == sg.id;
                              });
     if (glyph == glyphs.end()) {
       std::cerr << "Glyph not found for codePoint" << sg.id << "\n";
     }
     int x, y, w, h;
-    glyph->getAdvance();
+    double top, bottom, left, right;
+    auto advance = sg.xAdvance;
     glyph->getBoxRect(x, y, w, h);
-    // std::cerr << "x: " << x << " y:" << y << " w: " << w << " h:" << h
-    //           << "atlas width: " << atlas.width
-    //           << " atlas height: " << atlas.height << "\n";
+    glyph->getQuadPlaneBounds(left, bottom, right, top);
+    std::cerr << "advance: " << advance << "\n";
 
     Renderer::Vertex topLeft = Renderer::Vertex{
-        .position = pen,
+        .position = pen + glm::vec3(left, top, 0),
         .normal = normal,
         .texCoord = {float(x) / atlas.width, float(y) / atlas.height}};
     std::cerr << "topLeft: " << "x: " << topLeft.position.x
               << " y: " << topLeft.position.y << " z: " << topLeft.position.z
               << "\n";
     Renderer::Vertex topRight = Renderer::Vertex{
-        .position = pen + glm::vec3({w, 0, 0}),
+        .position = pen + glm::vec3(right, top, 0),
         .normal = normal,
         .texCoord = {float(x + w) / atlas.width, float(y) / atlas.height}};
     std::cerr << "topRight: " << "x: " << topRight.position.x
               << " y: " << topRight.position.y << " z: " << topRight.position.z
               << "\n";
     Renderer::Vertex bottomRight = Renderer::Vertex{
-        .position = pen + glm::vec3({w, h, 0}),
+        .position = pen + glm::vec3({right, bottom, 0}),
         .normal = normal,
         .texCoord = {float(x + w) / atlas.width, float(y + h) / atlas.height}};
     std::cerr << "bottomRight: " << "x: " << bottomRight.position.x
@@ -66,13 +66,13 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
               << " z: " << bottomRight.position.z << "\n";
 
     Renderer::Vertex bottomLeft = Renderer::Vertex{
-        .position = pen + glm::vec3({0, h, 0}),
+        .position = pen + glm::vec3({left, bottom, 0}),
         .normal = normal,
         .texCoord = {float(x + w) / atlas.width, float(y + h) / atlas.height}};
     std::cerr << "bottomLeft: " << "x: " << bottomLeft.position.x
               << " y: " << bottomLeft.position.y
               << " z: " << bottomLeft.position.z << "\n";
-    pen = pen + glm::vec3({w, 0, 0});
+    pen = pen + glm::vec3({advance, 0, 0});
     unsigned int offset = vertices.size();
 
     vertices.insert(vertices.end(),
