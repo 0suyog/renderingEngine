@@ -11,18 +11,17 @@
 #include "msdf-atlas-gen/TightAtlasPacker.h"
 #include "msdf-atlas-gen/glyph-generators.h"
 #include "transform.h"
-#include <cstdlib>
 #include <iostream>
 namespace Core {
 
 static FT_Library ftLibrary = FT_Library();
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
-    Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
     const glm::vec3 &normal, const Transform &transform,
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
-  msdfgen::BitmapConstSection<unsigned char, 3> atlas = font.getAtlas();
-  const std::vector<msdf_atlas::GlyphGeometry> &glyphs = font.getGlyphs();
+  msdfgen::BitmapConstSection<unsigned char, 3> atlas = font->getAtlas();
+  const std::vector<msdf_atlas::GlyphGeometry> &glyphs = font->getGlyphs();
   std::vector<Renderer::MeshGeometry> meshGeometries;
   std::vector<Renderer::Vertex> vertices;
   std::vector<unsigned int> indices;
@@ -90,7 +89,7 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
       .backgroundColor = backgroundColor,
       // set atlas size
       // TODO: make this somewhat good rn its just hardcoded
-      .atlas = font.getAtlasTexture(150, 150)};
+      .atlas = font->getAtlasTexture(150, 150)};
 }
 
 void initFontLoader() { FT_Init_FreeType(&ftLibrary); }

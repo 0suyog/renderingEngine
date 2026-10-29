@@ -54,7 +54,6 @@ public:
 
   friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path,
                                         int width, int height);
-  ;
 
 private:
   Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
@@ -71,7 +70,7 @@ private:
 };
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
-    Font font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
     const glm::vec3 &normal, const Transform &transform,
     const glm::vec4 &foregroundColor = {0, 0, 0, 1},
     const glm::vec4 &backgroundColor = {1, 1, 1, 1});

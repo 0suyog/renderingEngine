@@ -18,7 +18,7 @@ struct RenderableText {
 
 class TextManager {
 public:
-  void add(const Core::Font &font, const std::string &string,
+  void add(const std::shared_ptr<Core::Font> &font, const std::string &string,
            const Core::Transform &transform,
            const glm::vec4 &foregroundColor = {1, 1, 1, 1},
            const glm::vec4 &backgroundColor = {0, 0, 0, 1});
