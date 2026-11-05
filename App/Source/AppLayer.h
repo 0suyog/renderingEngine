@@ -14,6 +14,7 @@
 #include "glm/ext/vector_float3.hpp"
 #include "glm/geometric.hpp"
 #include "Font/font.h"
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -21,8 +22,10 @@ class Playground : public Game::Scene {
 public:
   Playground() : Game::Scene() {
 
-    font = Core::loadFont(
-        "/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
+    font = // Core::loadFont(
+           //"/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
+        // Core::loadFont("/usr/share/fonts/noto/NotoSerifDevanagari-Medium.ttf");
+        Core::loadFont("/usr/share/fonts/noto/NotoSerifDevanagari-Regular.ttf");
 
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
@@ -71,10 +74,14 @@ public:
 
     entityManager.AddEntity("sun")->addComponent<Component::CLight>(
         Renderer::DirectionalLight({2, 2, 2}, {0.5, 0.5, 0.0}));
-    //
+
     player = aabb;
 
-    textManager.add(font, "ba", Core::Transform().setPosition(glm::vec3(0)));
+    // std::string c = " ि";
+
+    textManager.add(
+        font, "ककाकिकीकुकुकेकैकोकौकंक:", Core::Transform().setPosition(glm::vec3(0)),
+        {1, 0, 0, 1}, {1, 1, 1, 0});
 
     sPhysics.setGravity(-2);
 

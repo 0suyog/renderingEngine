@@ -33,6 +33,7 @@ void freeFontLibrary();
 
 class Font {
 public:
+  std::shared_ptr<Renderer::Texture> getAtlasTexture();
   std::shared_ptr<Renderer::Texture> getAtlasTexture(unsigned int width,
                                                      unsigned int height);
 
@@ -46,14 +47,18 @@ public:
     return m_glyphs;
   }
 
+  hb_font_t *getHbFont() const { return m_hbFont; }
+
+  const FT_Face &getFtFace() const { return m_ftFace; }
+
   std::vector<ShapedGlyph> shapeText(const std::string &text) const;
 
-  void generateGlyphs(int width, int height);
-
-  void generateAtlas();
+  void setSize(int width, int height = 0);
 
   friend std::shared_ptr<Font> loadFont(const std::filesystem::path &path,
                                         int width, int height);
+  int getWidth() { return m_width; }
+  int getHeight() { return m_height; }
 
 private:
   Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
@@ -67,13 +72,17 @@ private:
   std::unordered_map<Core::UIntHash, std::shared_ptr<Renderer::Texture>>
       m_texturesMap;
   std::filesystem::path path;
+  int m_width, m_height;
+
+private:
+  void generateGlyphs();
+  void generateAtlas();
 };
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
     std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
     const glm::vec3 &normal, const Transform &transform,
-    const glm::vec4 &foregroundColor = {0, 0, 0, 1},
-    const glm::vec4 &backgroundColor = {1, 1, 1, 1});
+    const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor);
 
 inline std::unordered_map<std::string, std::shared_ptr<Font>> fontMap;
 

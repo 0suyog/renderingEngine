@@ -8,9 +8,12 @@ void TextManager::add(const std::shared_ptr<Core::Font> &font,
                       const Core::Transform &transform,
                       const glm::vec4 &foregroundColor,
                       const glm::vec4 &backgroundColor) {
+
+  font->getAtlasTexture();
   auto shapedGlyphs = font->shapeText(string);
   auto renderableText = Core::shapedGlyphsToRenderableText(
-      font, shapedGlyphs, {0, 0, 1}, transform);
+      font, shapedGlyphs, {0, 0, 1}, transform, foregroundColor,
+      backgroundColor);
   m_texts.push_back(renderableText);
 }
 
