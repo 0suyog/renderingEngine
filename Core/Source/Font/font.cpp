@@ -51,9 +51,8 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
 
     int x, y, w, h;
     double top, bottom, left, right;
-    const double emScale =
-        1.0 /
-        font->getHeight(); // the pixel size you passed to FT_Set_Pixel_Sizes
+    // DK: I don't really understand the font scale will have to look it up
+    const double emScale = 1.0 / font->getHeight();
 
     auto xadvance = sg.xAdvance * emScale;
     auto yadvance = sg.yAdvance * emScale;

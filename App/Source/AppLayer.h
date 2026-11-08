@@ -79,9 +79,9 @@ public:
 
     // std::string c = " ि";
 
-    textManager.add(
-        font, "ककाकिकीकुकुकेकैकोकौकंक:", Core::Transform().setPosition(glm::vec3(0)),
-        {1, 0, 0, 1}, {1, 1, 1, 0});
+    textManager.add(font, "ककाकिकीappleकुकुकेकैकोकौकंक:",
+                    Core::Transform().setPosition(glm::vec3(0)), {1, 0, 0, 1},
+                    {1, 1, 1, 0});
 
     sPhysics.setGravity(-2);
 

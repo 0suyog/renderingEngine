@@ -173,6 +173,8 @@ void render(const RenderContext &renderCtx, const RenderableText &text,
   sendTextUniformsToShader(renderCtx, s, text.atlas, text.foregroundColor,
                            text.backgroundColor, modelMatrix);
   sendLightsToShader(s, renderCtx.lights);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   for (const auto &meshGeometry : text.meshGeometryes) {
     render(renderCtx, meshGeometry, modelMatrix);
   }
