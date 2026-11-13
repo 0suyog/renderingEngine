@@ -3,7 +3,9 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <string>
 #include <utility>
+#include <vector>
 namespace Core {
 inline bool nearZero(float x) { return std::abs(x) < 0.0001f; }
 
@@ -23,6 +25,20 @@ inline UIntHash hashUIntPair(const unsigned first, unsigned int second) {
   auto numOfBits = sizeof(unsigned int) * CHAR_BIT;
   return (static_cast<UIntHash>(first) << numOfBits) |
          static_cast<UIntHash>(second);
+}
+
+inline std::vector<std::string> splitString(const std::string &s,
+                                            const char &delimiter) {
+  std::vector<std::string> retVal;
+  std::string temp = "";
+  for (auto const &str : s) {
+    if (str == delimiter) {
+      retVal.push_back(temp);
+      continue;
+    }
+    temp.push_back(str);
+  }
+  return retVal;
 }
 
 } // namespace Core

@@ -23,6 +23,25 @@ std::optional<std::string> ReadTextFile(const std::filesystem::path &path) {
   return data;
 }
 
+bool WriteTextFile(const std::filesystem::path &path, const std::string &s) {
+  if (path.has_parent_path()) {
+    auto parentPath = path.parent_path();
+    std::filesystem::create_directories(parentPath);
+  }
+  std::ofstream f(path);
+  if (!f.is_open())
+    return false;
+  f << s;
+  bool success = f.good();
+  f.close();
+  // checking after closing too cuz closing can also fail apparantly
+  success = f.good() && success;
+  if (!success) {
+    std::filesystem::remove(path);
+  }
+  return success;
+}
+
 std::optional<Image> ReadImage(const std::filesystem::path &path) {
   stbi_set_flip_vertically_on_load(true);
   stbi_set_flip_vertically_on_load_thread(true);
@@ -66,8 +85,8 @@ std::optional<Image> ReadImageFromMemory(unsigned char *buffer, int length) {
 
 bool WritePng(const std::filesystem::path &name, int width, int height,
               int components, const unsigned char *buffer) {
-  auto parentPath = name.parent_path();
   if (name.has_parent_path()) {
+    auto parentPath = name.parent_path();
     std::filesystem::create_directories(parentPath);
   }
   stbi_flip_vertically_on_write(1);

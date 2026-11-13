@@ -1,6 +1,6 @@
 #include "physicsObject.h"
 #include "glm/ext/vector_float3.hpp"
-#include "utils.h"
+#include "coreUtils.h"
 #include <iostream>
 namespace Physics {
 void PhysicsObject::Integrate(float timeStep) {

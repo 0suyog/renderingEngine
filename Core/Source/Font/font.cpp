@@ -1,21 +1,58 @@
 #include "Font/font.h"
+#include "Font/fontUtils.h"
+#include "Font/glyph.h"
 #include "Renderer/mesh.h"
 #include "Renderer/text.h"
 #include "core/BitmapRef.hpp"
+#include "file.h"
 #include "freetype/freetype.h"
 #include "freetype/ftsystem.h"
 #include "hb-ft.h"
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"
 #include "msdf-atlas-gen/FontGeometry.h"
+#include "msdf-atlas-gen/GlyphGeometry.h"
 #include "msdf-atlas-gen/ImmediateAtlasGenerator.h"
 #include "msdf-atlas-gen/TightAtlasPacker.h"
 #include "msdf-atlas-gen/glyph-generators.h"
 #include "transform.h"
-#include <cstdlib>
 #include <iostream>
+#include <vector>
 namespace Core {
 
 static FT_Library ftLibrary = FT_Library();
+
+void initFontLoader() { FT_Init_FreeType(&ftLibrary); }
+
+void freeFontLibrary() { FT_Free_Func(ftLibrary); }
+
+/**
+ * @brief Loads provided font from path with provided width and height, leave
+ * height to 0 to make it same as width
+ * @param path font path
+ * @param width font width def:100
+ * @param height font height def:100
+ * @return
+ */
+std::shared_ptr<Font> loadFont(const std::filesystem::path &path, int width,
+                               int height) {
+  if (!ftLibrary) {
+    initFontLoader();
+  }
+  if (fontMap.contains(path.string())) {
+    return fontMap[path.string()];
+  }
+
+  FT_Face ftFace;
+  auto err = FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
+  if (err) {
+    if (err) {
+      std::cerr << "Failed creating FT face: " << FT_Error_String(err) << '\n';
+    }
+  }
+  fontMap[path.string()] =
+      std::shared_ptr<Font>(new Font(ftFace, path, width, height));
+  return fontMap[path.string()];
+}
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
     std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
@@ -23,18 +60,19 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
 
   msdfgen::BitmapConstSection<unsigned char, 3> atlas = font->getAtlas();
-  const std::vector<msdf_atlas::GlyphGeometry> &glyphs = font->getGlyphs();
+  auto &glyphs = font->getGlyphs();
+
   std::vector<Renderer::MeshGeometry> meshGeometries;
   std::vector<Renderer::Vertex> vertices;
   std::vector<unsigned int> indices;
+
   glm::vec3 pen = glm::vec3(0.0f);
 
   for (const auto &sg : shapedGlyphs) {
-    auto glyph =
-        std::ranges::find_if(glyphs.begin(), glyphs.end(),
-                             [sg](const msdf_atlas::GlyphGeometry &glyph) {
-                               return glyph.getIndex() == sg.id;
-                             });
+
+    auto glyph = std::ranges::find_if(
+        glyphs.begin(), glyphs.end(),
+        [sg](const struct glyph &glyph) { return glyph.id == sg.id; });
 
     if (glyph == glyphs.end()) {
       char glyphName[128] = {};
@@ -49,8 +87,14 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
       continue;
     }
 
-    int x, y, w, h;
-    double top, bottom, left, right;
+    // flipping the v coords cuz textures is vertically flipped so need to
+    // unflip it
+    int atlasLeft = glyph->atlasLeft, atlasBottom = glyph->atlasTop,
+        atlasRight = glyph->atlasLeft + glyph->atlasRight,
+        atlasTop = glyph->atlasTop + glyph->atlasBottom;
+    double top = glyph->top, bottom = glyph->bottom, left = glyph->left,
+           right = glyph->right;
+
     // DK: I don't really understand the font scale will have to look it up
     const double emScale = 1.0 / font->getHeight();
 
@@ -58,38 +102,41 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
     auto yadvance = sg.yAdvance * emScale;
     auto xoffset = sg.xOffset * emScale;
     auto yoffset = sg.yOffset * emScale;
+
     auto penWOffsetForGlyph = pen + glm::vec3(xoffset, yoffset, 0);
-    // std::cerr << "xadvance: " << xadvance << " yadvance: " << "null"
-    //           << "\nxoffset: " << xoffset << " yoffset: " << yoffset << "\n";
-    glyph->getBoxRect(x, y, w, h);
-    glyph->getQuadPlaneBounds(left, bottom, right, top);
 
     int xScale, yScale;
+
     hb_font_get_scale(font->getHbFont(), &xScale, &yScale);
-    // flipping the v coords cuz textures is vertically flipped so need to
-    // unflip it
     Renderer::Vertex topLeft = Renderer::Vertex{
         .position = penWOffsetForGlyph + glm::vec3(left, top, 0),
         .normal = normal,
-        .texCoord = {float(x) / atlas.width, float(y + h) / atlas.height}};
+        .texCoord = {float(atlasLeft) / atlas.width,
+                     float(atlasTop) / atlas.height}};
+
     Renderer::Vertex topRight = Renderer::Vertex{
         .position = penWOffsetForGlyph + glm::vec3(right, top, 0),
         .normal = normal,
-        .texCoord = {float(x + w) / atlas.width, float(y + h) / atlas.height}};
+        .texCoord = {float(atlasRight) / atlas.width,
+                     float(atlasTop) / atlas.height}};
+
     Renderer::Vertex bottomRight = Renderer::Vertex{
         .position = penWOffsetForGlyph + glm::vec3({right, bottom, 0}),
         .normal = normal,
-        .texCoord = {float(x + w) / atlas.width, float(y) / atlas.height}};
+        .texCoord = {float(atlasRight) / atlas.width,
+                     float(atlasBottom) / atlas.height}};
+
     Renderer::Vertex bottomLeft = Renderer::Vertex{
         .position = penWOffsetForGlyph + glm::vec3({left, bottom, 0}),
         .normal = normal,
-        .texCoord = {float(x) / atlas.width, float(y) / atlas.height}};
-    pen = pen + glm::vec3({xadvance, yadvance, 0});
-    unsigned int offset = vertices.size();
+        .texCoord = {float(atlasLeft) / atlas.width,
+                     float(atlasBottom) / atlas.height}};
 
+    pen = pen + glm::vec3({xadvance, yadvance, 0});
+
+    unsigned int offset = vertices.size();
     vertices.insert(vertices.end(),
                     {topLeft, topRight, bottomRight, bottomLeft});
-
     indices.insert(indices.end(), {offset, offset + 1, offset + 2, offset,
                                    offset + 2, offset + 3});
   }
@@ -103,14 +150,8 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
                                   .atlas = font->getAtlasTexture()};
 }
 
-void initFontLoader() { FT_Init_FreeType(&ftLibrary); }
-
-void freeFontLibrary() { FT_Free_Func(ftLibrary); }
-
-std::string fontAtlasCacheName(std::filesystem::path path,
-                               uint64_t sizePairHash) {
+std::string fontAtlasCacheName(std::filesystem::path path) {
   auto name = path.filename();
-  path.append(std::to_string(sizePairHash));
   return name.string() + std::to_string(std::filesystem::hash_value(path));
 }
 
@@ -122,23 +163,42 @@ bool cacheFontAtlas(const Font &font, const std::string &cacheName) {
   return Core::WritePng(cachePath, bmp.width, bmp.height, 3, bmp.pixels);
 }
 
-std::optional<msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>
-generateAtlasFromCache(const std::string &cacheName) {
+bool cacheGlyphs(const Font &font, const std::string &cacheName) {
+  auto cachePath = cacheDir;
+  cachePath.append(cacheName);
+  std::cerr << "writing to file for glyphs now\n";
+  return WriteTextFile(cachePath, encodeGlyphs(font.getGlyphs()));
+}
+
+static bool generateAtlasFromCache(
+    const std::string &cacheName,
+    msdf_atlas::BitmapAtlasStorage<unsigned char, 3> &atlas) {
   auto cachePath = cacheDir;
   cachePath.append(cacheName);
   auto im = Core::ReadImage(cachePath);
   if (!im)
-    return std::optional<msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>();
+    return false;
 
   msdfgen::BitmapConstSection<unsigned char, 3> sec;
   sec.pixels = im->data;
   sec.width = im->width;
   sec.height = im->height;
   sec.rowStride = im->channels * im->width;
-  msdf_atlas::BitmapAtlasStorage<unsigned char, 3> atlas =
+  atlas =
       msdf_atlas::BitmapAtlasStorage<unsigned char, 3>(sec.width, sec.height);
   atlas.put(0, 0, sec);
-  return atlas;
+  return true;
+}
+
+static bool generateGlyphsFromCache(const std::string &cacheName,
+                                    std::vector<glyph> &glyphs) {
+  auto cachePath = cacheDir;
+  cachePath.append(cacheName);
+  auto text = ReadTextFile(cachePath);
+  if (!text)
+    return false;
+  auto success = decodeGlyphs(text.value(), glyphs);
+  return success;
 }
 
 void Font::setSize(int width, int height) {
@@ -146,47 +206,63 @@ void Font::setSize(int width, int height) {
   if (m_width < 1)
     m_width = 1;
   m_height = height < 1 ? width : height;
+  assert(m_ftFace);
+  auto error = FT_Set_Pixel_Sizes(m_ftFace, m_width, m_height);
+
+  if (error) {
+    std::cerr << "failed setting font size\n";
+  }
+
+  assert(m_hbFont);
+  hb_ft_font_changed(m_hbFont);
 }
 
 std::shared_ptr<Renderer::Texture> Font::getAtlasTexture() {
 
-  generateGlyphs();
-
-  auto key = Core::hashUIntPair(m_width, m_height);
-  if (m_texturesMap.contains(key)) {
-    return m_texturesMap[key];
+  if (m_atlasTexture && m_glyphs.size()) {
+    return m_atlasTexture;
   }
-  auto cacheName = fontAtlasCacheName(path, key);
-  if (auto cachedAtlas = generateAtlasFromCache(cacheName)) {
-    m_atlas = cachedAtlas.value();
+  auto atlasCacheName = path.filename().replace_extension() / "atlas.png";
+  auto glyphsCacheName = path.filename().replace_extension() / "glyphs";
+
+  // only use cache if both atlas cache and glyphs cache is available otherwise
+  // generate new
+  if (generateAtlasFromCache(atlasCacheName, m_atlas) &&
+      generateGlyphsFromCache(glyphsCacheName, m_glyphs) && m_glyphs.size()) {
+    std::cerr << "seems both are available\n";
     msdfgen::BitmapConstRef<unsigned char, 3> bmp = m_atlas;
-    m_texturesMap[key] =
+    m_atlasTexture =
         Renderer::TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
   } else {
-    generateAtlas();
+    m_glyphs.clear();
+    auto glyphGeometries = generateGlyphGeometries();
+    std::cerr << "generating atlas\n";
+    generateAtlas(glyphGeometries);
+    std::cerr << "generating glyphs\n";
+    generateGlyphs(glyphGeometries);
+    std::cerr << "finished generating glyphs\n";
     msdfgen::BitmapConstRef<unsigned char, 3> bmp = m_atlas;
-    m_texturesMap[key] =
+    m_atlasTexture =
         Renderer::TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
-    auto success = cacheFontAtlas(*this, cacheName);
+    std::cerr << "caching atlas\n";
+    auto success = cacheFontAtlas(*this, atlasCacheName);
     if (!success) {
       std::cerr << "failed caching atlas";
     }
+    success = cacheGlyphs(*this, glyphsCacheName);
+    if (!success) {
+      std::cerr << "failed caching glyphs\n";
+    }
   }
-  return m_texturesMap[key];
-}
-
-std::shared_ptr<Renderer::Texture> Font::getAtlasTexture(unsigned int width,
-                                                         unsigned int height) {
-  setSize(width, height);
-  return getAtlasTexture();
+  return m_atlasTexture;
 }
 
 Font::Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
            int height)
     : m_ftFace(ftFace), path(path) {
-  setSize(width, height);
   m_msdfFont = msdfgen::adoptFreetypeFont(m_ftFace);
   m_hbFont = hb_ft_font_create_referenced(m_ftFace);
+  setSize(width, height);
 }
 
 Font::~Font() {
@@ -227,73 +303,56 @@ std::vector<ShapedGlyph> Font::shapeText(const std::string &text) const {
   return results;
 }
 
-// TODO: rn i am packing atlas twice, one when generating glyph, and another
-// when generating atlas as glyphs need to be packed, and since i am caching
-// atlas as image and don't have information as to where each glyph is placed in
-// atlas i need to pack them again (i am not sure if its consistent ie if
-// packing same char set will result in same atlas every time, will know if
-// something breaks ig), instead of doing that, cache both the atlas and
-// the glyphs, and restore them with atlas
-
-void Font::generateGlyphs() {
+std::vector<msdf_atlas::GlyphGeometry> Font::generateGlyphGeometries() const {
   std::vector<msdf_atlas::GlyphGeometry> glyphs;
   msdf_atlas::FontGeometry geometry(&glyphs);
-  assert(m_ftFace);
-  auto error = FT_Set_Pixel_Sizes(m_ftFace, m_width, m_height);
-
-  if (error) {
-    std::cerr << "failed setting font size\n";
-  }
-
-  hb_ft_font_changed(m_hbFont);
 
   assert(m_msdfFont);
-  msdf_atlas::Charset charset = msdf_atlas::Charset::ASCII;
 
   msdf_atlas::Charset glyphset;
+  // TODO: I would eventualy like to give the developer option to add only the
+  // glyphs that are specified by the user but rn this shoud be fine
   for (unsigned i = 0; i < m_ftFace->num_glyphs; ++i)
-    glyphset.add(i); // these are glyph indices, not codepoints
-
+    glyphset.add(i);
   auto loaded = geometry.loadGlyphset(m_msdfFont, 1.0, glyphset);
 
-  // bool loaded = geometry.loadCharset(m_msdfFont, 1.0, charset);
   std::cerr << "loaded: " << loaded << "\n";
+
   for (auto &glyph : glyphs) {
     glyph.edgeColoring(&msdfgen::edgeColoringInkTrap, 3.0, 0);
   }
 
-  msdf_atlas::TightAtlasPacker packer;
-  packer.setDimensionsConstraint(msdf_atlas::DimensionsConstraint::SQUARE);
-  // this sets the minimum "space a glyph will take" so big number better if
-  // viewing letters from close
-  packer.setMinimumScale(240.0);
-  // how much information needs to be retained outside of an edge basically to
-  // know how far i am from an edge, helpful for glowing texts and stuff
-  packer.setPixelRange(10.0);
-  // couldnt figure out this tho
-  // TODO: figure oute what this does (I couldn't see difference between miter
-  // of 0.1 and 40, other than 0.1 is a teeny bit blurrier than 40)
-  packer.setMiterLimit(0.1);
-  packer.pack(glyphs.data(), glyphs.size());
-  // exit(-1);
-  m_glyphs = glyphs;
+  return glyphs;
+}
+// TODO: havent actually generated glyphs do this
+void Font::generateGlyphs(
+    const std::vector<msdf_atlas::GlyphGeometry> &glyphGeometries) {
+  for (const auto &glyphGeometry : glyphGeometries) {
+    glyph g;
+    g.id = glyphGeometry.getIndex();
+    glyphGeometry.getBoxRect(g.atlasLeft, g.atlasTop, g.atlasRight,
+                             g.atlasBottom);
+    glyphGeometry.getQuadPlaneBounds(g.left, g.bottom, g.right, g.top);
+    m_glyphs.push_back(g);
+  }
 }
 
-void Font::generateAtlas() {
+void Font::generateAtlas(
+    std::vector<msdf_atlas::GlyphGeometry> &glyphGeometries) {
 
   msdf_atlas::TightAtlasPacker packer;
   packer.setDimensionsConstraint(msdf_atlas::DimensionsConstraint::SQUARE);
   // this sets the minimum "space a glyph will take" so big number better if
   // viewing letters from close
-  packer.setMinimumScale(240.0);
+  packer.setMinimumScale(60.0);
   // how much information needs to be retained outside of an edge basically to
   // know how far i am from an edge, helpful for glowing texts and stuff
   packer.setPixelRange(10.0);
   // couldnt figure out this tho
   // TODO: figure oute what this does (I couldn't see difference between miter
   // of 0.1 and 40, other than 0.1 is a teeny bit blurrier than 40)
-  packer.setMiterLimit(0.1);
-  auto error = packer.pack(m_glyphs.data(), m_glyphs.size());
+  packer.setMiterLimit(1);
+  auto error = packer.pack(glyphGeometries.data(), glyphGeometries.size());
   if (error) {
     std::cerr << "error when packing atlas\n";
   }
@@ -304,38 +363,9 @@ void Font::generateAtlas() {
       float, 3, msdf_atlas::msdfGenerator,
       msdf_atlas::BitmapAtlasStorage<unsigned char, 3>>
       generator(width, height);
-  generator.generate(m_glyphs.data(), m_glyphs.size());
+  generator.generate(glyphGeometries.data(), glyphGeometries.size());
   m_atlas = generator.atlasStorage();
   msdfgen::BitmapRef<unsigned char, 3> m = m_atlas;
-}
-
-/**
- * @brief Loads provided font from path with provided width and height, leave
- * height to 0 to make it same as width
- * @param path font path
- * @param width font width def:100
- * @param height font height def:100
- * @return
- */
-std::shared_ptr<Font> loadFont(const std::filesystem::path &path, int width,
-                               int height) {
-  if (!ftLibrary) {
-    initFontLoader();
-  }
-  if (fontMap.contains(path.string())) {
-    return fontMap[path.string()];
-  }
-
-  FT_Face ftFace;
-  auto err = FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
-  if (err) {
-    if (err) {
-      std::cerr << "Failed creating FT face: " << FT_Error_String(err) << '\n';
-    }
-  }
-  fontMap[path.string()] =
-      std::shared_ptr<Font>(new Font(ftFace, path, width, height));
-  return fontMap[path.string()];
 }
 
 } // namespace Core

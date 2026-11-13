@@ -1,4 +1,5 @@
 #pragma once
+#include "Font/glyph.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "ext/import-font.h"
@@ -8,7 +9,7 @@
 #include "msdf-atlas-gen/BitmapAtlasStorage.h"
 #include "msdf-atlas-gen/GlyphGeometry.h"
 #include "transform.h"
-#include "utils.h"
+#include "coreUtils.h"
 #include <cstdint>
 #include <filesystem>
 #include <string>
@@ -21,12 +22,6 @@ struct RenderableText;
 
 namespace Core {
 
-struct ShapedGlyph {
-  uint32_t id;
-  float xAdvance, yAdvance;
-  float xOffset, yOffset;
-};
-
 void initFontLoader();
 
 void freeFontLibrary();
@@ -34,8 +29,6 @@ void freeFontLibrary();
 class Font {
 public:
   std::shared_ptr<Renderer::Texture> getAtlasTexture();
-  std::shared_ptr<Renderer::Texture> getAtlasTexture(unsigned int width,
-                                                     unsigned int height);
 
   ~Font();
 
@@ -43,9 +36,7 @@ public:
     return m_atlas;
   }
 
-  const std::vector<msdf_atlas::GlyphGeometry> &getGlyphs() const {
-    return m_glyphs;
-  }
+  const std::vector<glyph> &getGlyphs() const { return m_glyphs; }
 
   hb_font_t *getHbFont() const { return m_hbFont; }
 
@@ -61,22 +52,25 @@ public:
   int getHeight() { return m_height; }
 
 private:
+  std::vector<msdf_atlas::GlyphGeometry> generateGlyphGeometries() const;
+  void
+  generateGlyphs(const std::vector<msdf_atlas::GlyphGeometry> &glyphGeometries);
+  void generateAtlas(std::vector<msdf_atlas::GlyphGeometry> &glyphGeometries);
+
+private:
   Font(const FT_Face &ftFace, const std::filesystem::path &path, int width,
        int height);
-
   msdf_atlas::BitmapAtlasStorage<unsigned char, 3> m_atlas;
-  std::vector<msdf_atlas::GlyphGeometry> m_glyphs;
+  std::vector<glyph> m_glyphs;
+  std::vector<msdf_atlas::GlyphGeometry> m_glyphGeometries;
   FT_Face m_ftFace = nullptr;
   hb_font_t *m_hbFont = nullptr;
   msdfgen::FontHandle *m_msdfFont = nullptr;
+  std::shared_ptr<Renderer::Texture> m_atlasTexture;
   std::unordered_map<Core::UIntHash, std::shared_ptr<Renderer::Texture>>
       m_texturesMap;
   std::filesystem::path path;
   int m_width, m_height;
-
-private:
-  void generateGlyphs();
-  void generateAtlas();
 };
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
@@ -86,8 +80,7 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
 
 inline std::unordered_map<std::string, std::shared_ptr<Font>> fontMap;
 
-std::string fontAtlasCacheName(std::filesystem::path path,
-                               uint64_t sizePairHash);
+std::string fontAtlasCacheName(std::filesystem::path path);
 
 inline std::filesystem::path cacheDir = "./cache/";
 
@@ -95,6 +88,8 @@ bool cacheFontAtlas(const Font &font, const std::string &cacheName);
 
 inline std::shared_ptr<Renderer::Texture>
 getCachedFontAtlas(const std::string &cacheName);
+
+bool cacheGlyphs(const Font &font, const std::string &cacheName);
 
 /**
  * @brief Loads provided font with provided width and height, leave height as 0
