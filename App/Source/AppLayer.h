@@ -25,8 +25,8 @@ public:
     font = // Core::loadFont(
            //"/usr/share/fonts/IsovekaTerm/IosevkaTermNerdFont-Heavy.ttf");
         // Core::loadFont("/usr/share/fonts/noto/NotoSerifDevanagari-Medium.ttf");
-        Core::loadFont("/usr/share/fonts/noto/NotoSerifDevanagari-Regular.ttf");
-
+        // Core::loadFont("/usr/share/fonts/noto/NotoSerifDevanagari-Regular.ttf");
+        Core::loadFont("../assets/fonts/Poppins-Regular.ttf");
     renderContext = {
         .cam = std::make_shared<Renderer::Camera>(),
         .viewPortWidth = 600,
@@ -79,9 +79,64 @@ public:
 
     // std::string c = " ि";
 
-    textManager.add(font, "ककाकिकीappleकुकुकेकैकोकौकंक:",
+    textManager.add(font, R"(क – कपुरि क  apple
+ख – खरायो ख
+ग – गाईगोड़े ग
+घ – घर घ
+ङ – ङ
+च – चरा च
+छ – छाता छ
+ज – जहाज ज
+झ – झण्डा झ
+ञ – ञ
+ट – टमाटर ट
+ठ – ठेला ठ
+ड – डमरु ड
+ढ – ढोका ढ
+ण – ण
+त – तरकारी त
+थ – थर्मस थ
+द – दाँत द
+ध – धनुष ध
+न – नल न
+प – पतंग प
+फ – फल फ
+ब – बाघ ब
+भ – भालु भ
+म – माछा म
+य – यातायात य
+र – रथ र
+ल – लट्टाई ल
+व – वन व
+श – शङ्ख श
+ष – षट्कोण ष
+स – स्याउ स
+ह – हात्ती ह
+क्ष – क्षितिज क्ष
+त्र – त्रिशूल त्र
+ज्ञ – ज्ञानी ज्ञ
+अ – अनार अ
+आ – आँप आ
+इ – इमली इ
+ई – ईश्वर ई
+उ – उल्लु उ
+ऊ – ऊन ऊ
+ऋ – ऋषि ऋ
+ए – एक ए
+ऐ – ऐना ऐ
+ओ – ओखर ओ
+औ – औषधि औ
+अं – अंगुर अं
+अः – दुःख अः
+
+ॐ – ॐ
+श्री – श्री
+    )",
                     Core::Transform().setPosition(glm::vec3(0)), {1, 0, 0, 1},
                     {1, 1, 1, 0});
+
+    // textManager.add(font, "a\nb",
+    // Core::Transform().setPosition(glm::vec3(0)));
 
     sPhysics.setGravity(-2);
 

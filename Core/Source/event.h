@@ -35,7 +35,7 @@ public:
   EventDispatcher(Event &event) : m_Event(event) {}
 
   template <typename T>
-  // requires(std::is_base_of_v<Event, T>)
+    requires(std::is_base_of_v<Event, T>)
   bool Dispatch(EventFn<T> func) {
     if (m_Event.GetEventType() == T::GetStaticType() && !m_Event.Handled) {
       m_Event.Handled = func(*(T *)&m_Event);

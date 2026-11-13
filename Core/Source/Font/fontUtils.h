@@ -8,7 +8,7 @@ namespace Core {
 inline std::string encodeGlyph(const glyph &g) {
   std::string str =
       std::to_string(g.id) + ";" + std::to_string(g.atlasTop) + ";" +
-      std::to_string(g.atlasTop) + ";" + std::to_string(g.atlasRight) + ";" +
+      std::to_string(g.atlasLeft) + ";" + std::to_string(g.atlasRight) + ";" +
       std::to_string(g.atlasBottom) + ";" + std::to_string(g.left) + ";" +
       std::to_string(g.bottom) + ";" + std::to_string(g.right) + ";" +
       std::to_string(g.top) + "\n";
@@ -25,7 +25,7 @@ inline bool decodeGlyph(const std::string &s, glyph &g) {
   if (!(ss >> g.atlasTop))
     return false;
   ss.ignore(1, ';');
-  if (!(ss >> g.atlasTop))
+  if (!(ss >> g.atlasLeft))
     return false;
   ss.ignore(1, ';');
   if (!(ss >> g.atlasRight))

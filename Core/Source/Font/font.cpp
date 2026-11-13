@@ -55,7 +55,8 @@ std::shared_ptr<Font> loadFont(const std::filesystem::path &path, int width,
 }
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
-    std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    std::shared_ptr<Font> font,
+    const std::vector<std::vector<ShapedGlyph>> &shapedLines,
     const glm::vec3 &normal, const Transform &transform,
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor) {
 
@@ -63,86 +64,93 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
   auto &glyphs = font->getGlyphs();
 
   std::vector<Renderer::MeshGeometry> meshGeometries;
-  std::vector<Renderer::Vertex> vertices;
-  std::vector<unsigned int> indices;
 
-  glm::vec3 pen = glm::vec3(0.0f);
+  glm::vec3 baseLine = glm::vec3(0.0f);
 
-  for (const auto &sg : shapedGlyphs) {
+  const double emScale = 1.0 / font->getHeight();
+  float lineHeight = font->getFtFace()->size->metrics.height / 64.0f * emScale;
 
-    auto glyph = std::ranges::find_if(
-        glyphs.begin(), glyphs.end(),
-        [sg](const struct glyph &glyph) { return glyph.id == sg.id; });
+  std::cerr << "line height: " << lineHeight << "\n";
 
-    if (glyph == glyphs.end()) {
-      char glyphName[128] = {};
+  for (const auto &sl : shapedLines) {
+    glm::vec3 pen = baseLine;
+    std::vector<Renderer::Vertex> vertices;
+    std::vector<unsigned int> indices;
+    for (const auto &sg : sl) {
+      auto glyph = std::ranges::find_if(
+          glyphs.begin(), glyphs.end(),
+          [sg](const struct glyph &glyph) { return glyph.id == sg.id; });
 
-      FT_Error error = FT_Get_Glyph_Name(font->getFtFace(), sg.id, glyphName,
-                                         sizeof(glyphName));
+      if (glyph == glyphs.end()) {
+        char glyphName[128] = {};
 
-      auto gl = FT_Get_Name_Index(font->getFtFace(), glyphName);
+        FT_Error error = FT_Get_Glyph_Name(font->getFtFace(), sg.id, glyphName,
+                                           sizeof(glyphName));
 
-      std::cerr << "Glyph not found: " << gl << " | Glyph index: " << sg.id
-                << " | Error: " << error << '\n';
-      continue;
+        auto gl = FT_Get_Name_Index(font->getFtFace(), glyphName);
+
+        std::cerr << "Glyph not found: " << gl << " | Glyph index: " << sg.id
+                  << " | Error: " << error << '\n';
+        continue;
+      }
+
+      // flipping the v coords cuz textures is vertically flipped so need to
+      // unflip it
+      int atlasLeft = glyph->atlasLeft, atlasBottom = glyph->atlasTop,
+          atlasRight = glyph->atlasRight, atlasTop = glyph->atlasBottom;
+      double top = glyph->top, bottom = glyph->bottom, left = glyph->left,
+             right = glyph->right;
+
+      // DK: I don't really understand the font scale will have to look it up
+
+      auto xadvance = sg.xAdvance * emScale;
+      auto yadvance = sg.yAdvance * emScale;
+      auto xoffset = sg.xOffset * emScale;
+      auto yoffset = sg.yOffset * emScale;
+
+      auto penWOffsetForGlyph = pen + glm::vec3(xoffset, yoffset, 0);
+
+      int xScale, yScale;
+
+      hb_font_get_scale(font->getHbFont(), &xScale, &yScale);
+      Renderer::Vertex topLeft = Renderer::Vertex{
+          .position = penWOffsetForGlyph + glm::vec3(left, top, 0),
+          .normal = normal,
+          .texCoord = {float(atlasLeft) / atlas.width,
+                       float(atlasTop) / atlas.height}};
+
+      Renderer::Vertex topRight = Renderer::Vertex{
+          .position = penWOffsetForGlyph + glm::vec3(right, top, 0),
+          .normal = normal,
+          .texCoord = {float(atlasRight) / atlas.width,
+                       float(atlasTop) / atlas.height}};
+
+      Renderer::Vertex bottomRight = Renderer::Vertex{
+          .position = penWOffsetForGlyph + glm::vec3({right, bottom, 0}),
+          .normal = normal,
+          .texCoord = {float(atlasRight) / atlas.width,
+                       float(atlasBottom) / atlas.height}};
+
+      Renderer::Vertex bottomLeft = Renderer::Vertex{
+          .position = penWOffsetForGlyph + glm::vec3({left, bottom, 0}),
+          .normal = normal,
+          .texCoord = {float(atlasLeft) / atlas.width,
+                       float(atlasBottom) / atlas.height}};
+
+      pen = pen + glm::vec3({xadvance, yadvance, 0});
+
+      unsigned int offset = vertices.size();
+      vertices.insert(vertices.end(),
+                      {topLeft, topRight, bottomRight, bottomLeft});
+      indices.insert(indices.end(), {offset, offset + 1, offset + 2, offset,
+                                     offset + 2, offset + 3});
+
+      auto meshGeometry = Renderer::MeshGeometry(vertices, indices);
+      meshGeometries.push_back(meshGeometry);
     }
-
-    // flipping the v coords cuz textures is vertically flipped so need to
-    // unflip it
-    int atlasLeft = glyph->atlasLeft, atlasBottom = glyph->atlasTop,
-        atlasRight = glyph->atlasLeft + glyph->atlasRight,
-        atlasTop = glyph->atlasTop + glyph->atlasBottom;
-    double top = glyph->top, bottom = glyph->bottom, left = glyph->left,
-           right = glyph->right;
-
-    // DK: I don't really understand the font scale will have to look it up
-    const double emScale = 1.0 / font->getHeight();
-
-    auto xadvance = sg.xAdvance * emScale;
-    auto yadvance = sg.yAdvance * emScale;
-    auto xoffset = sg.xOffset * emScale;
-    auto yoffset = sg.yOffset * emScale;
-
-    auto penWOffsetForGlyph = pen + glm::vec3(xoffset, yoffset, 0);
-
-    int xScale, yScale;
-
-    hb_font_get_scale(font->getHbFont(), &xScale, &yScale);
-    Renderer::Vertex topLeft = Renderer::Vertex{
-        .position = penWOffsetForGlyph + glm::vec3(left, top, 0),
-        .normal = normal,
-        .texCoord = {float(atlasLeft) / atlas.width,
-                     float(atlasTop) / atlas.height}};
-
-    Renderer::Vertex topRight = Renderer::Vertex{
-        .position = penWOffsetForGlyph + glm::vec3(right, top, 0),
-        .normal = normal,
-        .texCoord = {float(atlasRight) / atlas.width,
-                     float(atlasTop) / atlas.height}};
-
-    Renderer::Vertex bottomRight = Renderer::Vertex{
-        .position = penWOffsetForGlyph + glm::vec3({right, bottom, 0}),
-        .normal = normal,
-        .texCoord = {float(atlasRight) / atlas.width,
-                     float(atlasBottom) / atlas.height}};
-
-    Renderer::Vertex bottomLeft = Renderer::Vertex{
-        .position = penWOffsetForGlyph + glm::vec3({left, bottom, 0}),
-        .normal = normal,
-        .texCoord = {float(atlasLeft) / atlas.width,
-                     float(atlasBottom) / atlas.height}};
-
-    pen = pen + glm::vec3({xadvance, yadvance, 0});
-
-    unsigned int offset = vertices.size();
-    vertices.insert(vertices.end(),
-                    {topLeft, topRight, bottomRight, bottomLeft});
-    indices.insert(indices.end(), {offset, offset + 1, offset + 2, offset,
-                                   offset + 2, offset + 3});
+    baseLine.y -= lineHeight;
   }
 
-  auto meshGeometry = Renderer::MeshGeometry(vertices, indices);
-  meshGeometries.push_back(meshGeometry);
   return Renderer::RenderableText{.meshGeometryes = meshGeometries,
                                   .transform = transform,
                                   .foregroundColor = foregroundColor,
@@ -274,32 +282,52 @@ Font::~Font() {
   }
 }
 
-std::vector<ShapedGlyph> Font::shapeText(const std::string &text) const {
+std::vector<std::vector<ShapedGlyph>>
+Font::shapeText(const std::string &text) const {
 
-  hb_buffer_t *buffer = hb_buffer_create();
-  hb_buffer_add_utf8(buffer, text.c_str(), static_cast<int>(text.size()), 0,
-                     static_cast<int>(text.size()));
-  hb_buffer_guess_segment_properties(buffer);
+  // preprocess text to seperate based on newline character \n and \r
 
-  assert(m_hbFont);
+  auto lines = splitString(text, '\n', '\r');
+  // for (auto l : lines) {
+  //   std::cerr << l << "\n";
+  // }
 
-  hb_shape(m_hbFont, buffer, nullptr, 0);
-  unsigned int count = 0;
-  auto *infos = hb_buffer_get_glyph_infos(buffer, &count);
-  auto *positions = hb_buffer_get_glyph_positions(buffer, &count);
-  std::vector<ShapedGlyph> results;
-  results.reserve(count);
-  for (unsigned int i = 0; i < count; i++) {
-    // DK: i don't know why we are dividing by 64.0f
-    auto thingy = ShapedGlyph{.id = infos[i].codepoint,
-                              .xAdvance = positions[i].x_advance / 64.0f,
-                              .yAdvance = positions[i].y_advance / 64.0f,
-                              .xOffset = positions[i].x_offset / 64.0f,
-                              .yOffset = positions[i].y_offset / 64.0f};
-    results.push_back(thingy);
+  std::vector<std::vector<ShapedGlyph>> results;
+  results.reserve(lines.size());
+  for (const auto &line : lines) {
+
+    hb_buffer_t *buffer = hb_buffer_create();
+    hb_buffer_add_utf8(buffer, line.c_str(), static_cast<int>(line.size()), 0,
+                       static_cast<int>(line.size()));
+    hb_buffer_guess_segment_properties(buffer);
+
+    assert(m_hbFont);
+
+    hb_shape(m_hbFont, buffer, nullptr, 0);
+    unsigned int count = 0;
+    auto *infos = hb_buffer_get_glyph_infos(buffer, &count);
+    auto *positions = hb_buffer_get_glyph_positions(buffer, &count);
+    std::vector<ShapedGlyph> shapedGlyphs;
+    shapedGlyphs.reserve(count);
+
+    for (unsigned int i = 0; i < count; i++) {
+      // DK: i don't know why we are dividing by 64.0f
+      auto thingy = ShapedGlyph{
+          .id = infos[i].codepoint,
+          .xAdvance = positions[i].x_advance / 64.0f,
+          .yAdvance = positions[i].y_advance / 64.0f,
+          .xOffset = positions[i].x_offset / 64.0f,
+          .yOffset = positions[i].y_offset / 64.0f,
+          // .isNewLine = infos[i].;
+      };
+
+      shapedGlyphs.push_back(thingy);
+    }
+
+    hb_buffer_destroy(buffer);
+    results.push_back(shapedGlyphs);
   }
   // std::cerr << "\n";
-  hb_buffer_destroy(buffer);
   return results;
 }
 
@@ -330,8 +358,8 @@ void Font::generateGlyphs(
   for (const auto &glyphGeometry : glyphGeometries) {
     glyph g;
     g.id = glyphGeometry.getIndex();
-    glyphGeometry.getBoxRect(g.atlasLeft, g.atlasTop, g.atlasRight,
-                             g.atlasBottom);
+    glyphGeometry.getQuadAtlasBounds(g.atlasLeft, g.atlasTop, g.atlasRight,
+                                     g.atlasBottom);
     glyphGeometry.getQuadPlaneBounds(g.left, g.bottom, g.right, g.top);
     m_glyphs.push_back(g);
   }

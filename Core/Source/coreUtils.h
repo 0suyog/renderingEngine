@@ -3,7 +3,9 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <iostream>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 namespace Core {
@@ -26,18 +28,24 @@ inline UIntHash hashUIntPair(const unsigned first, unsigned int second) {
   return (static_cast<UIntHash>(first) << numOfBits) |
          static_cast<UIntHash>(second);
 }
-
+template <typename... Delimiters>
+  requires(std::is_convertible_v<Delimiters, char> && ...)
 inline std::vector<std::string> splitString(const std::string &s,
-                                            const char &delimiter) {
+                                            const Delimiters &...delimiter) {
   std::vector<std::string> retVal;
   std::string temp = "";
   for (auto const &str : s) {
-    if (str == delimiter) {
+    if (((str == delimiter) || ...)) {
       retVal.push_back(temp);
+      temp = "";
       continue;
     }
     temp.push_back(str);
   }
+  retVal.push_back(temp);
+  // for (int i = 0; i < retVal.size(); i++) {
+  //   std::cerr << retVal[i];
+  // }
   return retVal;
 }
 

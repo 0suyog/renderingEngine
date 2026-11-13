@@ -6,7 +6,7 @@ struct glyph {
   // glyph index in font
   uint32_t id;
   // position in atlas
-  int atlasLeft, atlasTop, atlasRight, atlasBottom;
+  double atlasLeft, atlasTop, atlasRight, atlasBottom;
   // where the glyph should be placed on baseline
   double left, bottom, right, top;
 };
@@ -18,5 +18,7 @@ struct ShapedGlyph {
   float xAdvance, yAdvance;
   // how much to move the penposition before rendering this glyph
   float xOffset, yOffset;
+  // is newline
+  bool isNewLine = false;
 };
 } // namespace Core

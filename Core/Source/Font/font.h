@@ -42,7 +42,8 @@ public:
 
   const FT_Face &getFtFace() const { return m_ftFace; }
 
-  std::vector<ShapedGlyph> shapeText(const std::string &text) const;
+  std::vector<std::vector<ShapedGlyph>>
+  shapeText(const std::string &text) const;
 
   void setSize(int width, int height = 0);
 
@@ -74,7 +75,8 @@ private:
 };
 
 Renderer::RenderableText shapedGlyphsToRenderableText(
-    std::shared_ptr<Font> font, const std::vector<ShapedGlyph> &shapedGlyphs,
+    std::shared_ptr<Font> font,
+    const std::vector<std::vector<ShapedGlyph>> &shapedGlyphs,
     const glm::vec3 &normal, const Transform &transform,
     const glm::vec4 &foregroundColor, const glm::vec4 &backgroundColor);
 
