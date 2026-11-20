@@ -44,9 +44,6 @@ void PhysicsEngine::ResolveCollisions() {
     for (int i = 0; i < 3; i++) {
       toMove[i] = Core::nearZero(toMove[i]) ? 0.0f : toMove[i];
     }
-    // std::cerr << "normal: " << intersectData.GetNormal().x << " "
-    //           << intersectData.GetNormal().y << " "
-    //           << intersectData.GetNormal().z << "\n";
     // if object A isnt static move it by half the penetration backward the
     // normal
     if (!objectA->isStatic && !objectB->isStatic) {

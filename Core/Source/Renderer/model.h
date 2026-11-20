@@ -8,17 +8,7 @@ namespace Renderer {
 class Model {
 public:
   Model(const std::filesystem::path &path) { loadModel(path); }
-  Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {
-    // for (const auto &m : m_meshes) {
-    //   const auto &v = m.vertices;
-    //   for (const auto &vertex : v) {
-    //     std::cerr << "position x: " << vertex.position.x
-    //               << " y: " << vertex.position.y << " z:" <<
-    //               vertex.position.z
-    //               << "\n";
-    //   }
-    // }
-  }
+  Model(const std::vector<Mesh> &m_meshes) : m_meshes(m_meshes) {}
 
   friend void render(const RenderContext &renderCtx, const Model &model,
                      const glm::mat4 &modelMatrix);

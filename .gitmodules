@@ -13,3 +13,6 @@
 [submodule "Core/Vendors/freetype"]
 	path = Core/Vendors/freetype
 	url = https://gitlab.freedesktop.org/freetype/freetype.git
+[submodule "Core/Vendors/fmt"]
+	path = Core/Vendors/fmt
+	url = https://github.com/fmtlib/fmt.git

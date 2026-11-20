@@ -1,6 +1,7 @@
 #include "Font/font.h"
 #include "Font/fontUtils.h"
 #include "Font/glyph.h"
+#include "Logger/logger.h"
 #include "Renderer/mesh.h"
 #include "Renderer/text.h"
 #include "core/BitmapRef.hpp"
@@ -15,6 +16,7 @@
 #include "msdf-atlas-gen/TightAtlasPacker.h"
 #include "msdf-atlas-gen/glyph-generators.h"
 #include "transform.h"
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 namespace Core {
@@ -46,7 +48,7 @@ std::shared_ptr<Font> loadFont(const std::filesystem::path &path, int width,
   auto err = FT_New_Face(ftLibrary, path.c_str(), 0, &ftFace);
   if (err) {
     if (err) {
-      std::cerr << "Failed creating FT face: " << FT_Error_String(err) << '\n';
+      LOG_ERROR("Failed creating FT Face: ", FT_Error_String(err));
     }
   }
   fontMap[path.string()] =
@@ -70,8 +72,6 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
   const double emScale = 1.0 / font->getHeight();
   float lineHeight = font->getFtFace()->size->metrics.height / 64.0f * emScale;
 
-  std::cerr << "line height: " << lineHeight << "\n";
-
   for (const auto &sl : shapedLines) {
     glm::vec3 pen = baseLine;
     std::vector<Renderer::Vertex> vertices;
@@ -88,9 +88,8 @@ Renderer::RenderableText shapedGlyphsToRenderableText(
                                            sizeof(glyphName));
 
         auto gl = FT_Get_Name_Index(font->getFtFace(), glyphName);
-
-        std::cerr << "Glyph not found: " << gl << " | Glyph index: " << sg.id
-                  << " | Error: " << error << '\n';
+        LOG_WARN("Glyph Not Found: {} | Glyph Index: | Error: ", gl, sg.id,
+                 error);
         continue;
       }
 
@@ -174,7 +173,6 @@ bool cacheFontAtlas(const Font &font, const std::string &cacheName) {
 bool cacheGlyphs(const Font &font, const std::string &cacheName) {
   auto cachePath = cacheDir;
   cachePath.append(cacheName);
-  std::cerr << "writing to file for glyphs now\n";
   return WriteTextFile(cachePath, encodeGlyphs(font.getGlyphs()));
 }
 
@@ -218,7 +216,7 @@ void Font::setSize(int width, int height) {
   auto error = FT_Set_Pixel_Sizes(m_ftFace, m_width, m_height);
 
   if (error) {
-    std::cerr << "failed setting font size\n";
+    LOG_WARN("Failed Setting Font Size");
   }
 
   assert(m_hbFont);
@@ -237,29 +235,28 @@ std::shared_ptr<Renderer::Texture> Font::getAtlasTexture() {
   // generate new
   if (generateAtlasFromCache(atlasCacheName, m_atlas) &&
       generateGlyphsFromCache(glyphsCacheName, m_glyphs) && m_glyphs.size()) {
-    std::cerr << "seems both are available\n";
     msdfgen::BitmapConstRef<unsigned char, 3> bmp = m_atlas;
     m_atlasTexture =
         Renderer::TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
   } else {
     m_glyphs.clear();
     auto glyphGeometries = generateGlyphGeometries();
-    std::cerr << "generating atlas\n";
+    LOG("Generating Atlas");
     generateAtlas(glyphGeometries);
-    std::cerr << "generating glyphs\n";
+    LOG("Generating Glyphs");
     generateGlyphs(glyphGeometries);
-    std::cerr << "finished generating glyphs\n";
+    LOG("Finished Generating Glyphs");
     msdfgen::BitmapConstRef<unsigned char, 3> bmp = m_atlas;
     m_atlasTexture =
         Renderer::TextureFromMemory(bmp.pixels, bmp.width, bmp.height, 3, 3);
-    std::cerr << "caching atlas\n";
+    LOG("Caching Atlas");
     auto success = cacheFontAtlas(*this, atlasCacheName);
     if (!success) {
-      std::cerr << "failed caching atlas";
+      LOG_WARN("Failed Caching Atlas");
     }
     success = cacheGlyphs(*this, glyphsCacheName);
     if (!success) {
-      std::cerr << "failed caching glyphs\n";
+      LOG_WARN("Failed Caching Atlas");
     }
   }
   return m_atlasTexture;
@@ -286,11 +283,7 @@ std::vector<std::vector<ShapedGlyph>>
 Font::shapeText(const std::string &text) const {
 
   // preprocess text to seperate based on newline character \n and \r
-
   auto lines = splitString(text, '\n', '\r');
-  // for (auto l : lines) {
-  //   std::cerr << l << "\n";
-  // }
 
   std::vector<std::vector<ShapedGlyph>> results;
   results.reserve(lines.size());
@@ -327,7 +320,6 @@ Font::shapeText(const std::string &text) const {
     hb_buffer_destroy(buffer);
     results.push_back(shapedGlyphs);
   }
-  // std::cerr << "\n";
   return results;
 }
 
@@ -343,8 +335,6 @@ std::vector<msdf_atlas::GlyphGeometry> Font::generateGlyphGeometries() const {
   for (unsigned i = 0; i < m_ftFace->num_glyphs; ++i)
     glyphset.add(i);
   auto loaded = geometry.loadGlyphset(m_msdfFont, 1.0, glyphset);
-
-  std::cerr << "loaded: " << loaded << "\n";
 
   for (auto &glyph : glyphs) {
     glyph.edgeColoring(&msdfgen::edgeColoringInkTrap, 3.0, 0);
@@ -382,7 +372,7 @@ void Font::generateAtlas(
   packer.setMiterLimit(1);
   auto error = packer.pack(glyphGeometries.data(), glyphGeometries.size());
   if (error) {
-    std::cerr << "error when packing atlas\n";
+    LOG_ERROR("Error When Packing Atlas");
   }
   int width, height;
   packer.getDimensions(width, height);

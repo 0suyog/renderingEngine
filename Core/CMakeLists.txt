@@ -84,6 +84,7 @@ target_sources(
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/texture.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/light.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/text.h
+		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Logger/logger.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/physicsSystem.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/Systems/system.h
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Source/windowevents.h
@@ -109,12 +110,12 @@ target_include_directories(engine.core
 		  ${CMAKE_CURRENT_SOURCE_DIR}/Vendors/glad/include
 )
 add_subdirectory(Vendors/glfw)
-# set(MSDF_ATLAS_BUILD_STANDALONE OFF)
 set(MSDF_ATLAS_USE_VCPKG OFF)
 set(MSDF_ATLAS_USE_SKIA OFF)
 
 add_subdirectory(Vendors/freetype)
 add_subdirectory(Vendors/msdf-atlas-gen)
+add_subdirectory(Vendors/fmt)
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 add_subdirectory(Vendors/assimp)
 add_subdirectory(Vendors/harfbuzz)
@@ -122,7 +123,7 @@ add_subdirectory(Vendors/harfbuzz)
 add_custom_target(copy_assets_core ALL 
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/assets  ${CMAKE_BINARY_DIR}/assets
 )
-target_link_libraries(engine.core PUBLIC glfw assimp harfbuzz freetype msdf-atlas-gen::msdf-atlas-gen)
+target_link_libraries(engine.core PUBLIC glfw assimp harfbuzz freetype msdf-atlas-gen::msdf-atlas-gen fmt::fmt)
 
 option(BUILD_CORE_TESTS "Build Core tests" OFF)
 

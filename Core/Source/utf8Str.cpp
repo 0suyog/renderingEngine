@@ -7,8 +7,6 @@
 namespace Core {
 
 rune Utf8String::operator[](unsigned int index) const {
-  std::cerr << "size of text: " << m_text.size() << "\n";
-  std::cerr << "size of utf8: " << m_length << "\n";
   unsigned int pos = -1;
   rune out = 0;
   for (unsigned int i = 0; i < m_text.size(); i++) {
@@ -33,15 +31,10 @@ rune Utf8String::operator[](unsigned int index) const {
     // count first 1 bits
     auto numOf1 = std::countl_one(s);
     unsigned char firstByte = m_text[i];
-    std::cerr << "firstByte: " << std::bitset<8>(firstByte) << "\n";
     // clear first n bits that represent how many codepoints to use plus one
     // extra bit
-    std::cerr << "pos: " << pos << " numOf1: " << numOf1 << " index: " << index
-              << "\n";
     firstByte &= 0b11111111 >> (numOf1 + 1);
-    std::cerr << "firstByte: " << std::bitset<8>(firstByte) << "\n";
     rune mask = rune(firstByte);
-    std::cerr << "mask: " << std::bitset<32>(mask) << "\n";
 
     // (num1 -1) cuz for last byte no left shift, so starting from 0 to numOf1-1
     // and shift by 6 cuz first 2 bits of following bytes is ignored
@@ -50,28 +43,22 @@ rune Utf8String::operator[](unsigned int index) const {
       mask <<= 6 * (numOf1 - 1);
 
     out |= mask;
-    std::cerr << "out: " << std::bitset<32>(out) << "\n";
     if (numOf1 > 1) {
       // reverse loop throgh characters from first valid rune to its last
       // code point
       for (unsigned int j = i + numOf1 - 1; j > i; j--) {
-        std::cerr << "this runs twice? numOf1: " << numOf1 << "\n";
         if (j > m_text.size()) {
           exit(-1);
         }
         unsigned char byte = m_text[j];
-        std::cerr << "text index: " << j << " bitset: " << std::bitset<8>(byte)
-                  << "\n\n";
         // cloar first 2 bit
         byte &= 0b00111111;
         rune mask = rune(byte);
         // left shift the mask based on where i want the output's bits to be
         // replaced, by 6 cuz same reason as before
         mask <<= ((i + numOf1 - 1) - j) * 6;
-        std::cerr << "mask: " << std::bitset<32>(mask) << "\n";
         // add the byte to output rune
         out |= mask;
-        std::cerr << "out: " << std::bitset<32>(mask) << "\n";
       }
     }
 

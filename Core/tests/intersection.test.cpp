@@ -9,7 +9,6 @@ TEST(SPHERESPHERE, INTERSECTING) {
   auto bbs = Physics::BoundingSphere({0, 0, 0}, 2);
   auto other = Physics::BoundingSphere({0, 1, 0}, 2);
   auto result = Physics::IntersectSphereSphere(bbs, other);
-  std::cerr << result.GetDistance() << "\n";
   EXPECT_TRUE(result.GetDoesIntersect());
   EXPECT_EQ(result.GetDistance(), 3.0f);
 }

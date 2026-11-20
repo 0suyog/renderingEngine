@@ -1,9 +1,9 @@
 #include "AppLayer.h"
-#include "Font/font.h"
 #include "Game/gameLayer.h"
 #include "application.h"
-#include <iostream>
 #include <memory>
+#include <fmt/format.h>
+#include <fmt/color.h>
 // DEBUG: main function is being called twice when gameLayer->setCurrenScene is
 // called
 int main() {

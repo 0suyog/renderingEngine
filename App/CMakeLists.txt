@@ -6,7 +6,6 @@ SET(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(App)
 
-
 target_sources(
   App
 	 PRIVATE

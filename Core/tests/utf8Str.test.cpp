@@ -25,8 +25,6 @@ TEST(UTF8STRING, NOTASCII) {
 TEST(UTF8STRING, CJK) {
   auto utf8 = Core::Utf8String("臺金");
   Core::rune r = utf8[1];
-  std::cerr << "my bitset: " << std::bitset<32>(r) << "\n\n"
-            << "actual bitset: " << std::bitset<32>(U'金');
   EXPECT_EQ(r, U'金');
 }
 

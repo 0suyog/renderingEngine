@@ -1,4 +1,5 @@
 #include "Physics/collider.h"
+#include "Logger/logger.h"
 #include "Physics/boundingSphere.h"
 #include "Physics/intersectData.h"
 #include "intersections.h"
@@ -64,8 +65,9 @@ IntersectData Collider::Intersect(const Collider &colliderA,
   //   return IntersectPlanePlane(self, other);
   // }
 
-  std::cerr << "Collision between colliders of type: " << colliderA.m_type
-            << " and type: " << colliderB.m_type << " is not defined";
+  LOG_WARN(
+      "Collidion Between Colliders Of Type: {} And Type: {} Is Not Defined.",
+      colliderA.m_type, colliderB.m_type);
 
   std::exit(-1);
 }

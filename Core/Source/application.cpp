@@ -1,4 +1,5 @@
 #include "application.h"
+#include "Logger/logger.h"
 #include "glm/common.hpp"
 #include <iostream>
 #include <ranges>
@@ -7,7 +8,7 @@ namespace Core {
 static Application *s_Application = nullptr;
 
 static void GLFWErrorCallback(int error, const char *description) {
-  std::cerr << "[GLFW Error]: " << description << std::endl;
+  LOG_ERROR("[GLFW Error]: {}", description);
 }
 
 Application::Application(const ApplicationSpecification &spec)

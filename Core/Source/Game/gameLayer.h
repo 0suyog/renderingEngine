@@ -3,6 +3,7 @@
 #include "Components/CShape.h"
 #include "Components/CTransform.h"
 #include "GLFW/glfw3.h"
+#include "Logger/logger.h"
 #include "action.h"
 #include "scene.h"
 #include "event.h"
@@ -78,7 +79,7 @@ private:
 
   bool handleKeyPress(const Core::KeyPressedEvent &e) {
     if (!currentScene) {
-      std::cerr << "[GAMELAYER] no scene is selected, check it" << "\n";
+      LOG_ERROR("No Scene Is Selected");
       return false;
     }
     if (currentScene->actionMap.contains(e.GetKeyCode())) {
@@ -91,7 +92,7 @@ private:
 
   bool handleKeyRelease(const Core::KeyReleasedEvent &e) {
     if (!currentScene) {
-      std::cerr << "[GAMELAYER] no scene is selected, check it" << "\n";
+      LOG_ERROR("No Scene Is Selected");
       return false;
     }
     if (currentScene->actionMap.contains(e.GetKeyCode())) {

@@ -1,4 +1,5 @@
 #include "Renderer/texture.h"
+#include "Logger/logger.h"
 #include "Renderer/text.h"
 #include "Renderer/embededimages.h"
 #include "core/BitmapRef.hpp"
@@ -33,8 +34,6 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
                           : internalChannels == 3 ? GL_RGB8
                           : internalChannels == 4 ? GL_RGBA8
                                                   : GL_R8;
-  // std::cerr << "channels:" << channels
-  //           << "internalChannels: " << internalChannels << "\n";
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   glTextureStorage2D(result->handle, 1, internalFormat, width, height);
   glTextureSubImage2D(result->handle, 0, 0, 0, width, height, format,
@@ -44,7 +43,6 @@ std::shared_ptr<Texture> TextureFromMemory(const unsigned char *data, int width,
 }
 
 std::shared_ptr<Texture> TextureFromImage(const Core::Image &i) {
-  // std::cerr << ""
   return TextureFromMemory(i.data, i.width, i.height, i.channels, i.channels);
 }
 
@@ -55,11 +53,11 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
     std::optional<Core::Image> i = Core::ReadImage(path);
 
     if (!i) {
-      std::cerr << "[TEXTURE] Failed opening image: " << path << "\n";
+      LOG_WARN("[TEXTURE] Failed Opening Image: {}", path.c_str());
       return GetBuiltInTexture(BuiltInTexture::ERROR);
     }
 
-    std::cerr << "New texture created of key " << key << "\n";
+    LOG("New Texture Created Of Key {}", key);
 
     std::shared_ptr<Texture> result = TextureFromImage(i.value());
     textures[key] = result;
@@ -67,19 +65,14 @@ std::shared_ptr<Texture> TextureFromFile(const std::filesystem::path &path) {
   return textures[key];
 }
 
-static int count = 1;
 // why is length int and not uint? I dont know
 std::shared_ptr<Texture> TextureFromImageInMemory(unsigned char *data,
                                                   int length) {
   auto image = Core::ReadImageFromMemory(data, length);
   if (!image) {
-    std::cerr << "[TEXTURE] Reading from memory but data doesnt exist";
+    LOG_ERROR("[TEXTURE] Reading From Memor But Data Doesn't Exist");
     exit(-1);
   }
-  // Core::WriteTestDefault("image" + std::to_string(count) + ".png",
-  //                        image.value());
-
-  count++;
   return TextureFromImage(image.value());
 }
 

@@ -1,3 +1,4 @@
+#include "Logger/logger.h"
 #include "glad/glad.h"
 #include "file.h"
 #include "shader.h"
@@ -32,7 +33,7 @@ std::shared_ptr<ShaderProgram> getShader(EShaders es) {
     }
     return s_TextShader;
   default:
-    std::cerr << "[getShader] No Shader of that type";
+    LOG_ERROR("Tried Accessing Shader Of Unknown Type");
     return nullptr;
     break;
   }
@@ -52,8 +53,8 @@ GLuint ShaderProgram::init() {
   const char *shaderSource;
   auto fileData = Core::ReadTextFile(m_vertexPath);
   if (!fileData) {
-    std::cerr << "[SHADER] cannot open vertex shader file" << "\n";
-    std::cerr << "Failed to open '" << m_vertexPath << '\n';
+    LOG_ERROR("[SHADER] Failed Opeinng Vertex Shader File: {}",
+              m_vertexPath.c_str());
     return -1;
   }
   shaderSource = fileData->c_str();
@@ -66,19 +67,18 @@ GLuint ShaderProgram::init() {
   if (status == GL_FALSE) {
     int infoLogLen;
     glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &infoLogLen);
-    std::cerr << "[SHADER] Vertex shader compilation failed"
-              << "\n";
+    LOG_ERROR("[SHADER] Vertex Shader Compilation Failed");
     std::string infoLog(infoLogLen, '\0');
     glGetShaderInfoLog(vertexShader, infoLogLen, NULL, infoLog.data());
-    std::cerr << infoLog << "\n";
+    LOG_ERROR("[SHADER] Error: {}", infoLog);
     glDeleteShader(vertexShader);
     return -1;
   }
 
   fileData = Core::ReadTextFile(m_fragmentPath);
   if (!fileData) {
-    std::cerr << "[SHADER] cannot open fragment shader file" << "\n";
-    std::cerr << "Failed to open '" << m_fragmentPath << '\n';
+    LOG_ERROR("[SHADER] Failed Opening Fragment Shader File: {}",
+              m_fragmentPath.c_str());
     return -1;
   }
   shaderSource = fileData->c_str();
@@ -89,13 +89,12 @@ GLuint ShaderProgram::init() {
 
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
   if (status == GL_FALSE) {
-    std::cerr << "[SHADER] Fragment shader compilation failed" << m_fragmentPath
-              << "\n";
+    LOG_ERROR("[SHADER] Fragment Shader Compilation Failed");
     int infoLogLen;
     glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &infoLogLen);
     std::string infoLog(infoLogLen, '\0');
     glGetShaderInfoLog(fragmentShader, infoLogLen, NULL, infoLog.data());
-    std::cerr << infoLog << "\n";
+    LOG_ERROR("[SHADER] Error: {}", infoLog);
     glDeleteShader(fragmentShader);
     return -1;
   }
@@ -114,8 +113,8 @@ GLuint ShaderProgram::init() {
     GLint maxLength = 0;
     std::vector<GLchar> infoLog(maxLength);
     glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
-    std::cerr << "[SHADER] Shader Linking Error" << "\n";
-    std::cerr << infoLog.data() << "\n";
+    LOG_ERROR("[SHADER] Shader Linking Error");
+    LOG_ERROR("[SHADER] Error: {}", infoLog.data());
     glDeleteProgram(programId);
     return -1;
   }

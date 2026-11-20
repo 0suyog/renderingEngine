@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 enable_testing()
+add_compile_definitions(ENGINE_CODE_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 add_subdirectory(Vendors/googletest)
 

@@ -33,25 +33,24 @@ public:
         .viewPortHeight = 800,
     };
 
-    // auto floor = entityManager.AddEntity("floor");
-    //
-    // floor
-    //     ->addComponent<Component::CShape>(Renderer::Cuboid(
-    //         500, 3, 500,
-    //         Renderer::Material{
-    //             .diffuseTexture = font->getAtlasTexture(150, 150),
-    //             .specularTexture = font->getAtlasTexture(150, 150),
-    //             .shininess = 64}))
-    //     .addComponent<Component::CTransform>(Core::Transform())
-    //     .addComponent<Component::CPhysicsObject>(
-    //         std::make_shared<Physics::PhysicsObject>(
-    //             glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), false, true))
-    //     .addComponent<Component::CCollider>(Physics::Aabb::Generate(
-    //         floor->GetComponent<Component::CShape>()->shape.m_meshGeometries))
-    //     .addComponent<Component::CStatic>();
+    auto floor = entityManager.AddEntity("floor");
+
+    floor
+        ->addComponent<Component::CShape>(Renderer::Cuboid(
+            500, 3, 500,
+            Renderer::Material{.diffuseTexture = Renderer::TextureFromFile(
+                                   "../assets/images/astronaut.jpg"),
+                               .specularTexture = font->getAtlasTexture(),
+                               .shininess = 64}))
+        .addComponent<Component::CTransform>(Core::Transform())
+        .addComponent<Component::CPhysicsObject>(
+            std::make_shared<Physics::PhysicsObject>(
+                glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), false, true))
+        .addComponent<Component::CCollider>(Physics::Aabb::Generate(
+            floor->GetComponent<Component::CShape>()->shape.m_meshGeometries))
+        .addComponent<Component::CStatic>();
 
     auto aabb = entityManager.AddEntity("aabb");
-    //
     aabb->addComponent<Component::CShape>(
             Renderer::Cube(5,
                            Renderer::Material{
@@ -64,7 +63,7 @@ public:
             Core::Transform().setPosition({0, 0, 0}))
         .addComponent<Component::CPhysicsObject>(
             std::make_shared<Physics::PhysicsObject>(glm::vec3(0, 10, 0),
-                                                     glm::vec3(0, 0, 0), false))
+                                                     glm::vec3(0, 0, 0), true))
         .addComponent<Component::CCollider>(Physics::Aabb::Generate(
             aabb->GetComponent<Component::CShape>()->shape.m_meshGeometries))
         .addComponent<Component::CSpeed>(10, 20)
@@ -77,9 +76,8 @@ public:
 
     player = aabb;
 
-    // std::string c = " ि";
-
-    textManager.add(font, R"(क – कपुरि क  apple
+    textManager.add(font, R"(क – कपुरि क
+apple
 ख – खरायो ख
 ग – गाईगोड़े ग
 घ – घर घ

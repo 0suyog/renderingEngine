@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include "Logger/logger.h"
 #include "event.h"
 #include "windowevents.h"
 #include "inputevents.h"
@@ -23,14 +24,14 @@ void Window::Create() {
                               m_Specification.Title.c_str(), NULL, NULL);
 
   if (!m_Handle) {
-    std::cerr << "Failde to create GLFW window\n";
+    LOG_ERROR("Failed To Create GLFW Window");
     glfwTerminate();
     exit(-1);
   }
 
   glfwMakeContextCurrent(m_Handle);
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cerr << "Failed to initialize GLAD\n";
+    LOG_ERROR("Failed To Initialize GLAD");
     glfwTerminate();
     exit(-1);
   }

@@ -43,9 +43,6 @@ inline std::vector<std::string> splitString(const std::string &s,
     temp.push_back(str);
   }
   retVal.push_back(temp);
-  // for (int i = 0; i < retVal.size(); i++) {
-  //   std::cerr << retVal[i];
-  // }
   return retVal;
 }
 

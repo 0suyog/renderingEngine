@@ -1,4 +1,5 @@
 #include "model.h"
+#include "Logger/logger.h"
 #include "assimp/Importer.hpp"
 #include "assimp/cimport.h"
 #include "assimp/material.h"
@@ -48,8 +49,8 @@ void Model::loadModel(const std::filesystem::path &path) {
       importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
       !scene->mRootNode) {
-    std::cerr << "[ASSIMP] error loading model " << path << " "
-              << aiGetErrorString() << "\n";
+    LOG_ERROR("[ASSIMP] Error Loading Model:{} error:{}", path.c_str(),
+              aiGetErrorString());
     exit(-1);
   }
   m_directory = path.parent_path();
